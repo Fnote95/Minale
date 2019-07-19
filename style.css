@@ -4307,4 +4307,6 @@ input[type="file"] {
 	height: 50px;
 
 }
-
+.container-fluid{
+	background-color: #f9f9f9;
+}

@@ -51,38 +51,57 @@ if (isset($_POST['submit'])) {
 }
 ?>
 <div class="container-fluid">
-<div class="row" style="padding-top: 20px; padding-left: 5px ">
-	<div class="col-md-2 col-sm-2 col-xs-2">
-		<img src="images.jpg" alt="Logo" style="width: 50; height: 50px">
+	<div class="row" style="padding: 10px;">
+		<div class="col-md-10 col-sm-10 col-xs-10 pull-left">
+			
+				<a id="back"><i class="fa fa-arrow-left" style="font-size: 25px; color: red;"></i></a>
+		
+		</div>
+		<div class="col-md-1 col-sm-1 col-xs-1 ">
+			<a href="#">
+				<i class="fa fa-bars" style="font-size: 25px; color: red;"></i>
+			</a>
+		</div>
 	</div>
+	<form action="details?item=<?=(isset($_GET['custom']))?$item_id.'&custom='.$custom_id : $item_id;?>" method="post" enctype="multipart/form-data">
+		<div class="row">
+			<div class="col-md-12 col-sm-12 col-xs-12" style="background-size: auto 300px;background-image: url('<?=$item_pic;?>');  height: 300px;overflow: hidden;">
+				
+		
+					<div class="pull-left" style="margin-top: -88px; margin-left: -150px; height: 176px; width: 300px; border-radius: 50%; background-color: red; box-shadow: 5px 1px 4px 0 rgba(0, 0, 0, 0.5);">
+						<h4 class="text-left" style="color:white;margin-top: 98px;margin-left: 150px;"><b><?=$item_name;?></b></h4>
+						<h3 class="text-left" style="color: white;margin-top: 0px; margin-left: 150px;"><b><?=cash($item_price);?></b></h3>			
+					</div>
+							
+			</div>
+			<div class="col-md-12 col-sm-12 col-xs-12" style="margin-top: -1px;color:white; padding-top: 25px;padding-bottom:25px;background-image:linear-gradient(to top, rgba(252,84,4,1) 1%, rgba(255,0,0,1) 100%) ;">
+				<div class="col-md-6 col-sm-6 col-xs-6" >
+					<h4><b>Ingredients</b></h4>
+					<p>
+						<?php foreach ($item_composition as $comp): ?>
+							<i><?=$comp['quantity'].'-'.$comp['comp'].',';?></i>
+						<?php endforeach;?>
+					</p>
+					
+			
+				</div>		
+				<div class="col-md-6 col-sm-6 col-xs-6">
+					<h4><b>Quantity</b></h4>
+					<input type="number" name="quantity">
+				</div>
+			</div>
+
+		</div>
+		<div class="row" style="padding: 15px">
+			<div class="col-md-6 col-sm-6 col-xs-6">
+				<a href="customize?customize=<?=(isset($_GET['custom']))?$item_id.'&custom='.$custom_id : $item_id;?>" class="btn btn-success form-control">Customize</a>
+			</div>
+			<div class="col-md-6 col-sm-6 col-xs-6">
+				<button type="submit" name="submit" class="btn btn-danger form-control">Add to order</button>
+			</div>
+		</div>
+	</form>
 </div>
-<form action="details?item=<?=(isset($_GET['custom']))?$item_id.'&custom='.$custom_id : $item_id;?>" method="post" enctype="multipart/form-data">
-	<div class="row" style="padding-top: 5px">
-		<div class="col-md-12 col-sm-12 col-xs-12 text-center">
-			<img src="images/item_image/hamburger.jpg" alt="Logo" style="width: 200px; height: 200px;">
-		</div>
-		<div class="col-md-6 col-sm-6 col-xs-6">
-			<h4 class="text-center"><b>Composition</b></h4>
-			<ul>
-				<?php foreach ($item_composition as $comp): ?>
-					<li><?=$comp['quantity'].' '.$comp['comp'];?></li>
-				<?php endforeach;?>
-			</ul>
-		</div>		
-		<div class="col-md-6 col-sm-6 col-xs-6">
-			<h4 class="text-center"><b>Quantity</b></h4>
-			<input type="number" name="quantity" class="form-control">
-			<h4 class="text-center"><b>Price</b></h4>
-			<h4 class="text-center" style="color: green;"><?=cash($item_price);?></h4>
-		</div>
-	</div>
-	<div class="row" style="padding: 15px">
-		<div class="col-md-6 col-sm-6 col-xs-6">
-			<a href="customize?customize=<?=(isset($_GET['custom']))?$item_id.'&custom='.$custom_id : $item_id;?>" class="btn btn-success form-control">Customize</a>
-		</div>
-		<div class="col-md-6 col-sm-6 col-xs-6">
-			<button type="submit" name="submit" class="btn btn-danger form-control">Add to order</button>
-		</div>
-	</div>
-</form>
-</div>
+<?php
+include "includes/footer.php";
+?>
