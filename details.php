@@ -26,6 +26,7 @@ if (isset($_GET['item'])&&!empty($_GET['item'])) {
 }
 
 if (isset($_POST['submit'])) {
+
 	$orders_array[0]['item_id']=$item_id;
 	$orders_array[0]['quantity']=sanitize($_POST['quantity']);
 	$orders_array[0]['custom_id']=(isset($_GET['custom']))? $custom_id : 'none';
@@ -34,6 +35,7 @@ if (isset($_POST['submit'])) {
 
 	
 	if (isset($_SESSION['order'])) {
+
 		$order_id=sanitize($_SESSION['order']);
 		$o_query=$db->query("SELECT * FROM orders WHERE id='$order_id'");
 		$orders_list=mysqli_fetch_assoc($o_query);
@@ -46,6 +48,7 @@ if (isset($_POST['submit'])) {
 		$db->query("INSERT INTO orders (items,session_id) VALUES ('$orders_json','$session_id')");
 		$order_id=$db->insert_id;
 		$_SESSION['order']=$order_id;
+
 	}
 
 }
@@ -59,7 +62,7 @@ if (isset($_POST['submit'])) {
 		</div>
 		<div class="col-md-1 col-sm-1 col-xs-1 ">
 			<a href="#">
-				<i class="fa fa-bars" style="font-size: 25px; color: red;"></i>
+				<i class="fa fa-bars" onclick="review();" style="font-size: 25px; color: red;"></i>
 			</a>
 		</div>
 	</div>
@@ -75,7 +78,7 @@ if (isset($_POST['submit'])) {
 							
 			</div>
 			<div class="col-md-12 col-sm-12 col-xs-12" style="margin-top: -1px;color:white; padding-top: 25px;padding-bottom:25px;background-image:linear-gradient(to top, rgba(252,84,4,1) 1%, rgba(255,0,0,1) 100%) ;">
-				<div class="col-md-6 col-sm-6 col-xs-6" >
+				<div class="col-md-12 col-sm-12 col-xs-12" >
 					<h4><b>Ingredients</b></h4>
 					<p>
 						<?php foreach ($item_composition as $comp): ?>
@@ -85,23 +88,36 @@ if (isset($_POST['submit'])) {
 					
 			
 				</div>		
-				<div class="col-md-6 col-sm-6 col-xs-6">
+				<div class="col-md-12 col-sm-12 col-xs-12">
 					<h4><b>Quantity</b></h4>
-					<input type="number" name="quantity">
+					<div class="form-row" style="margin-left: -35px">
+						<div class="col-md-3 col-sm-3 col-xs-3" style="margin-right: -27px;margin-top:2px">
+							<a class="btn btn-default btn-sm pull-right" onclick="decrement()"><i class="fa fa-minus" style="color:red;"></i></a>
+						</div>
+						<div class="col-md-5 col-sm-5 col-xs-5">
+							<input type="number" class="form-control text-center" name="quantity" id="quan" value="1" min="1" style="color: black;">
+						</div>
+						<div class="col-md-3 col-sm-3 col-xs-3" style="margin-left: -27px;margin-top:2px">
+							<a class="btn btn-default btn-sm pull-left" onclick="increment();"><i class="fa fa-plus" style="color:red;"></i></a>
+						</div>
+					</div>
 				</div>
 			</div>
+					
+		</div>
+		<div class="row" style="padding-top: 15px;padding-bottom: 15px">
+			<div class="col-md-6 col-sm-6 col-xs-6">
+				<a href="customize?customize=<?=(isset($_GET['custom']))?$item_id.'&custom='.$custom_id : $item_id;?>" class="btn btn-success form-control" style="background-color: rgba(252,84,4,1);color:white; border-radius: 3px;">CUSTOMIZE</a>
+			</div>
+			<div class="col-md-6 col-sm-6 col-xs-6">
+				<button type="submit" name="submit" class="btn btn-danger form-control" style="background-color: rgba(252,84,4,1);color:white;border-radius: 3px;">ADD TO ORDER</button>
+			</div>
+		</div>
 
-		</div>
-		<div class="row" style="padding: 15px">
-			<div class="col-md-6 col-sm-6 col-xs-6">
-				<a href="customize?customize=<?=(isset($_GET['custom']))?$item_id.'&custom='.$custom_id : $item_id;?>" class="btn btn-success form-control">Customize</a>
-			</div>
-			<div class="col-md-6 col-sm-6 col-xs-6">
-				<button type="submit" name="submit" class="btn btn-danger form-control">Add to order</button>
-			</div>
-		</div>
+
 	</form>
 </div>
+
 <?php
 include "includes/footer.php";
 ?>

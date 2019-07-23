@@ -1,4 +1,18 @@
- 	<div class="row" style="padding-top: 20px; padding-left: 5px ">
+
+<?php
+require_once "core/init.php";
+include "includes/head.php";
+
+if (isset($_SESSION['order'])) {
+	$order_id=sanitize($_SESSION['order']);
+	$order_query=$db->query("SELECT * FROM orders WHERE id='$order_id' AND order_status=3");
+	$order=mysqli_fetch_assoc($order_query);
+	$order_array=json_decode($order['items'],true);
+
+//var_dump($order_array);
+?>
+<div class="container-fluid">
+ 	<div class="row" style="padding-top: 20px;">
 		<div class="col-md-2 col-sm-2 col-xs-2">
 			<img src="images.jpg" alt="Logo" style="width: 50; height: 50px">
 		</div>
@@ -6,19 +20,6 @@
 			<h3>&nbsp&nbsp&nbsp&nbsp<b>Review</b></h3>
 		</div>
 	</div>
-<?php
-require_once "core/init.php";
-include "includes/head.php";
-
-if (isset($_SESSION['order'])) {
-	$order_id=sanitize($_SESSION['order']);
-	$order_query=$db->query("SELECT * FROM orders WHERE id='$order_id'");
-	$order=mysqli_fetch_assoc($order_query);
-	$order_array=json_decode($order['items'],true);
-
-//var_dump($order_array);
-?>
-
 	<div class="row text-center" style="padding-top: 20px">
 		<?php foreach($order_array as $order): 
 			$item_id=$order['item_id'];
@@ -28,7 +29,7 @@ if (isset($_SESSION['order'])) {
 			$item=mysqli_fetch_assoc($item_query);
 
 		?>
-		<div class="col-md-12 review" style="padding: 5px">
+		<div class="col-md-12 review" >
 			<div class="row" style="padding: 5px">
 				<div class="col-md-4 col-sm-4 col-xs-4">
 					<img src="<?=$item['item_pic'];?>" style="width: 80px; height: 80px;">
@@ -56,3 +57,4 @@ if (isset($_SESSION['order'])) {
 	</div>
 </div>
 </div>
+
