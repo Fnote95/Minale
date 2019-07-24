@@ -20,7 +20,15 @@
 		jQuery('#quan').val(result);
 	}
 	function review(){
-		jQuery('#body').html('<div class="container-fluid"><div style="width: 100%; height=50%;"><h1>review</h1></div></div>');
+		jQuery.ajax({
+                url: 'api/corner_menu.php',
+                type: 'POST',
+                data: {},
+                success: function(data){
+                    jQuery('#body').html(data);
+                },
+                error: function(){alert("something went wrong!")},
+            });
 	}
 </script>
 </body>

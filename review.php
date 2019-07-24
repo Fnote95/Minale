@@ -29,14 +29,17 @@ if (isset($_SESSION['order'])) {
 			$item=mysqli_fetch_assoc($item_query);
 
 		?>
-		<div class="col-md-12 review" >
+		<div class="col-md-12 review">
 			<div class="row" style="padding: 5px">
 				<div class="col-md-4 col-sm-4 col-xs-4">
-					<img src="<?=$item['item_pic'];?>" style="width: 80px; height: 80px;">
+					<div style="border: 3px solid rgba(252,84,4,1);width:86px; height:auto ; margin: 0% auto; border-radius: 50%; overflow: hidden;">
+						<img src="<?=$item['item_pic'];?>" style="width: 80px; height: 80px;">
+					</div>
+					
 				</div>
 				<div class="col-md-5 col-sm-5 col-xs-5 text-center">
 					<h5><b><?=$item['item_name'];?></b></h5>
-					<div class="input-group bootstrap-touchspin"><span class="input-group-btn"><button class="btn btn-white bootstrap-touchspin-down" type="button">-</button></span><span class="input-group-addon bootstrap-touchspin-prefix" style="display: none;"></span><input class="touchspin1 form-control" type="text" value="<?=$quantity;?>" name="demo1" style="display: block;"><span class="input-group-addon bootstrap-touchspin-postfix" style="display: none;"></span><span class="input-group-btn"><button class="btn btn-white bootstrap-touchspin-up" type="button">+</button></span></div>
+					<div class="input-group bootstrap-touchspin"><span class="input-group-btn"><button class="btn btn-white bootstrap-touchspin-down" type="button" style="color:red;"><b>-</b></button></span><span class="input-group-addon bootstrap-touchspin-prefix" style="display: none;"></span><input class="touchspin1 form-control" type="text" value="<?=$quantity;?>" name="demo1" style="display: block;"><span class="input-group-addon bootstrap-touchspin-postfix" style="display: none;"></span><span class="input-group-btn"><button class="btn btn-white bootstrap-touchspin-up" type="button" style="color:red;"><b>+</b></button></span></div>
 				</div>
 				<div class="col-md-3 col-sm-3 col-xs-3">
 					<div class="text-right">

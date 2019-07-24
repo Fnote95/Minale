@@ -37,11 +37,12 @@ margin: 15px auto;
 	margin: 0px auto;
 }
 .review{
-	border: 0.1px solid #d3d3d3;
+	border: 0.1px solid rgba(252,84,4,1);
 	/*border-radius: 15px;*/
 
 	margin: 0px auto;
-	background-color: #f7f7f7;
+	background-image:linear-gradient(to top, rgba(252,84,4,1) 1%, rgba(255,0,0,1) 100%) ;
+	color:white;
 	
 }
 #register{
