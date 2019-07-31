@@ -2755,10 +2755,10 @@ ul.profile-contact-menu {
 	background:linear-gradient(to bottom, #ad6c7c 0%, rgb(216, 0, 255) 100%);
 	color:#fff;
 }
-.btn-group-xs>.btn, .btn-xs{
+/*.btn-group-xs>.btn, .btn-xs{
 	background:linear-gradient(to bottom, #1702d0  0%, #3fc1b5 100%);
 	color:#fff;
-}
+}*/
 .btn-group-xs>.btn:focus, .btn-xs:focus{
 	outline:none;
 }

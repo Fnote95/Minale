@@ -6,18 +6,20 @@
 	  return false;
 	} 
 
-	function increment(){
-		var element = jQuery('#quan').val();
+	function increment(ids){
+		var element = jQuery('#quan'+ids).val();
 		var result=parseInt(element)+1;
-		jQuery('#quan').val(result);
+
+		jQuery('#quan'+ids).val(result);
 	}
-	function decrement(){
-		var element = jQuery('#quan').val();
+	function decrement(ids){
+		var element = jQuery('#quan'+ids).val();
 		var result=parseInt(element)-1;
 		if (result<=0) {
 			var result=1;
 		}
-		jQuery('#quan').val(result);
+
+		jQuery('#quan'+ids).val(result);
 	}
 	function review(){
 		jQuery.ajax({

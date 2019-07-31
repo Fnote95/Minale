@@ -6,7 +6,7 @@
 	</div>
 	<div class="row" style="padding-top: 30px">
 		<div class="col-md-6 col-sm-12 col-xs-12 text-center" style="padding: 15px">
-			<a href="eatin.php">
+			<a href="main.php">
 				<button class="btn" style="width: 300px; height: 100px; background-color: red; border-radius: 45px;">
 					<h2 class="text-center" style="color: white"><b>Eat In</b></h2>
 				</button>
