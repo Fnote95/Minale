@@ -2,6 +2,11 @@
 require_once "core/init.php";
 include "includes/head.php";
 
+$check_query=$db->query("SELECT * FROM orders WHERE order_status=3");
+$check=mysqli_num_rows($check_query);
+//var_dump($check);
+
+
 if (isset($_POST['submit'])) {
 /////////////////////////////////////
 
@@ -34,6 +39,7 @@ if (isset($_POST['submit'])) {
 	$new_items=json_encode($new_items);
 	
 	$db->query("UPDATE orders SET items='$new_items', order_status=0 WHERE id='$order_id' AND order_status=3");
+	header('Location : review');
 }
 
 ?>
@@ -56,7 +62,7 @@ if (isset($_POST['submit'])) {
 	<form action="review" method="post" enctype="multipart/form-data">
 	<div class="row text-center" style="padding-top: 10px">
 		<?php
-		if (isset($_SESSION['order'])) {
+		if (isset($_SESSION['order'])&&($check>0)) {
 			$order_id=sanitize($_SESSION['order']);
 			$order_query=$db->query("SELECT * FROM orders WHERE id='$order_id' AND order_status=3");
 			$order=mysqli_fetch_assoc($order_query);
@@ -128,7 +134,7 @@ if (isset($_POST['submit'])) {
 
 	<div class="row" style="padding-top: 15px;padding-bottom: 15px">
 		<div class="col-md-12 col-sm-12 col-xs-12">
-			<a href="customize?customize=<?=(isset($_GET['custom']))?$item_id.'&custom='.$custom_id : $item_id;?>" class="btn btn-success form-control" style="background-color: rgba(252,84,4,1);color:white; border-radius: 3px;">BACK TO MENU</a>
+			<a href="index" class="btn btn-success form-control" style="background-color: rgba(252,84,4,1);color:white; border-radius: 3px;">BACK TO MENU</a>
 		</div>
 		
 	</div>

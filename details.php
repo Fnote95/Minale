@@ -41,7 +41,7 @@ if (isset($_POST['submit'])) {
 		$orders_list=mysqli_fetch_assoc($o_query);
 		$orders_session=json_decode($orders_list['items'],true);
 		$orders_json=json_encode(array_merge($orders_session,$orders_array));
-		$db->query("UPDATE orders SET items='$orders_json' WHERE id='$order_id'");
+		$db->query("UPDATE orders SET items='$orders_json' WHERE id='$order_id' AND order_status=0");
 
 	}
 	else{
@@ -92,13 +92,13 @@ if (isset($_POST['submit'])) {
 					<h4><b>Quantity</b></h4>
 					<div class="form-row" style="margin-left: -35px">
 						<div class="col-md-3 col-sm-3 col-xs-3" style="margin-right: -27px;margin-top:2px">
-							<a class="btn btn-default btn-sm pull-right" onclick="decrement()"><i class="fa fa-minus" style="color:red;"></i></a>
+							<a class="btn btn-default btn-sm pull-right" onclick="decrement(1)"><i class="fa fa-minus" style="color:red;"></i></a>
 						</div>
 						<div class="col-md-5 col-sm-5 col-xs-5">
-							<input type="number" class="form-control text-center" name="quantity" id="quan" value="1" min="1" style="color: black;">
+							<input type="number" class="form-control text-center" name="quantity" id="quan1" value="1" min="1" style="color: black;">
 						</div>
 						<div class="col-md-3 col-sm-3 col-xs-3" style="margin-left: -27px;margin-top:2px">
-							<a class="btn btn-default btn-sm pull-left" onclick="increment();"><i class="fa fa-plus" style="color:red;"></i></a>
+							<a class="btn btn-default btn-sm pull-left" onclick="increment(1);"><i class="fa fa-plus" style="color:red;"></i></a>
 						</div>
 					</div>
 				</div>
