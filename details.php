@@ -41,7 +41,7 @@ if (isset($_POST['submit'])) {
 		$orders_list=mysqli_fetch_assoc($o_query);
 		$orders_session=json_decode($orders_list['items'],true);
 		$orders_json=json_encode(array_merge($orders_session,$orders_array));
-		$db->query("UPDATE orders SET items='$orders_json' WHERE id='$order_id' AND order_status=0");
+		$db->query("UPDATE orders SET items='$orders_json' WHERE id='$order_id' AND order_status=0 OR order_status=3");
 
 	}
 	else{
@@ -53,6 +53,7 @@ if (isset($_POST['submit'])) {
 
 }
 ?>
+
 <div class="container-fluid">
 	<div class="row" style="padding: 10px;">
 		<div class="col-md-10 col-sm-10 col-xs-10 pull-left">

@@ -8,9 +8,9 @@ ob_start();?>
 		</a>
 	</div>	
 	<div style="padding-top: 50%; padding-bottom: 100%; color: white">
-		<a href="review" style="color: white"><h1 class="text-center" style="padding: 15px"><b>REVIEW</b></h1></a>
-		<a href="main" style="color: white"><h1 class="text-center" style="padding: 15px"><b>MAIN MENU</b></h1></a>
 		<a href="index" style="color: white"><h1 class="text-center" style="padding: 15px"><b>HOME</b></h1></a>
+		<a href="main" style="color: white"><h1 class="text-center" style="padding: 15px"><b>MAIN MENU</b></h1></a>
+		<a href="review" style="color: white"><h1 class="text-center" style="padding: 15px"><b>REVIEW</b></h1></a>
 	</div>
 </div>
 <?php echo ob_get_clean();?>

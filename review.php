@@ -2,14 +2,16 @@
 require_once "core/init.php";
 include "includes/head.php";
 
-$check_query=$db->query("SELECT * FROM orders WHERE order_status=3");
-$check=mysqli_num_rows($check_query);
-//var_dump($check);
+if (isset($_SESSION['order'])&&!empty($_SESSION['order'])) {
+	$or_id=sanitize($_SESSION['order']);
+	$check_query=$db->query("SELECT * FROM orders WHERE id='$or_id' AND order_status=3 OR order_status=0");
+	$check=mysqli_num_rows($check_query);
+}
+
 
 
 if (isset($_POST['submit'])) {
-/////////////////////////////////////
-
+////////////////////////////////////
 	$post_array=array();
 	$new_quantity=array();
 	foreach ($_POST as $po) {
@@ -39,32 +41,31 @@ if (isset($_POST['submit'])) {
 	$new_items=json_encode($new_items);
 	
 	$db->query("UPDATE orders SET items='$new_items', order_status=0 WHERE id='$order_id' AND order_status=3");
-	header('Location : review');
+	header('Location: review');
 }
 
 ?>
 <div class="container-fluid">
 	<div class="row" style="padding: 10px; background-color: #fff">
-		<div class="col-md-10 col-sm-10 col-xs-10 pull-left">
-			
+		<div class="col-md-1 col-sm-1 col-xs-1 pull-left" style="padding: 5px">
 				<a id="back"><i class="fa fa-arrow-left" style="font-size: 25px; color: red;"></i></a>
-		
 		</div>
-		<div class="col-md-1 col-sm-1 col-xs-1 ">
+		<div class="col-md-10 col-sm-10 col-xs-10 text-center" style="padding: 5px">
+				<h3 class="text-center" style="color: red;"><b>Review</b></h3>
+		</div>
+
+		<div class="col-md-1 col-sm-1 col-xs-1 " style="padding: 5px">
 			<a href="#">
 				<i class="fa fa-bars" onclick="review();" style="font-size: 25px; color: red;"></i>
 			</a>
 		</div>
-	</div>
-	<div class="row" style="padding-top: 10px;color: red;">
-		<h3 class="text-center"><b>Review</b></h3>
 	</div>
 	<form action="review" method="post" enctype="multipart/form-data">
 	<div class="row text-center" style="padding-top: 10px">
 		<?php
 		if (isset($_SESSION['order'])&&($check>0)) {
 			$order_id=sanitize($_SESSION['order']);
-			$order_query=$db->query("SELECT * FROM orders WHERE id='$order_id' AND order_status=3");
+			$order_query=$db->query("SELECT * FROM orders WHERE id='$order_id' AND order_status=0 OR order_status=3");
 			$order=mysqli_fetch_assoc($order_query);
 			$order_array=json_decode($order['items'],true);
 
