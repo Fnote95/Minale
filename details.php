@@ -41,7 +41,7 @@ if (isset($_POST['submit'])) {
 		$orders_list=mysqli_fetch_assoc($o_query);
 		$orders_session=json_decode($orders_list['items'],true);
 		$orders_json=json_encode(array_merge($orders_session,$orders_array));
-		$db->query("UPDATE orders SET items='$orders_json' WHERE id='$order_id' AND order_status=0 OR order_status=3");
+		$db->query("UPDATE orders SET items='$orders_json' WHERE id='$order_id' AND (order_status=0 OR order_status=3)");
 
 	}
 	else{
@@ -80,29 +80,31 @@ if (isset($_POST['submit'])) {
 			</div>
 			<div class="col-md-12 col-sm-12 col-xs-12" style="margin-top: -1px;color:white; padding-top: 25px;padding-bottom:25px;background-image:linear-gradient(to top, rgba(252,84,4,1) 1%, rgba(255,0,0,1) 100%) ;">
 				<div class="col-md-12 col-sm-12 col-xs-12" >
-					<h4><b>Ingredients</b></h4>
-					<p>
+					<h4 class="text-center"><b>Ingredients</b></h4>
+					<p class="text-center">
 						<?php foreach ($item_composition as $comp): ?>
 							<i><?=$comp['quantity'].'-'.$comp['comp'].',';?></i>
 						<?php endforeach;?>
 					</p>
-					
-			
-				</div>		
-				<div class="col-md-12 col-sm-12 col-xs-12">
-					<h4><b>Quantity</b></h4>
-					<div class="form-row" style="margin-left: -35px">
-						<div class="col-md-3 col-sm-3 col-xs-3" style="margin-right: -27px;margin-top:2px">
-							<a class="btn btn-default btn-sm pull-right" onclick="decrement(1)"><i class="fa fa-minus" style="color:red;"></i></a>
-						</div>
-						<div class="col-md-5 col-sm-5 col-xs-5">
-							<input type="number" class="form-control text-center" name="quantity" id="quan1" value="1" min="1" style="color: black;">
-						</div>
-						<div class="col-md-3 col-sm-3 col-xs-3" style="margin-left: -27px;margin-top:2px">
-							<a class="btn btn-default btn-sm pull-left" onclick="increment(1);"><i class="fa fa-plus" style="color:red;"></i></a>
-						</div>
+				</div>
+				<div class="col-md-3 col-sm-3 col-xs-3"></div>		
+				<div class="col-md-6 col-sm-6 col-xs-6">
+					<h4 class="text-center"><b>Quantity</b></h4>
+					<div class="input-group bootstrap-touchspin">
+						<span class="input-group-btn" onclick="decrement(1)">
+							<button class="btn btn-white bootstrap-touchspin-down" type="button" style="color:red;"><b>-</b></button>
+						</span>
+						<span class="input-group-addon bootstrap-touchspin-prefix" style="display: none;"></span>
+						<input class="touchspin1 form-control text-center" id="quan1" type="text" value="<?=1;?>" name="quantity" style="color: black;">
+						<span class="input-group-addon bootstrap-touchspin-postfix" style="display: none;"></span>
+						<span class="input-group-btn" onclick="increment(1);">
+							<button class="btn btn-white bootstrap-touchspin-up" type="button" style="color:red;">
+								<b>+</b>
+							</button>
+						</span>
 					</div>
 				</div>
+				<div class="col-md-3 col-sm-3 col-xs-3"></div>
 			</div>
 					
 		</div>

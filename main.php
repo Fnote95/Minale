@@ -23,15 +23,23 @@ $sub_menu_query=$db->query("SELECT * FROM category");
 
 		<div class="row">
 			<div class="col-md-12 col-sm-12 col-xs-12">
-			<?php while($sub_cat=mysqli_fetch_assoc($sub_menu_query)): ?>
-				<div class="col-md-6 col-sm-6 col-xs-6" style="padding: 5px">
-					<a href="eatin?sub=<?=$sub_cat['id'];?>">
-						<div class="text-center" style="margin-bottom: 5px;padding:25px;background-color: white; box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.1);">
-							<i class="fa fa-arrow-left" style="font-size: 25px; color: red;"></i>
-							<h5 style="padding-top: 5px"><b><?=$sub_cat['cat_name'];?></b></h5>
+			<?php while($sub_cat=mysqli_fetch_assoc($sub_menu_query)): 
+				$su_cat_id=$sub_cat['id'];
+				$img_query=$db->query("SELECT * FROM menu WHERE cat_id='$su_cat_id'");
+				$img=mysqli_fetch_assoc($img_query);
+
+				?>
+				<a href="eatin?sub=<?=$sub_cat['id'];?>">
+				<div class="col-md-6 col-sm-6 col-xs-6" style="height: 125px;margin-top: 10px;padding: 5px;overflow: hidden;background-image: url('<?=$img['item_pic'];?>');background-size: auto 175px;border: 1px solid #f0f0f0;box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.14);">
+				
+						<!------------------------------------>
+						<div class="pull-left" style="margin-top: -44px; margin-left: -75px; height: 88px; width: 150px; border-radius: 50%; background-color: red;box-shadow: 5px 5px 5px 0 rgba(0, 0, 0, 0.3);">
+							<h6 class="text-left" style="color:white;margin-top: 49px;margin-left: 75px;"><b><?=$sub_cat['cat_name'];?></b></h6>
+									
 						</div>
-					</a>
+						<!-------------------------------------->
 				</div>
+			</a>
 			<?php endwhile;?>
 			</div>
 		</div>

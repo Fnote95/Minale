@@ -11,6 +11,7 @@ if (isset($_SESSION['order'])&&!empty($_SESSION['order'])) {
 
 
 if (isset($_POST['submit'])) {
+
 ////////////////////////////////////
 	$post_array=array();
 	$new_quantity=array();
@@ -25,7 +26,7 @@ if (isset($_POST['submit'])) {
 	
 ///////////////////////////////////////
 	$order_id=sanitize($_SESSION['order']);
-	$order_query=$db->query("SELECT * FROM orders WHERE id='$order_id' AND order_status=3");
+	$order_query=$db->query("SELECT * FROM orders WHERE id='$order_id' AND (order_status=3 OR order_status=0)");
 	$order=mysqli_fetch_assoc($order_query);
 
 	$items=json_decode($order['items'],true);
@@ -39,8 +40,7 @@ if (isset($_POST['submit'])) {
 		$index++;
 	}
 	$new_items=json_encode($new_items);
-	
-	$db->query("UPDATE orders SET items='$new_items', order_status=0 WHERE id='$order_id' AND order_status=3");
+	$db->query("UPDATE orders SET items='$new_items', order_status=0 WHERE id='$order_id' AND (order_status=3 OR order_status=0)");
 	header('Location: review');
 }
 
@@ -76,6 +76,7 @@ if (isset($_POST['submit'])) {
 			$custom_id=$order['custom_id'];
 			$item_query=$db->query("SELECT * FROM menu WHERE id='$item_id'");
 			$item=mysqli_fetch_assoc($item_query);
+			$price=(int)$item['price']*(int)$quantity;
 
 		?>
 		<div class="col-md-12 review">
@@ -106,8 +107,8 @@ if (isset($_POST['submit'])) {
 				</div>
 				<div class="col-md-3 col-sm-3 col-xs-3">
 					<div class="text-right">
-						<!--<a href="customize.php?customize=<?=($custom_id=='none')?$item_id : $item_id.'&custom='.$custom_id;?>" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-pencil" style="color: red"></span></a>-->
 						<a href="review" onClick="return confirm('Delete This Product?')" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-remove" style="color: red"></span></a>
+						<h5 style="padding-top: 50%"><b><?=cash($price);?></b></h5>
 					</div>
 				</div>
 			</div>		
@@ -119,7 +120,7 @@ if (isset($_POST['submit'])) {
 
 	<div class="row" style="padding-top: 15px;padding-bottom: 15px">
 		<div class="col-md-6 col-sm-6 col-xs-6">
-			<a href="customize?customize=<?=(isset($_GET['custom']))?$item_id.'&custom='.$custom_id : $item_id;?>" class="btn btn-success form-control" style="background-color: rgba(252,84,4,1);color:white; border-radius: 3px;">BACK TO MENU</a>
+			<a href="main" class="btn btn-success form-control" style="background-color: rgba(252,84,4,1);color:white; border-radius: 3px;">BACK TO MENU</a>
 		</div>
 		<div class="col-md-6 col-sm-6 col-xs-6">
 			<button type="submit" name="submit" class="btn btn-danger form-control" style="background-color: rgba(252,84,4,1);color:white;border-radius: 3px;">FINISH ORDER</button>
@@ -135,7 +136,7 @@ if (isset($_POST['submit'])) {
 
 	<div class="row" style="padding-top: 15px;padding-bottom: 15px">
 		<div class="col-md-12 col-sm-12 col-xs-12">
-			<a href="index" class="btn btn-success form-control" style="background-color: rgba(252,84,4,1);color:white; border-radius: 3px;">BACK TO MENU</a>
+			<a href="main" class="btn btn-success form-control" style="background-color: rgba(252,84,4,1);color:white; border-radius: 3px;">BACK TO MENU</a>
 		</div>
 		
 	</div>
