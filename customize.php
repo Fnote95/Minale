@@ -43,7 +43,8 @@ if (isset($_GET['customize'])&&!empty($_GET['customize'])) {
 				<a id="back"><i class="fa fa-arrow-left" style="font-size: 25px; color: red;"></i></a>
 		</div>
 		<div class="col-md-10 col-sm-10 col-xs-10 text-center" style="padding: 5px">
-				<h3 class="text-center" style="color: red;"><b>Customize</b></h3>
+				<!--<h3 class="text-center" style="color: red;"><b>Customize</b></h3>-->
+				<h4 style="color: red;"><b>Customizing <?=$item['item_name'];?></b></h4>
 		</div>
 
 		<div class="col-md-1 col-sm-1 col-xs-1 " style="padding: 5px">
@@ -52,7 +53,22 @@ if (isset($_GET['customize'])&&!empty($_GET['customize'])) {
 			</a>
 		</div>
 	</div>
-	<div class="row text-center" style="padding-top: 20px">
+
+<div class="row">
+	<div class="col-md-12 col-sm-12 col-xs-12" style="background-size: auto 300px;background-image: url('<?=$item['item_pic'];?>');  height: 300px;overflow: hidden;">
+	<div class="pull-left" style="margin-top: -88px; margin-left: -150px; height: 176px; width: 300px; border-radius: 50%; background-color: red; box-shadow: 5px 1px 4px 0 rgba(0, 0, 0, 0.5);">
+		<h4 class="text-left" style="color:white;margin-top: 98px;margin-left: 150px;"><b><?=$item['item_name'];?></b></h4>
+		<h3 class="text-left" id="price1" style="color: white;margin-top: 0px; margin-left: 150px;"><b><?=cash($item['price']);?></b></h3>			
+	</div>
+			
+	</div>
+</div>
+
+<div class="row text-center" style="padding-top: 10px">
+
+	<div>
+		<h4 style="color: red"><b>Ingredients</b></h4>
+	</div>
 	<form action="customize?customize=<?=(isset($_GET['custom']))?$item_id.'&custom='.$custom_id : $item_id;?>" method="post" enctype="multipart/form-data">
 
 	<?php 
@@ -63,6 +79,7 @@ if (isset($_GET['customize'])&&!empty($_GET['customize'])) {
 				<div class="col-md-4 col-sm-4 col-xs-4">
 					<h4><b><?=$comp['comp'];?></b></h4>
 				</div>
+				<div class="col-md-3 col-sm-3 col-xs-3"></div>
 				<div class="col-md-5 col-sm-5 col-xs-5 text-center">
 					
 					<div class="input-group bootstrap-touchspin">
@@ -80,11 +97,7 @@ if (isset($_GET['customize'])&&!empty($_GET['customize'])) {
 					</div>
 
 				</div>
-				<div class="col-md-3 col-sm-3 col-xs-3">
-					<div class="text-right">
-						<a href="#" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span></a>
-					</div>
-				</div>
+				
 			</div>
 		</div>
 	<?php
@@ -94,7 +107,7 @@ if (isset($_GET['customize'])&&!empty($_GET['customize'])) {
 	</div>
 	<div class="row" style="padding: 15px">
 		<div class="col-md-12 col-sm-12 col-xs-12">
-			<input type="submit" name="customize" value="Finish Customizing" class="btn btn-danger form-control">
+			<input type="submit" name="customize" value="Finish Customizing" class="btn btn-danger form-control" style="background-color: rgba(252,84,4,1);color:white; border-radius: 3px;">
 		</div>
 	</div>
 	</form>

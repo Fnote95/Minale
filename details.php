@@ -31,9 +31,8 @@ if (isset($_POST['submit'])) {
 	$orders_array[0]['quantity']=sanitize($_POST['quantity']);
 	$orders_array[0]['custom_id']=(isset($_GET['custom']))? $custom_id : 'none';
 	$session_id=session_id();
-	$orders_json=json_encode($orders_array,true);
-
-	
+	$order_json=json_encode($orders_array,true);
+	$order_type=$_SESSION['type'];
 	if (isset($_SESSION['order'])) {
 
 		$order_id=sanitize($_SESSION['order']);
@@ -41,14 +40,26 @@ if (isset($_POST['submit'])) {
 		$orders_list=mysqli_fetch_assoc($o_query);
 		$orders_session=json_decode($orders_list['items'],true);
 		$orders_json=json_encode(array_merge($orders_session,$orders_array));
-		$db->query("UPDATE orders SET items='$orders_json' WHERE id='$order_id' AND (order_status=0 OR order_status=3)");
 
+		$previouse_type=$orders_list['order_type'];
+		if($previouse_type!=$order_type){
+
+			$db->query("INSERT INTO orders (items,order_type,session_id) VALUES ('$order_json','$order_type','$session_id')");
+			$order_id=$db->insert_id;
+			$_SESSION['order']=$order_id;
+		}else{
+			
+			$db->query("UPDATE orders SET items='$orders_json' WHERE id='$order_id' AND (order_status=0 OR order_status=3)");
+		header('Location: success');
+
+		}
+		
 	}
 	else{
-		$db->query("INSERT INTO orders (items,session_id) VALUES ('$orders_json','$session_id')");
+		$db->query("INSERT INTO orders (items,order_type,session_id) VALUES ('$order_json','$order_type','$session_id')");
 		$order_id=$db->insert_id;
 		$_SESSION['order']=$order_id;
-
+		header('Location: success');
 	}
 
 }
@@ -74,7 +85,7 @@ if (isset($_POST['submit'])) {
 		
 					<div class="pull-left" style="margin-top: -88px; margin-left: -150px; height: 176px; width: 300px; border-radius: 50%; background-color: red; box-shadow: 5px 1px 4px 0 rgba(0, 0, 0, 0.5);">
 						<h4 class="text-left" style="color:white;margin-top: 98px;margin-left: 150px;"><b><?=$item_name;?></b></h4>
-						<h3 class="text-left" style="color: white;margin-top: 0px; margin-left: 150px;"><b><?=cash($item_price);?></b></h3>			
+						<h3 class="text-left" id="price1" style="color: white;margin-top: 0px; margin-left: 150px;"><b><?=cash($item_price);?></b></h3>			
 					</div>
 							
 			</div>
@@ -91,13 +102,13 @@ if (isset($_POST['submit'])) {
 				<div class="col-md-6 col-sm-6 col-xs-6">
 					<h4 class="text-center"><b>Quantity</b></h4>
 					<div class="input-group bootstrap-touchspin">
-						<span class="input-group-btn" onclick="decrement(1)">
+						<span class="input-group-btn" onclick="decrement(1);update_price(<?=$item_price;?>,1);">
 							<button class="btn btn-white bootstrap-touchspin-down" type="button" style="color:red;"><b>-</b></button>
 						</span>
 						<span class="input-group-addon bootstrap-touchspin-prefix" style="display: none;"></span>
 						<input class="touchspin1 form-control text-center" id="quan1" type="text" value="<?=1;?>" name="quantity" style="color: black;">
 						<span class="input-group-addon bootstrap-touchspin-postfix" style="display: none;"></span>
-						<span class="input-group-btn" onclick="increment(1);">
+						<span class="input-group-btn" onclick="increment(1);update_price(<?=$item_price;?>,1);">
 							<button class="btn btn-white bootstrap-touchspin-up" type="button" style="color:red;">
 								<b>+</b>
 							</button>

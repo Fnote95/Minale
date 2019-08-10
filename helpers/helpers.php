@@ -1,6 +1,6 @@
 <?php 
 function display_errors($errors){
-	$display= '<div class="container-fluid"><div class="row"><ul class="bg-danger">';
+	$display= '<div class="container-fluid"><div class="row text-center"><ul class="bg-danger">';
 	foreach ($errors as $error) {
 		$display.='<li class="text-danger">'.$error.'</li>';
 	}
@@ -36,6 +36,9 @@ function has_permission($permission='admin'){
 		return true;
 	}
 	return false;
+}
+function session_error_redirect($url='login.php'){
+	header('Location: index');
 }
 function login_error_redirect($url='login.php'){
 

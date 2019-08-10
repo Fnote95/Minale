@@ -1,8 +1,16 @@
 <?php
 require_once "core/init.php";
+
 include "includes/head.php";
 
 
+if (isset($_GET['type'])&&!empty($_GET['type'])) {
+	$type=sanitize($_GET['type']);
+	$_SESSION['type']=$type;
+}
+if(!isset($_SESSION['type'])){
+	session_error_redirect();
+}
 $sub_menu_query=$db->query("SELECT * FROM category");
 ?>
 <div class="container-fluid">

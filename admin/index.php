@@ -45,13 +45,21 @@ $process_js_index=8;
 	
 	<div class="col-md-6">
 		<h2 class="text-center"><b>Queued Orders</b></h2>
-		<?php while($order_queued=mysqli_fetch_assoc($order_queued_query)): ?>
+		<?php while($order_queued=mysqli_fetch_assoc($order_queued_query)): 
+			$cust_array=json_decode($order_queued['items'],true);
+			$cust_check=0;
+			foreach ($cust_array as $cust) {
+				if ($cust['custom_id']!='none') {
+					$cust_check++;
+				}
+			}
+			?>
 			<div class="col-md-12" style="padding:10px; margin: 15px; background-color: #f9f9f9; border: 1px solid #f0f0f0;box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.14);">
 				<div class="col-md-12" style="border-bottom: 1px solid #d8d8d8">
 					 <div class="col-md-2"><h4 style="color: red"><b>#<?=$order_queued['id'];?></b></h4></div>
 						<div class="col-md-3"><h5><b>Multiple Orders</b></h5></div>
-						<div class="col-md-3"><h5><b>Table No.:12</b></h5></div>
-					<div class="col-md-2"><h5 style="color: green"><b>Regular</b></h5></div>
+						<div class="col-md-3"><h5><b>Table No. <?=$order_queued['table_no'];?></b></h5></div>
+					<div class="col-md-4"><h5 style="color: green"><b><?=($cust_check>0)? $cust_check.' Customized orders':'All Regular';?></b></h5></div>
 				</div>
 				<div class="col-md-12" style="padding: 5px">
 		
@@ -85,7 +93,14 @@ $process_js_index=8;
 
 	<div class="col-md-6">
 		<h2 class="text-center"><b>Orders Being Processed</b></h2>
-		<?php while($order_processed=mysqli_fetch_assoc($order_processed_query)): ?>
+		<?php while($order_processed=mysqli_fetch_assoc($order_processed_query)): 
+			$cust_array=json_decode($order_processed['items'],true);
+			$cust_check=0;
+			foreach ($cust_array as $cust) {
+				if ($cust['custom_id']!='none') {
+					$cust_check++;
+				}
+			}?>
 		<div class="col-md-12" style="padding-top: 15px">
 			<div class="sparkline<?=$process_js_index;?>-list basic-res-b-30 shadow-reset">
                 <div class="sparkline<?=$process_js_index;?>-hd">
@@ -93,8 +108,8 @@ $process_js_index=8;
                        <div class="row">
 							<div class="col-md-2"><h4 style="color: red"><b>#<?=$order_processed['id'];?></b></h4></div>
 							<div class="col-md-3"><h5><b>Multiple Orders</b></h5></div>
-							<div class="col-md-3"><h5><b>Table No.:12</b></h5></div>
-							<div class="col-md-2"><h5 style="color: green"><b>Regular</b></h5></div>
+							<div class="col-md-3"><h5><b>Table No.<?=$order_processed['table_no'];?></b></h5></div>
+							<div class="col-md-3"><h5 style="color: green"><b><?=($cust_check>0)? $cust_check.' Customized orders':'All Regular';?></b></h5></div>
 							<div class="sparkline<?=$process_js_index;?>-outline-icon col-md-2">
                             <span class="sparkline<?=$process_js_index;?>-collapse-link pull-right"><i class="fa fa-chevron-down"></i></span>
                         	</div>

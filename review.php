@@ -5,7 +5,7 @@ include "includes/head.php";
 if (isset($_SESSION['order'])&&!empty($_SESSION['order'])) {
 	$or_id=sanitize($_SESSION['order']);
 
-	$check_query=$db->query("SELECT * FROM orders WHERE id='$or_id' AND order_status=3 OR order_status=0");
+	$check_query=$db->query("SELECT * FROM orders WHERE id='$or_id' AND (order_status=3 OR order_status=0)");
 	$check=mysqli_num_rows($check_query);
 	$check2=mysqli_fetch_assoc($check_query);
 }
@@ -13,10 +13,13 @@ if (isset($_SESSION['order'])&&!empty($_SESSION['order'])) {
 
 
 if (isset($_POST['submit'])) {
-
 ////////////////////////////////////
 	$table_no=$_POST['table_no'];
-
+	$errors=array();
+	if($table_no==''){
+		$errors[]='You must enter your table number!';
+	}
+	
 	$post_array=array();
 	$new_quantity=array();
 	foreach ($_POST as $po) {
@@ -43,9 +46,15 @@ if (isset($_POST['submit'])) {
 		$new_items[$index]['custom_id']=$item['custom_id'];
 		$index++;
 	}
+	if (!empty($errors)) {
+		 echo display_errors($errors);
+	}
+	else
+	{
 	$new_items=json_encode($new_items);
 	$db->query("UPDATE orders SET items='$new_items', order_status=0, table_no='$table_no' WHERE id='$order_id' AND (order_status=3 OR order_status=0)");
 	header('Location: review');
+	}
 }
 
 ?>
@@ -64,27 +73,32 @@ if (isset($_POST['submit'])) {
 			</a>
 		</div>
 	</div>
-	<?php if($check2['order_status']==0){ 
+	<?php if(isset($_SESSION['order'])&&$check2['order_status']==0){ 
+
 		$orders_before_query=$db->query("SELECT * FROM orders WHERE order_status=0 AND id<'$or_id'");
 		$orders_before=mysqli_num_rows($orders_before_query);
-		if(isset($_GET['edit'])){
+
+		if(isset($_GET['edit'])||$check2['order_status']==3){
+
 			display_regular();
+
 		}
 		else{
+
 		?>
 		<div class="row" style="padding: 10px; background-color: #fff;margin-top: 2px">
-			<div class="col-md-6 col-sm-6 col-xs-6">
-				<img src="images.jpg" style="width: 120px">
+			<div class="col-md-12 col-sm-12 col-xs-12 text-center">
+				<img src="min.png" style="width: 120px">
 			</div>
 
-			<div class="col-md-6 col-sm-6 col-xs-6" style="color: red">
-				<p><b>Your order is in the waiting area</b></p>
-				<p><b>There are <?=$orders_before;?> orders before you</b></p>	
+			<div class="col-md-12 col-sm-12 col-xs-12" style="color: red; padding-top: 10px">
+				<h4 style="font-size: 15px"><b><i class="glyphicon glyphicon-time"></i>  Your order is in the waiting area</b></h4>
+				<h4 style="font-size: 15px"><b><i class="fa fa-users"></i>  There are -<?=$orders_before;?>- orders before you</b></h4>	
 			</div>
-			<div class="col-md-12 col-sm-12 col-xs-12">
+			<div class="col-md-12 col-sm-12 col-xs-12" style="padding-top: 15px">
 				<a href="review?edit=1" class="btn btn-white form-control" style="background-color: rgba(252,84,4,1);color:white;border-radius: 3px;">Edit or add more orders</a>
 			</div>
-			</div>
+		</div>
 			
 
 <?php
@@ -97,16 +111,16 @@ function display_regular(){
 	global $check;
 	global $db;
 ?>
-	<form action="review" method="post" enctype="multipart/form-data">
+	<form action="review<?=isset($_GET['edit'])?'?edit=1':'';?>" method="post" enctype="multipart/form-data">
 	<div class="row text-center" style="padding-top: 10px">
 		<?php
 		if (isset($_SESSION['order'])&&($check>0)) {
 			$order_id=sanitize($_SESSION['order']);
 			
 			$order_query=$db->query("SELECT * FROM orders WHERE id='$order_id' AND (order_status=0 OR order_status=3)");
-			$order=mysqli_fetch_assoc($order_query);
+			$orders=mysqli_fetch_assoc($order_query);
 		
-			$order_array=json_decode($order['items'],true);
+			$order_array=json_decode($orders['items'],true);
 
 			$index=1;
 			foreach($order_array as $order): 
@@ -130,13 +144,13 @@ function display_regular(){
 					<h5><b><?=$item['item_name'];?></b></h5>
 
 					<div class="input-group bootstrap-touchspin">
-						<span class="input-group-btn" onclick="decrement(<?=$index;?>)">
+						<span class="input-group-btn" onclick="decrement(<?=$index;?>);update_price(<?=$price;?>,<?=$index;?>);">
 							<button class="btn btn-white bootstrap-touchspin-down" type="button" style="color:red;"><b>-</b></button>
 						</span>
 						<span class="input-group-addon bootstrap-touchspin-prefix" style="display: none;"></span>
 						<input class="touchspin1 form-control text-center" id="quan<?=$index;?>" type="text" value="<?=$quantity;?>" name="demo<?=$index;?>" style="color: black;">
 						<span class="input-group-addon bootstrap-touchspin-postfix" style="display: none;"></span>
-						<span class="input-group-btn" onclick="increment(<?=$index;?>);">
+						<span class="input-group-btn" onclick="increment(<?=$index;?>);update_price(<?=$price;?>,<?=$index;?>);">
 							<button class="btn btn-white bootstrap-touchspin-up" type="button" style="color:red;">
 								<b>+</b>
 							</button>
@@ -147,7 +161,7 @@ function display_regular(){
 				<div class="col-md-3 col-sm-3 col-xs-3">
 					<div class="text-right">
 						<a href="review" onClick="return confirm('Delete This Product?')" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-remove" style="color: red"></span></a>
-						<h5 style="padding-top: 50%"><b><?=cash($price);?></b></h5>
+						<h5 id="price<?=$index;?>" style="padding-top: 50%"><b><?=cash($price);?></b></h5>
 					</div>
 				</div>
 			</div>		
@@ -162,10 +176,9 @@ function display_regular(){
 			<h4 style="color: white; margin-top: 5px"><b>Enter your table number</b></h4>
 		</div>
 		<div class="col-md-4 col-sm-4 col-xs-4" style="padding-left: 5px">
-			<input type="text" name="table_no" class="form-control text-center" style="color: #000">
+			<input type="text" name="table_no" class="form-control text-center" value="<?=(isset($_GET['edit']))? $orders['table_no']:'';?>" style="color: #000">
 		</div>
 	</div>
-
 	<div class="row" style="padding-top: 15px;padding-bottom: 15px">
 		<div class="col-md-6 col-sm-6 col-xs-6">
 			<a href="main" class="btn btn-success form-control" style="background-color: rgba(252,84,4,1);color:white; border-radius: 3px;">BACK TO MENU</a>
