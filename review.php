@@ -9,6 +9,20 @@ if (isset($_SESSION['order'])&&!empty($_SESSION['order'])) {
 	$check=mysqli_num_rows($check_query);
 	$check2=mysqli_fetch_assoc($check_query);
 }
+if (isset($_GET['delete'])) {
+	$delete_id=sanitize($_GET['delete']);
+
+	$order_query_delete=$db->query("SELECT * FROM orders WHERE id='$or_id'");
+	$order_delete=mysqli_fetch_assoc($order_query_delete);
+	$order_json_delete=json_decode($order_delete['items'],true);
+	array_splice($order_json_delete, $delete_id,1);
+
+	$order_json_delete=json_encode($order_json_delete);
+
+	$db->query("UPDATE orders SET items='$order_json_delete' WHERE id='$or_id' AND (order_status=3 OR order_status=0)");
+	header('Location: review');
+	
+}
 
 
 
@@ -123,6 +137,7 @@ function display_regular(){
 			$order_array=json_decode($orders['items'],true);
 
 			$index=1;
+			$delenex=0;
 			foreach($order_array as $order): 
 			$item_id=$order['item_id'];
 			$quantity=$order['quantity'];
@@ -160,7 +175,7 @@ function display_regular(){
 				</div>
 				<div class="col-md-3 col-sm-3 col-xs-3">
 					<div class="text-right">
-						<a href="review" onClick="return confirm('Delete This Product?')" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-remove" style="color: red"></span></a>
+						<a href="review?delete=<?=$delenex;?>" onClick="return confirm('Are you sure you want to remove this item from you orders?')" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-remove" style="color: red"></span></a>
 						<h5 id="price<?=$index;?>" style="padding-top: 50%"><b><?=cash($price);?></b></h5>
 					</div>
 				</div>
@@ -168,6 +183,7 @@ function display_regular(){
 		</div>
 		<?php 
 		$index++;
+		$delenex++;
 		endforeach;?>
 	</div>
 

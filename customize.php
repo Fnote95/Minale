@@ -2,14 +2,18 @@
 require_once "core/init.php";
 include "includes/head.php";
 
+
+
 if (isset($_GET['customize'])&&!empty($_GET['customize'])) {
 	$item_id=sanitize($_GET['customize']);
 	$item_query=$db->query("SELECT * FROM menu WHERE id='$item_id'");
+	$pic_query=$db->query("SELECT * FROM menu WHERE id='$item_id'");
 	if (isset($_GET['custom'])&&!empty($_GET['custom'])) {
 		$custom_id=sanitize($_GET['custom']);
 		$item_query=$db->query("SELECT * FROM customize WHERE id='$custom_id'");
 	}
 	$item=mysqli_fetch_assoc($item_query);
+	$item2=mysqli_fetch_assoc($pic_query);
 	$item_composition=json_decode($item['composition'],true);
 
 	if (isset($_POST['customize'])&&!empty($_POST['customize'])) {
@@ -44,7 +48,7 @@ if (isset($_GET['customize'])&&!empty($_GET['customize'])) {
 		</div>
 		<div class="col-md-10 col-sm-10 col-xs-10 text-center" style="padding: 5px">
 				<!--<h3 class="text-center" style="color: red;"><b>Customize</b></h3>-->
-				<h4 style="color: red;"><b>Customizing <?=$item['item_name'];?></b></h4>
+				<h4 style="color: red;"><b>Customizing <?=$item2['item_name'];?></b></h4>
 		</div>
 
 		<div class="col-md-1 col-sm-1 col-xs-1 " style="padding: 5px">
@@ -55,10 +59,10 @@ if (isset($_GET['customize'])&&!empty($_GET['customize'])) {
 	</div>
 
 <div class="row">
-	<div class="col-md-12 col-sm-12 col-xs-12" style="background-size: auto 300px;background-image: url('<?=$item['item_pic'];?>');  height: 300px;overflow: hidden;">
+	<div class="col-md-12 col-sm-12 col-xs-12" style="background-size: auto 300px;background-image: url('<?=$item2['item_pic'];?>');  height: 300px;overflow: hidden;">
 	<div class="pull-left" style="margin-top: -88px; margin-left: -150px; height: 176px; width: 300px; border-radius: 50%; background-color: red; box-shadow: 5px 1px 4px 0 rgba(0, 0, 0, 0.5);">
-		<h4 class="text-left" style="color:white;margin-top: 98px;margin-left: 150px;"><b><?=$item['item_name'];?></b></h4>
-		<h3 class="text-left" id="price1" style="color: white;margin-top: 0px; margin-left: 150px;"><b><?=cash($item['price']);?></b></h3>			
+		<h4 class="text-left" style="color:white;margin-top: 98px;margin-left: 150px;"><b><?=$item2['item_name'];?></b></h4>
+		<h3 class="text-left" id="price1" style="color: white;margin-top: 0px; margin-left: 150px;"><b><?=cash($item2['price']);?></b></h3>			
 	</div>
 			
 	</div>

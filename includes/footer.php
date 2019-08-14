@@ -11,14 +11,16 @@
         ============================================ -->
     <script src="admin/js/select2/select2.full.min.js"></script>
     <script src="admin/js/select2/select2-active.js"></script>
+  
       <!-- modal JS
         ============================================ -->
 
     <script src="admin/js/modal-active.js"></script>
     <!-- main JS
     ============================================ -->
-    
+         
     <script src="js/jquery.meanmenu.js"></script>
+
     <script src="admin/js/main.js"></script>
 
 

@@ -46,18 +46,27 @@ if (isset($_POST['submit'])) {
 
 			$db->query("INSERT INTO orders (items,order_type,session_id) VALUES ('$order_json','$order_type','$session_id')");
 			$order_id=$db->insert_id;
+			if (isset($_GET['custom'])&&!empty($_GET['custom'])) {
+				$db->query("UPDATE customize SET order_id='$order_id' WHERE id='$custom_id'");
+			}
 			$_SESSION['order']=$order_id;
-		}else{
+		}
+		else{
 			
-			$db->query("UPDATE orders SET items='$orders_json' WHERE id='$order_id' AND (order_status=0 OR order_status=3)");
+		$db->query("UPDATE orders SET items='$orders_json' WHERE id='$order_id' AND (order_status=0 OR order_status=3)");
 		header('Location: success');
-
+		if (isset($_GET['custom'])&&!empty($_GET['custom'])) {
+				$db->query("UPDATE customize SET order_id='$order_id' WHERE id='$custom_id'");
+			}
 		}
 		
 	}
 	else{
 		$db->query("INSERT INTO orders (items,order_type,session_id) VALUES ('$order_json','$order_type','$session_id')");
 		$order_id=$db->insert_id;
+		if (isset($_GET['custom'])&&!empty($_GET['custom'])) {
+			$db->query("UPDATE customize SET order_id='$order_id' WHERE id='$custom_id'");
+		}
 		$_SESSION['order']=$order_id;
 		header('Location: success');
 	}
@@ -89,7 +98,16 @@ if (isset($_POST['submit'])) {
 					</div>
 							
 			</div>
+
 			<div class="col-md-12 col-sm-12 col-xs-12" style="margin-top: -1px;color:white; padding-top: 25px;padding-bottom:25px;background-image:linear-gradient(to top, rgba(252,84,4,1) 1%, rgba(255,0,0,1) 100%) ;">
+				<?php if(isset($_GET['custom'])): ?>
+					<div class="row" style="margin-top: -10px;">
+						<div class="col-md-12 col-sm-12 col-xs-12">
+							<h5 class="pull-right" style="color: #fff;padding: 5px; padding-right: 10px; padding-left: 10px; background-color: #fc5404; margin-right: -5%"><b>Customized</b></h5>
+						</div>
+						
+					</div>
+				<?php endif;?>
 				<div class="col-md-12 col-sm-12 col-xs-12" >
 					<h4 class="text-center"><b>Ingredients</b></h4>
 					<p class="text-center">

@@ -34,8 +34,8 @@ if ($order_processed_num<5) {
 /////////////////////////////////////////////////////////////////////////////////////
 
 /////////////////queries to display orders on the queued and processed sections////////
-$order_queued_query=$db->query("SELECT * FROM orders WHERE order_status=0");
-$order_processed_query=$db->query("SELECT * FROM orders WHERE order_status=1");
+$order_queued_query=$db->query("SELECT * FROM orders WHERE order_status=0 AND order_type=1");
+$order_processed_query=$db->query("SELECT * FROM orders WHERE order_status=1 AND order_type=1");
 //$queued_js_index=8;
 $process_js_index=8;
 
