@@ -120,6 +120,22 @@
                 }
                 jQuery('#comps').val(compString);
             }
+
+    function update_orders(){
+
+        
+         setInterval(function(){
+            jQuery.ajax({
+                url: 'api/update_orders.php',
+                type: 'POST',
+                data: {},
+                success: function(data){
+                    jQuery('#ord').html(data);
+                },
+                error: function(){alert("something went wrong!")},
+            });
+         }, 500);
+    }
 	
 </script>
 </body>

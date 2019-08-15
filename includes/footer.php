@@ -65,6 +65,9 @@
 		result=result + ' Br.'
 		jQuery('#price'+ids).html(result);
 	}
+	function update_orders(){
+		setInterval();
+	}
 </script>
 </body>
 </html>
