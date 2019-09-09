@@ -8,7 +8,7 @@ if ((isset($_GET['done'])&&!empty($_GET['done']))) {
 	header('Location: takeout.php');
 }
 
-$order_queued_query=$db->query("SELECT * FROM orders WHERE order_status=1 AND order_type=2");
+$order_queued_query=$db->query("SELECT * FROM orders WHERE order_status=0 AND order_type=2");
 
 $process_js_index=8;
 ?>

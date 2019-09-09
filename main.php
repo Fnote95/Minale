@@ -8,6 +8,9 @@ if (isset($_GET['type'])&&!empty($_GET['type'])) {
 	$type=sanitize($_GET['type']);
 	$_SESSION['type']=$type;
 }
+else{
+	session_error_redirect();
+}
 if(!isset($_SESSION['type'])){
 	session_error_redirect();
 }

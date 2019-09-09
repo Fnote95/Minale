@@ -19,7 +19,6 @@
     <!-- main JS
     ============================================ -->
          
-    <script src="js/jquery.meanmenu.js"></script>
 
     <script src="admin/js/main.js"></script>
 

@@ -50,16 +50,17 @@ if (isset($_POST['submit'])) {
 				$db->query("UPDATE customize SET order_id='$order_id' WHERE id='$custom_id'");
 			}
 			$_SESSION['order']=$order_id;
+			header('Location: success');
 		}
 		else{
 			
 		$db->query("UPDATE orders SET items='$orders_json' WHERE id='$order_id' AND (order_status=0 OR order_status=3)");
-		header('Location: success');
+		
 		if (isset($_GET['custom'])&&!empty($_GET['custom'])) {
 				$db->query("UPDATE customize SET order_id='$order_id' WHERE id='$custom_id'");
 			}
 		}
-		
+		header('Location: success');
 	}
 	else{
 		$db->query("INSERT INTO orders (items,order_type,session_id) VALUES ('$order_json','$order_type','$session_id')");

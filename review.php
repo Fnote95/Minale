@@ -39,7 +39,11 @@ if (isset($_POST['submit'])) {
 	foreach ($_POST as $po) {
 		$post_array[]=$po;
 	}
+
 	$array_size=sizeof($post_array)-2;
+	if ($array_size==0) {
+		$errors[]='You must add orders first! There are no orders yet!';
+	}
 	for($i=0;$i<$array_size;$i++){
 		$new_quantity[]=$post_array[$i];
 	}
