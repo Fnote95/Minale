@@ -4,7 +4,12 @@ include "includes/head.php";
 
 if ((isset($_GET['done'])&&!empty($_GET['done']))) {
 	$done_id=sanitize($_GET['done']);
+	$end_query=$db->query("SELECT * FROM orders WHERE id='$done_id'");
+	$end_result=mysqli_fetch_assoc($end_query);
+	$sess_id=$end_result['session_id'];
+
 	$db->query("UPDATE orders SET order_status=2 WHERE id='$done_id'");
+	end_session($sess_id);
 	header('Location: takeout.php');
 }
 

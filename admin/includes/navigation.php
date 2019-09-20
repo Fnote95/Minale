@@ -19,6 +19,7 @@
 
                     <div class="collapse navbar-collapse" id="navbarCollapse">
                         <ul class="nav navbar-nav">
+                             <li><a href="eatin">Eat in orders</a></li>
                             <li><a href="takeout">Take out orders</a></li>
                             <li><a href="orders_report.php">Orders</a></li>
                              <li><a href="menu">Edit Menu</a></li>

@@ -50,6 +50,7 @@ $orders_query=$db->query("SELECT * FROM orders WHERE order_status=2");
 						<td><?php $sub_total_array=orders_price_parser($items);
 								  $ser_total=$sub_total_array['service'];
 								  echo cash(round($ser_total));	 
+
 						?></td>
 						<td><?php $sub_total_array=orders_price_parser($items);
 								  $tot_total=$sub_total_array['total'];
@@ -69,7 +70,7 @@ $orders_query=$db->query("SELECT * FROM orders WHERE order_status=2");
 				<tr>
 					<td></td>
 					<td></td>
-					<th><?=cash(round($total_quantity));?></th>
+					<th><?=round($total_quantity);?></th>
 					<th><?=cash(round($total_sub_total));?></th>
 					<th><?=cash(round($total_vat_total));?></th>
 					<th><?=cash(round($total_service));?></th>

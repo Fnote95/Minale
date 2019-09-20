@@ -109,8 +109,11 @@ if (isset($_GET['customize'])&&!empty($_GET['customize'])) {
 	endforeach; ?>
 
 	</div>
-	<div class="row" style="padding: 15px">
-		<div class="col-md-12 col-sm-12 col-xs-12">
+	<div class="row" style="padding: 5px;padding-top: 10px">
+		<div class="col-md-6 col-sm-6 col-xs-6">
+			<a href="details?item=<?=$item_id;?>" class="btn btn-danger form-control" style="background-color: rgba(252,0,4,1);color:white; border-radius: 3px;">Cancel</a>
+		</div>
+		<div class="col-md-6 col-sm-6 col-xs-6">
 			<input type="submit" name="customize" value="Finish Customizing" class="btn btn-danger form-control" style="background-color: rgba(252,84,4,1);color:white; border-radius: 3px;">
 		</div>
 	</div>

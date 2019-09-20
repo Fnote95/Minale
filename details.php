@@ -2,7 +2,6 @@
 require_once "core/init.php";
 include "includes/head.php";
 
-
 if (isset($_GET['item'])&&!empty($_GET['item'])) {
 	$item_id=sanitize($_GET['item']);
 

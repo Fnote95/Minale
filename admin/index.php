@@ -3,134 +3,210 @@
 require_once "../core/init.php";
 include "includes/head.php";
 
-
-///////////to handle when the done button is pressed//////////
-if ((isset($_GET['done'])&&!empty($_GET['done']))) {
-	$done_id=sanitize($_GET['done']);
-	end_session($session);
-	$db->query("UPDATE orders SET order_status=2 WHERE id='$done_id'");
-	header('Location: index.php');
+/////////////////////////////////////////////////////////////////////////////
+$orders_stat_query=$db->query("SELECT * FROM orders WHERE order_status=2");
+$total_total=0;
+while ($order_stat=mysqli_fetch_assoc($orders_stat_query)) {
+	$items=json_decode($order_stat['items'],true);
+	$sub_total_array=orders_price_parser($items);
+	$tot_total=$sub_total_array['total'];
+	$total_total+=$tot_total;
 }
-//////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////
+$eatin_query=$db->query("SELECT * FROM orders WHERE order_type=1 AND order_status!=2");
 
-////////////check to see how many orders are being processed//////////////////////
-$order_processed_num_query=$db->query("SELECT * FROM orders WHERE order_status=1");
-$order_processed_num=mysqli_num_rows($order_processed_num_query);
-//////////////////////////////////////////////////////////////////////////////////
-
-///////////to add orders from the queued section to the processing section//////////
-if ($order_processed_num<5) {
-	$limit=5-$order_processed_num;
-	echo $limit;
-	$limit_select_query=$db->query("SELECT * FROM orders WHERE order_status=0 LIMIT ".$limit);
-	//echo mysqli_num_rows($limit_select_query);
-	while($orders_processed_result=mysqli_fetch_assoc($limit_select_query)):
-		$sess_id=$orders_processed_result['session_id'];
-		$or_id=$orders_processed_result['id'];
-		$db->query("UPDATE orders SET order_status=1 WHERE id='$or_id'");
-		end_session($sess_id);
-	endwhile;
+$total_eatin=0;
+while ($eatin_stat=mysqli_fetch_assoc($eatin_query)) {
+	$items=json_decode($eatin_stat['items'],true);
+	$total_eatin+=orders_quantity_parser($items);
 }
-/////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+$takeout_query=$db->query("SELECT * FROM orders WHERE order_type=2 AND order_status!=2");
 
-/////////////////queries to display orders on the queued and processed sections////////
-$order_queued_query=$db->query("SELECT * FROM orders WHERE order_status=0 AND order_type=1");
-$order_processed_query=$db->query("SELECT * FROM orders WHERE order_status=1 AND order_type=1");
-//$queued_js_index=8;
-$process_js_index=8;
-
+$total_takeout=0;
+while ($takeout_stat=mysqli_fetch_assoc($takeout_query)) {
+	$items=json_decode($takeout_stat['items'],true);
+	$total_takeout+=orders_quantity_parser($items);
+}
+////////////////////////////////////////////////////////////////////////////
+$total_orders_query=$db->query("SELECT * FROM orders");
+$total=0;
+while ($total_orders=mysqli_fetch_assoc($total_orders_query)) {
+	$items=json_decode($total_orders['items'],true);
+	$total+=orders_quantity_parser($items);
+}
 ?>
-<div class="container-fluid">
-<div class="row" style="padding-top: 75px; padding-bottom: 50px;">
-	
-	<div class="col-md-6" id="ord">
-
-
-
-	</div>
-
-	<div class="col-md-6">
-		<h2 class="text-center"><b>Orders Being Processed</b></h2>
-		<?php while($order_processed=mysqli_fetch_assoc($order_processed_query)): 
-			$cust_array=json_decode($order_processed['items'],true);
-			$cust_check=0;
-			foreach ($cust_array as $cust) {
-				if ($cust['custom_id']!='none') {
-					$cust_check++;
-				}
-			}?>
-		<div class="col-md-12" style="padding-top: 15px">
-			<div class="sparkline<?=$process_js_index;?>-list basic-res-b-30 shadow-reset">
-                <div class="sparkline<?=$process_js_index;?>-hd">
-                    <div class="main-sparkline<?=$process_js_index;?>-hd">
-                       <div class="row">
-							<div class="col-md-2"><h4 style="color: red"><b>#<?=$order_processed['id'];?></b></h4></div>
-							<div class="col-md-3"><h5><b>Multiple Orders</b></h5></div>
-							<div class="col-md-3"><h5><b>Table No.<?=$order_processed['table_no'];?></b></h5></div>
-							<div class="col-md-3"><h5 style="color: green"><b><?=($cust_check>0)? $cust_check.' Customized orders':'All Regular';?></b></h5></div>
-							<div class="sparkline<?=$process_js_index;?>-outline-icon col-md-2">
-                            <span class="sparkline<?=$process_js_index;?>-collapse-link pull-right"><i class="fa fa-chevron-down"></i></span>
-                        	</div>
-						</div>
+<div class="income-order-visit-user-area" style="padding-top: 75px">
+	<div class="container-fluid">
+		<div class="col-md-2 text-center">
+				<canvas id="canvas2" width="150" height="150" style="background-color:#fff">
+				</canvas>
+		</div>
+		<div class="col-md-10">
+	        <div class="col-lg-3 col-md-6 col-sm-12">
+	            <div class="income-dashone-total income-monthly shadow-reset nt-mg-b-30">
+	                <div class="income-title">
+	                    <div class="main-income-head">
+	                        <h2>Sales</h2>
+	                        <div class="main-income-phara">
+	                            <p>Today</p>
+	                        </div>
+	                    </div>
+	                </div>
+	                <div class="income-dashone-pro">
+	                    <div class="income-rate-total">
+	                        <div class="price-adminpro-rate">
+	                            <h3><span>Br. </span><span class="counter"><?=$total_total;?></span></h3>
+	                        </div>
+	                        <div class="price-graph">
+	                            <span id="sparkline1"><canvas width="27" height="16" style="display: inline-block; width: 27px; height: 16px; vertical-align: top;"></canvas></span>
+	                        </div>
+	                    </div>
+	                    <div class="income-range">
+	                        <p>Total income</p>
+	                        <span class="income-percentange">98% <i class="fa fa-bolt"></i></span>
+	                    </div>
+	                    <div class="clear"></div>
+	                </div>
+	            </div>
+	        </div>
+	        <div class="col-lg-3 col-md-6 col-sm-12">
+	            <div class="income-dashone-total income-monthly shadow-reset nt-mg-b-30">
+	                <div class="income-title">
+	                    <div class="main-income-head">
+	                        <h2>Eat-in orders</h2>
+	                        <div class="main-income-phara">
+	                            <p>Today</p>
+	                        </div>
+	                    </div>
+	                </div>
+	                <div class="income-dashone-pro">
+	                    <div class="income-rate-total">
+	                        <div class="price-adminpro-rate">
+	                            <h3><span class="counter"><?=$total_eatin;?></span></h3>
+	                        </div>
+	                        <div class="price-graph">
+	                            <span id="sparkline1"><canvas width="27" height="16" style="display: inline-block; width: 27px; height: 16px; vertical-align: top;"></canvas></span>
+	                        </div>
+	                    </div>
+	                    <div class="income-range">
+	                        <p>New orders</p>
+	                        <span class="income-percentange">98% <i class="fa fa-bolt"></i></span>
+	                    </div>
+	                    <div class="clear"></div>
+	                </div>
+	            </div>
+	        </div>
+	        <div class="col-lg-3 col-md-6 col-sm-12">
+	            <div class="income-dashone-total orders-monthly shadow-reset nt-mg-b-30">
+	                <div class="income-title">
+	                    <div class="main-income-head">
+	                        <h2>Takeout orders</h2>
+	                        <div class="main-income-phara order-cl">
+	                            <p>Today</p>
+	                        </div>
+	                    </div>
+	                </div>
+	                <div class="income-dashone-pro">
+	                    <div class="income-rate-total">
+	                        <div class="price-adminpro-rate">
+	                            <h3><?=$total_takeout;?></h3>
+	                        </div>
+	                        <div class="price-graph">
+	                            <span id="sparkline6"><canvas width="56" height="16" style="display: inline-block; width: 56px; height: 16px; vertical-align: top;"></canvas></span>
+	                        </div>
+	                    </div>
+	                    <div class="income-range order-cl">
+	                        <p>New Orders</p>
+	                        <span class="income-percentange">66% <i class="fa fa-level-up"></i></span>
+	                    </div>
+	                    <div class="clear"></div>
+	                </div>
+	            </div>
+	        </div>
+	        <div class="col-lg-3 col-md-6 col-sm-12">
+                <div class="income-dashone-total visitor-monthly shadow-reset nt-mg-b-30">
+                    <div class="income-title">
+                        <div class="main-income-head">
+                            <h2>Total orders</h2>
+                            <div class="main-income-phara visitor-cl">
+                                <a href="products.php"><p>View</p></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="income-dashone-pro">
+                        <div class="income-rate-total">
+                            <div class="price-adminpro-rate">
+                                <h3><span class="counter"><?=$total;?></span></h3>
+                            </div>
+                            <div class="price-graph">
+                                <span id="sparkline2"><canvas width="39" height="19" style="display: inline-block; width: 39px; height: 19px; vertical-align: top;"></canvas></span>
+                            </div>
+                        </div>
+                        <div class="income-range visitor-cl">
+                            <p></p>
+                            <span class="income-percentange">55% <i class="fa fa-level-up"></i></span>
+                        </div>
+                        <div class="clear"></div>
                     </div>
                 </div>
-                <div class="sparkline<?=$process_js_index;?>-graph" style="display: none;">
-                	<table class="table table-striped table-condensed">
-                		<thead>
-                			<th class="text-center"></th>
-                			<th class="text-center">Item name</th>
-                			<th class="text-center">Quantity</th>
-                			<th class="text-center">Customization</th>
-                		</thead>
-                		<tbody>
-                			<?php
-                				$items_array=json_decode($order_processed['items'],true);
-                				$num=1;
-                				foreach($items_array as $items):
-                					
-                					$items_id=$items['item_id'];
-                					$items_query=$db->query("SELECT * FROM menu WHERE id='$items_id'");
-                					$menu_item=mysqli_fetch_assoc($items_query);
-                					$custom_id=$items['custom_id'];
-                					$custom_query=$db->query("SELECT * FROM customize WHERE id='$custom_id'");
-                					$custom=mysqli_fetch_assoc($custom_query);
-                					$custom_items=json_decode($custom['composition'],true);
-
-                			?>
-	                			<tr>
-	            					<td><img src="<?='../'.$menu_item['item_pic'];?>" style="width: 50px"></td>
-		                			<td><?=$menu_item['item_name'];?></td>
-		                			<td><?=$items['quantity'];?></td>
-		                			<td>
-		                				<?php 
-		                				if ($items['custom_id']=='none') {
-		                					echo 'None';
-		                				}
-		                				else{
-		                					foreach($custom_items as $cus_items):
-
-		                					echo $cus_items['comp'].':'.$cus_items['quantity'].' | ';
-
-		                					endforeach;	
-		                				}
-		                				?>
-		                			</td>
-	                			</tr>
-                			<?php
-                			$num++; 
-                			endforeach;?>
-                		</tbody>
-                	</table>
-								<a href="index?done=<?=$order_processed['id'];?>" onClick="return confirm('Are you sure you are done?')" class="btn btn-primary" >Done</a>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                <div class="income-dashone-total visitor-monthly shadow-reset nt-mg-b-30">
+                    <div class="income-title">
+                        <div class="main-income-head">
+                            <h2>Average wait time</h2>
+                        </div>
+                    </div>
+                    <div class="income-dashone-pro">
+                        <div class="income-rate-total">
+                            <div class="price-adminpro-rate">
+                                <h3><span class="counter">1234</span></h3>
+                            </div>
+                            <div class="price-graph">
+                                <span id="sparkline2"><canvas width="39" height="19" style="display: inline-block; width: 39px; height: 19px; vertical-align: top;"></canvas></span>
+                            </div>
+                        </div>
+                        <div class="income-range visitor-cl">
+                            <p></p>
+                            <span class="income-percentange">55% <i class="fa fa-level-up"></i></span>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
                 </div>
             </div>
-		</div>
-		<?php 
-		$process_js_index++;
-		endwhile;?>
+	        <div class="col-lg-3 col-md-6 col-sm-12">
+                <div class="income-dashone-total visitor-monthly shadow-reset nt-mg-b-30">
+                    <div class="income-title">
+                        <div class="main-income-head">
+                            <h2>Menu items</h2>
+                            <div class="main-income-phara visitor-cl">
+                                <a href="products.php"><p>View</p></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="income-dashone-pro">
+                        <div class="income-rate-total">
+                            <div class="price-adminpro-rate">
+                                <h3><span class="counter">1234</span></h3>
+                            </div>
+                            <div class="price-graph">
+                                <span id="sparkline2"><canvas width="39" height="19" style="display: inline-block; width: 39px; height: 19px; vertical-align: top;"></canvas></span>
+                            </div>
+                        </div>
+                        <div class="income-range visitor-cl">
+                            <p></p>
+                            <span class="income-percentange">55% <i class="fa fa-level-up"></i></span>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+            </div>               
+	    </div>
 	</div>
 </div>
-</div>
+
+
 
 <?php 
 include "includes/footer.php";

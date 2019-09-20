@@ -28,6 +28,10 @@ if (isset($_GET['delete'])) {
 
 if (isset($_POST['submit'])) {
 ////////////////////////////////////
+	if (!isset($_SESSION['order'])) {
+		header('Location: review');
+	}
+	else{
 	$table_no=$_POST['table_no'];
 	$errors=array();
 	if($table_no==''){
@@ -73,6 +77,7 @@ if (isset($_POST['submit'])) {
 	$db->query("UPDATE orders SET items='$new_items', order_status=0, table_no='$table_no' WHERE id='$order_id' AND (order_status=3 OR order_status=0)");
 	header('Location: review');
 	}
+}
 }
 
 ?>
