@@ -6,8 +6,7 @@ include "includes/head.php";
 ///////////to handle when the done button is pressed//////////
 if ((isset($_GET['done'])&&!empty($_GET['done']))) {
 	$done_id=sanitize($_GET['done']);
-//	end_session($session);
-	//var_dump($session);
+
 	$db->query("UPDATE orders SET order_status=2 WHERE id='$done_id'");
 	header('Location: eatin.php');
 }
@@ -22,7 +21,7 @@ $order_processed_num=mysqli_num_rows($order_processed_num_query);
 if ($order_processed_num<5) {
 	$limit=5-$order_processed_num;
 	
-	$limit_select_query=$db->query("SELECT * FROM orders WHERE order_status=0 LIMIT ".$limit);
+	$limit_select_query=$db->query("SELECT * FROM orders WHERE order_status=0 AND order_type=1 LIMIT ".$limit);
 	//echo mysqli_num_rows($limit_select_query);
 	while($orders_processed_result=mysqli_fetch_assoc($limit_select_query)):
 		$sess_id=$orders_processed_result['session_id'];
