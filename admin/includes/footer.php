@@ -134,8 +134,9 @@
                 },
                 error: function(){alert("something went wrong!")},
             });
-         }, 500);
+         }, 400);
     }
+
 
 
 var canvas = document.getElementById("canvas2");

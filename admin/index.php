@@ -35,6 +35,9 @@ while ($total_orders=mysqli_fetch_assoc($total_orders_query)) {
 	$items=json_decode($total_orders['items'],true);
 	$total+=orders_quantity_parser($items);
 }
+/////////////////////////////////////////////////////////////////////////////
+$total_menu_query=$db->query("SELECT * FROM menu");
+$total_menu_item=mysqli_num_rows($total_menu_query);
 ?>
 <div class="income-order-visit-user-area" style="padding-top: 75px">
 	<div class="container-fluid">
@@ -188,7 +191,7 @@ while ($total_orders=mysqli_fetch_assoc($total_orders_query)) {
                     <div class="income-dashone-pro">
                         <div class="income-rate-total">
                             <div class="price-adminpro-rate">
-                                <h3><span class="counter">1234</span></h3>
+                                <h3><span class="counter"><?=$total_menu_item;?></span></h3>
                             </div>
                             <div class="price-graph">
                                 <span id="sparkline2"><canvas width="39" height="19" style="display: inline-block; width: 39px; height: 19px; vertical-align: top;"></canvas></span>
@@ -202,6 +205,9 @@ while ($total_orders=mysqli_fetch_assoc($total_orders_query)) {
                     </div>
                 </div>
             </div>               
+	    </div>
+	    <div class="col-lg-6 col-md-6 col-sm-12">
+	    	
 	    </div>
 	</div>
 </div>

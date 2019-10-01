@@ -2,7 +2,15 @@
 function display_errors($errors){
 	$display= '<div class="container-fluid"><div class="row text-center"><ul class="bg-danger">';
 	foreach ($errors as $error) {
-		$display.='<li class="text-danger">'.$error.'</li>';
+		$display.='<li class="text-danger" style="padding:15px"><h4>'.$error.'</h4></li>';
+	}
+	$display.="</ul></div></div>";
+	return $display;
+}
+function display_errors_two($errors){
+	$display= '<div class="container-fluid" style="margin-top:50px;"><div class="row text-center"><ul class="bg-danger">';
+	foreach ($errors as $error) {
+		$display.='<li class="text-danger" style="padding:15px"><h4>'.$error.'</h4></li>';
 	}
 	$display.="</ul></div></div>";
 	return $display;

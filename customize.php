@@ -33,8 +33,8 @@ if (isset($_GET['customize'])&&!empty($_GET['customize'])) {
 		else{
 		$db->query("INSERT INTO customize (composition, item_id) VALUES('{$items_json}','{$item_id}')");
 			$custom_id=$db->insert_id;
-		}
 		
+		}
 		
 		header('Location: details?item='.$item_id.'&custom='.$custom_id);
 	}

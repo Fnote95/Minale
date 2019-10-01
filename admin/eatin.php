@@ -48,7 +48,7 @@ $process_js_index=8;
 
 	</div>
 
-	<div class="col-md-6">
+	<div class="col-md-6" id="pro">
 		<h2 class="text-center"><b>Orders Being Processed</b></h2>
 		<?php while($order_processed=mysqli_fetch_assoc($order_processed_query)): 
 			$cust_array=json_decode($order_processed['items'],true);
@@ -58,76 +58,60 @@ $process_js_index=8;
 					$cust_check++;
 				}
 			}?>
-		<div class="col-md-12" style="padding-top: 15px">
-			<div class="sparkline<?=$process_js_index;?>-list basic-res-b-30 shadow-reset">
-                <div class="sparkline<?=$process_js_index;?>-hd">
-                    <div class="main-sparkline<?=$process_js_index;?>-hd">
-                       <div class="row">
-							<div class="col-md-2"><h4 style="color: red"><b>#<?=$order_processed['id'];?></b></h4></div>
-							<div class="col-md-3"><h5><b>Multiple Orders</b></h5></div>
-							<div class="col-md-3"><h5><b>Table No.<?=$order_processed['table_no'];?></b></h5></div>
-							<div class="col-md-3"><h5 style="color: green"><b><?=($cust_check>0)? $cust_check.' Customized orders':'All Regular';?></b></h5></div>
-							<div class="sparkline<?=$process_js_index;?>-outline-icon col-md-2">
-                            <span class="sparkline<?=$process_js_index;?>-collapse-link pull-right"><i class="fa fa-chevron-down"></i></span>
-                        	</div>
-						</div>
-                    </div>
-                </div>
-                <div class="sparkline<?=$process_js_index;?>-graph" style="display: none;">
-                	<table class="table table-striped table-condensed">
-                		<thead>
-                			<th class="text-center"></th>
-                			<th class="text-center">Item name</th>
-                			<th class="text-center">Quantity</th>
-                			<th class="text-center">Customization</th>
-                		</thead>
-                		<tbody>
-                			<?php
-                				$items_array=json_decode($order_processed['items'],true);
-                				$num=1;
-                				foreach($items_array as $items):
-                					
-                					$items_id=$items['item_id'];
-                					$items_query=$db->query("SELECT * FROM menu WHERE id='$items_id'");
-                					$menu_item=mysqli_fetch_assoc($items_query);
-                					$custom_id=$items['custom_id'];
-                					$custom_query=$db->query("SELECT * FROM customize WHERE id='$custom_id'");
-                					$custom=mysqli_fetch_assoc($custom_query);
-                					$custom_items=json_decode($custom['composition'],true);
-
-                			?>
-	                			<tr>
-	            					<td><img src="<?='../'.$menu_item['item_pic'];?>" style="width: 50px"></td>
-		                			<td><?=$menu_item['item_name'];?></td>
-		                			<td><?=$items['quantity'];?></td>
-		                			<td>
-		                				<?php 
-		                				if ($items['custom_id']=='none') {
-		                					echo 'None';
-		                				}
-		                				else{
-		                					foreach($custom_items as $cus_items):
-
-		                					echo $cus_items['comp'].':'.$cus_items['quantity'].' | ';
-
-		                					endforeach;	
-		                				}
-		                				?>
-		                			</td>
-	                			</tr>
-                			<?php
-                			$num++; 
-                			endforeach;?>
-                		</tbody>
-                	</table>
-								<a href="eatin?done=<?=$order_processed['id'];?>" onClick="return confirm('Are you sure you are done?')" class="btn btn-primary" >Done</a>
-                </div>
-            </div>
+			<div class="col-md-12" style="padding:10px; margin: 15px; background-color: #f9f9f9; border: 1px solid #f0f0f0;box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.14);">
+				<div class="col-md-12" style="border-bottom: 1px solid #d8d8d8">
+					 <div class="col-md-2"><h4 style="color: red"><b>#<?=$order_processed['id'];?></b></h4></div>
+						<div class="col-md-3"><h5><b>Table No. <?=$order_processed['table_no'];?></b></h5></div>
+					<div class="col-md-4"><h5 style="color: green"><b><?=($cust_check>0)? $cust_check.' Customized orders':'All Regular';?></b></h5></div>
+				</div>
+			<div class="col-md-12" style="padding: 5px">
+				<?php
+    				$items_array=json_decode($order_processed['items'],true);
+    				$num=1;
+    				foreach($items_array as $items):
+    					
+    					$items_id=$items['item_id'];
+    					$items_query=$db->query("SELECT * FROM menu WHERE id='$items_id'");
+    					$menu_item=mysqli_fetch_assoc($items_query);
+    					$custom_id=$items['custom_id'];
+    					$custom_query=$db->query("SELECT * FROM customize WHERE id='$custom_id'");
+    					$custom=mysqli_fetch_assoc($custom_query);
+    					$custom_items=json_decode($custom['composition'],true);
+    			?>
+					<div class="col-md-4 col-sm-4 text-center">
+						<img src="<?='../'.$menu_item['item_pic'];?>" class="image" style="width:50px; height:50px">
+						<h5><b><?=$menu_item['item_name'];?> <span style="color: red">X <?=$items['quantity'];?></b></span></h5>
+						<p style="color: green"><b><?=($items['custom_id']=='none')?'Regular':'Customized';?></b></p>
+						<?php 
+	        				if ($items['custom_id']=='none') {
+	        				}
+	        				else{
+	        				?>
+	        				<table class="table table-striped">
+	        					<thead>
+	        				
+	        					</thead>
+	        					<tbody>
+	        						<?php foreach($custom_items as $cus_items): ?>
+	        						<tr>
+	        							
+	        								<td><?=$cus_items['comp'];?></td>
+	        								<td><?=$cus_items['quantity'];?></td>
+	        							
+	        						</tr>
+	        						<?php endforeach; ?>
+	        					</tbody>
+	        				</table>
+	        				<?php }?>
+					</div>
+				<?php endforeach;?>
+				<div class="col-md-12 col-sm-12 col-xs-12 text-center">
+					<a href="eatin?done=<?=$order_processed['id'];?>" onClick="return confirm('Are you sure you are done?')" class="btn btn-primary" >Done</a>
+				</div>
+			</div>
 		</div>
-		<?php 
-		$process_js_index++;
-		endwhile;?>
-	</div>
+
+	<?php endwhile;?>
 </div>
 </div>
 
