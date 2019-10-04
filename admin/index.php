@@ -42,12 +42,16 @@ $total_menu_item=mysqli_num_rows($total_menu_query);
 <div class="income-order-visit-user-area" style="padding-top: 75px">
 	<div class="container-fluid">
 		<div class="col-md-2 text-center">
-				<canvas id="canvas2" width="150" height="150" style="background-color:#fff">
+				<canvas id="canvas2" width="150" height="150" style="box-shadow:0 4px 10px 0 rgba(0, 0, 0, 0.30), 0 2px 10px 0 rgba(0, 0, 0, 0.30); border-radius: 10px;background-color:#500101">
 				</canvas>
+				<div style="padding-top: 50px">
+					<img src="../logo.png" style="width: 250px; height: auto">
+				</div>
+				
 		</div>
 		<div class="col-md-10">
 	        <div class="col-lg-3 col-md-6 col-sm-12">
-	            <div class="income-dashone-total income-monthly shadow-reset nt-mg-b-30">
+	            <div class="income-dashone-total income-monthly shadow-reset nt-mg-b-30" style="box-shadow:0 4px 10px 0 rgba(0, 0, 0, 0.30), 0 2px 10px 0 rgba(0, 0, 0, 0.30); border-radius: 10px;">
 	                <div class="income-title">
 	                    <div class="main-income-head">
 	                        <h2>Sales</h2>
@@ -74,7 +78,7 @@ $total_menu_item=mysqli_num_rows($total_menu_query);
 	            </div>
 	        </div>
 	        <div class="col-lg-3 col-md-6 col-sm-12">
-	            <div class="income-dashone-total income-monthly shadow-reset nt-mg-b-30">
+	            <div class="income-dashone-total income-monthly shadow-reset nt-mg-b-30" style="box-shadow:0 4px 10px 0 rgba(0, 0, 0, 0.30), 0 2px 10px 0 rgba(0, 0, 0, 0.30); border-radius: 10px;">
 	                <div class="income-title">
 	                    <div class="main-income-head">
 	                        <h2>Eat-in orders</h2>
@@ -101,7 +105,7 @@ $total_menu_item=mysqli_num_rows($total_menu_query);
 	            </div>
 	        </div>
 	        <div class="col-lg-3 col-md-6 col-sm-12">
-	            <div class="income-dashone-total orders-monthly shadow-reset nt-mg-b-30">
+	            <div class="income-dashone-total orders-monthly shadow-reset nt-mg-b-30" style="box-shadow:0 4px 10px 0 rgba(0, 0, 0, 0.30), 0 2px 10px 0 rgba(0, 0, 0, 0.30); border-radius: 10px;">
 	                <div class="income-title">
 	                    <div class="main-income-head">
 	                        <h2>Takeout orders</h2>
@@ -128,7 +132,7 @@ $total_menu_item=mysqli_num_rows($total_menu_query);
 	            </div>
 	        </div>
 	        <div class="col-lg-3 col-md-6 col-sm-12">
-                <div class="income-dashone-total visitor-monthly shadow-reset nt-mg-b-30">
+                <div class="income-dashone-total visitor-monthly shadow-reset nt-mg-b-30" style="box-shadow:0 4px 10px 0 rgba(0, 0, 0, 0.30), 0 2px 10px 0 rgba(0, 0, 0, 0.30); border-radius: 10px;">
                     <div class="income-title">
                         <div class="main-income-head">
                             <h2>Total orders</h2>
@@ -155,7 +159,7 @@ $total_menu_item=mysqli_num_rows($total_menu_query);
                 </div>
             </div>
             <div class="col-lg-3 col-md-6 col-sm-12">
-                <div class="income-dashone-total visitor-monthly shadow-reset nt-mg-b-30">
+                <div class="income-dashone-total visitor-monthly shadow-reset nt-mg-b-30" style="box-shadow:0 4px 10px 0 rgba(0, 0, 0, 0.30), 0 2px 10px 0 rgba(0, 0, 0, 0.30); border-radius: 10px;">
                     <div class="income-title">
                         <div class="main-income-head">
                             <h2>Average wait time</h2>
@@ -164,7 +168,7 @@ $total_menu_item=mysqli_num_rows($total_menu_query);
                     <div class="income-dashone-pro">
                         <div class="income-rate-total">
                             <div class="price-adminpro-rate">
-                                <h3><span class="counter">1234</span></h3>
+                                <h3><span class="counter"><?=average_wait_time();?></span><span> Minutes</span></h3>
                             </div>
                             <div class="price-graph">
                                 <span id="sparkline2"><canvas width="39" height="19" style="display: inline-block; width: 39px; height: 19px; vertical-align: top;"></canvas></span>
@@ -179,7 +183,7 @@ $total_menu_item=mysqli_num_rows($total_menu_query);
                 </div>
             </div>
 	        <div class="col-lg-3 col-md-6 col-sm-12">
-                <div class="income-dashone-total visitor-monthly shadow-reset nt-mg-b-30">
+                <div class="income-dashone-total visitor-monthly shadow-reset nt-mg-b-30" style="box-shadow:0 4px 10px 0 rgba(0, 0, 0, 0.30), 0 2px 10px 0 rgba(0, 0, 0, 0.30); border-radius: 10px;">
                     <div class="income-title">
                         <div class="main-income-head">
                             <h2>Menu items</h2>
@@ -204,11 +208,44 @@ $total_menu_item=mysqli_num_rows($total_menu_query);
                         <div class="clear"></div>
                     </div>
                 </div>
-            </div>               
+            </div>	   
+             <div class="col-lg-3 col-md-6 col-sm-12">
+	    	<?php $best_seller=best_seller();
+	    		$best_id=$best_seller[0]['id'];
+	    		$best_quantity=$best_seller[0]['quan'];
+	    		$best_query=$db->query("SELECT * FROM menu WHERE id='$best_id'");
+	    		$best=mysqli_fetch_assoc($best_query);
+	    	?>
+	            <div class="income-dashone-total income-monthly shadow-reset nt-mg-b-30" style="box-shadow:0 4px 10px 0 rgba(0, 0, 0, 0.30), 0 2px 10px 0 rgba(0, 0, 0, 0.30); border-radius: 10px;">
+	                <div class="income-title">
+	                    <div class="main-income-head">
+	                        <h2>Best seller</h2>
+	                        <div class="main-income-phara">
+	                            <p>Today</p>
+	                        </div>
+	                    </div>
+	                </div>
+	                <div class="income-dashone-pro">
+	                    <div class="income-rate-total">
+	                    <div class="col-md-6 col-sm-6">
+	   						<div  style="border: 3px solid rgba(252,84,4,1);width:70px; height:70px ; border-radius: 50%; overflow: hidden; background-color: white; margin-top: -10px;margin-left: -20px">
+								<img src="<?='../'.$best['item_pic'];?>" alt="" style="width: 100px; height: auto; padding-top: 5px">
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-6">
+								<h4 class="text-right" style="color: white; margin-right: -10px"><?=$best['item_name'];?></h4>
+						</div>
+ 						
+	                    <div class="income-range">
+	                       
+	                        <span class="income-percentange"><?=$best_quantity;?> Orders <i class="fa fa-bolt"></i></span>
+	                    </div>
+	                    <div class="clear"></div>
+	                </div>
+	            </div>
+	    	</div>               
 	    </div>
-	    <div class="col-lg-6 col-md-6 col-sm-12">
-	    	
-	    </div>
+
 	</div>
 </div>
 

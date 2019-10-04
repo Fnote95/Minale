@@ -24,6 +24,7 @@
 
 
 <script>
+
 	var element = document.getElementById('back');
 	element.setAttribute('href', document.referrer);
 	element.onclick = function() {
@@ -67,6 +68,7 @@
 	function update_orders(){
 		setInterval();
 	}
+	
 </script>
 </body>
 </html>

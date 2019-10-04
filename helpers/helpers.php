@@ -284,8 +284,66 @@ function validate_image(){
 }
 function validate_video(){
 
-}
+}////////////////////////////////////////////////////////////////////////////
+function average_wait_time(){
+	global $db;
+	$wait_query=$db->query("SELECT * FROM orders WHERE order_status=2");
+	
+	$order_quan=mysqli_num_rows($wait_query);
+	$total_sum=0;
 
+	while($wait_result=mysqli_fetch_assoc($wait_query)){
+		$total_sum=$total_sum + $wait_result['wait_time'];
+	
+	}
+	$average_wait=$total_sum/$order_quan;
+	$average_in_minutes=$average_wait/60000;
+	return floor($average_in_minutes);
+}
+/////////////////////////////////////////////////////////////////////////////
+function best_seller(){
+	global $db;
+	$menu_items_query=$db->query("SELECT * FROM menu");
+	$index=0;
+	$menu_array=array();
+	while ($result=mysqli_fetch_assoc($menu_items_query)) {
+		$menu_array[$index]['id']=$result['id'];
+		$menu_array[$index]['quan']=0;
+		$index++;
+	}
+	$menu_arr_len=sizeof($menu_array);
+
+	$orders_query=$db->query("SELECT * FROM orders WHERE order_status=2");
+	$index2=0;
+	$orders_array=array();
+	while($ord_result=mysqli_fetch_assoc($orders_query)){
+		$orders_array[$index2]=$ord_result['items'];
+		$index2++;
+	}
+	$orders_len=sizeof($orders_array);
+
+	for ($i=0; $i < $menu_arr_len ; $i++) { 
+		for ($x=0; $x < $orders_len ; $x++) { 
+			$orders_json=json_decode($orders_array[$x], true);
+			foreach($orders_json as $ord){
+				if ($menu_array[$i]['id']==$ord['item_id']) {
+					$menu_array[$i]['quan']=$menu_array[$i]['quan']+$ord['quantity'];
+				}
+			}
+		}
+	}
+	$best[0]['id']="";
+	$best[0]['quan']=$menu_array[0]['quan'];
+	for ($m=0; $m < $menu_arr_len; $m++) {
+
+			if ($best[0]['quan'] < $menu_array[$m]['quan']) {
+			$best['id']=$menu_array[$m]['id'];
+			$best['quan']=$menu_array[$m]['quan'];
+		}
+	}
+
+	return $menu_array;
+}
 /////////////////////////////////////////////////////////////////////////////
 function end_session($session_id_to_destroy){
 	

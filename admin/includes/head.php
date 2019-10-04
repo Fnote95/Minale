@@ -63,6 +63,7 @@
     <link rel="stylesheet" href="css/responsive.css">
     <!-- modernizr JS
 		============================================ -->
+      <script src="js/jquery-3.3.1.min.js"></script>
     <script src="js/vendor/modernizr-2.8.3.min.js"></script>
 </head>
 

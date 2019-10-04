@@ -107,6 +107,24 @@
     <script src="js/data-table/colResizable-1.5.source.js"></script>
     <script src="js/data-table/bootstrap-table-export.js"></script>
 <script>
+    ///////////////////////////////////////////////////////////////////////////////
+   
+                    function msToTime(duration) {
+                      var milliseconds = parseInt((duration % 1000) / 100),
+                        seconds = Math.floor((duration / 1000) % 60),
+                        minutes = Math.floor((duration / (1000 * 60)) % 60),
+                        hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
+
+                      hours = (hours < 10) ? "0" + hours : hours;
+                      minutes = (minutes < 10) ? "0" + minutes : minutes;
+                      seconds = (seconds < 10) ? "0" + seconds : seconds;
+
+                      return hours + ":" + minutes + ":" + seconds + "." + milliseconds;
+                    }
+   
+    
+////////////////////////////////////////////////////////////////////////////////////////
+   // alert();
 
 	function disapear(){
 		jQuery('#dis').html(" ");
@@ -218,6 +236,10 @@ function drawHand(ctx, pos, length, width) {
     ctx.stroke();
     ctx.rotate(-pos);
 }
+
+
+
+
 
 
 
