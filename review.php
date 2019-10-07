@@ -141,19 +141,23 @@ function display_regular(){
 			$order_id=sanitize($_SESSION['order']);
 			
 			$order_query=$db->query("SELECT * FROM orders WHERE id='$order_id' AND (order_status=0 OR order_status=3)");
+			
 			$orders=mysqli_fetch_assoc($order_query);
 		
 			$order_array=json_decode($orders['items'],true);
-
+			$num_rows=sizeof($order_array);
 			$index=1;
 			$delenex=0;
+			$total=0;
 			foreach($order_array as $order): 
 			$item_id=$order['item_id'];
 			$quantity=$order['quantity'];
 			$custom_id=$order['custom_id'];
 			$item_query=$db->query("SELECT * FROM menu WHERE id='$item_id'");
 			$item=mysqli_fetch_assoc($item_query);
+			$real_price=$item['price'];
 			$price=(int)$item['price']*(int)$quantity;
+			$total=$total+$price;
 
 		?>
 		<div class="col-md-12 review">
@@ -168,13 +172,13 @@ function display_regular(){
 					<h5><b><?=$item['item_name'];?></b></h5>
 
 					<div class="input-group bootstrap-touchspin">
-						<span class="input-group-btn" onclick="decrement(<?=$index;?>);update_price(<?=$price;?>,<?=$index;?>);">
+						<span class="input-group-btn" onclick="decrement(<?=$index;?>);update_price(<?=$real_price;?>,<?=$index;?>);update_total(<?=$num_rows;?>);">
 							<button class="btn btn-white bootstrap-touchspin-down" type="button" style="color:red;"><b>-</b></button>
 						</span>
 						<span class="input-group-addon bootstrap-touchspin-prefix" style="display: none;"></span>
 						<input class="touchspin1 form-control text-center" id="quan<?=$index;?>" type="text" value="<?=$quantity;?>" name="demo<?=$index;?>" style="color: black;">
 						<span class="input-group-addon bootstrap-touchspin-postfix" style="display: none;"></span>
-						<span class="input-group-btn" onclick="increment(<?=$index;?>);update_price(<?=$price;?>,<?=$index;?>);">
+						<span class="input-group-btn" onclick="increment(<?=$index;?>);update_price(<?=$real_price;?>,<?=$index;?>);update_total(<?=$num_rows;?>);">
 							<button class="btn btn-white bootstrap-touchspin-up" type="button" style="color:red;">
 								<b>+</b>
 							</button>
@@ -185,7 +189,7 @@ function display_regular(){
 				<div class="col-md-3 col-sm-3 col-xs-3">
 					<div class="text-right">
 						<a href="review?delete=<?=$delenex;?>" onClick="return confirm('Are you sure you want to remove this item from you orders?')" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-remove" style="color: red"></span></a>
-						<h5 id="price<?=$index;?>" style="padding-top: 50%"><b><?=cash($price);?></b></h5>
+						<h5 id="price<?=$index;?>" style="padding-top: 50%"><?=cash($price);?></h5>
 					</div>
 				</div>
 			</div>		
@@ -195,8 +199,10 @@ function display_regular(){
 		$delenex++;
 		endforeach;?>
 	</div>
-
-	<div class="row" style="margin-top: 20px;padding-top: 15px;padding-bottom: 15px;background-image:linear-gradient(to top, rgba(252,84,4,1) 1%, rgba(255,0,0,1) 100%);">
+	<div class="row" style="padding: 10px">
+		<h4 class="text-right"><b>Total = <span id="total" onload="update_total(<?=$num_rows;?>);" style="color: green"><?=cash($total);?></span></b></h4>
+	</div>
+	<div class="row" style="padding-top: 15px;padding-bottom: 15px;background-image:linear-gradient(to top, rgba(252,84,4,1) 1%, rgba(255,0,0,1) 100%);">
 		<div class="col-md-8 col-sm-8 col-xs-8" style="padding-right: 5px">
 			<h4 style="color: white; margin-top: 5px"><b>Enter your table number</b></h4>
 		</div>

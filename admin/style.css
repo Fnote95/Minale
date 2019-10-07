@@ -760,7 +760,7 @@ ul.setting-panel-list li{
 /*  7.  Footer copy right CSS
 /*----------------------------------------*/
 .footer-copyright-area{
-	background:#303030;
+	background-image: linear-gradient(to top, rgba(252,84,4,1) 1%, rgba(255,0,0,1) 100%);
 	padding:20px 0px;
 	text-align:center;
 }

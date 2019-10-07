@@ -24,8 +24,9 @@
                             <li><a href="orders_report.php">Orders</a></li>
                              <li><a href="menu">Edit Menu</a></li>
 
-                            <!-- <?php if(has_permission('admin')):?>-->
+                            
                              <li><a href="users.php">Users</a></li>
+                             <!-- <?php if(has_permission('admin')):?>-->
                             <!-- <?php endif;?>-->
                              <li class="dropdown pull-right">
                                  <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Signed in as <?=$user_data['first'];?>

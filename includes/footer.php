@@ -68,7 +68,21 @@
 	function update_orders(){
 		setInterval();
 	}
+	function update_total(num){
+		var total= 0;
+		for (var i=1; i <= num; i++) {
+			var quan= jQuery('#price'+i).html();
+			quan = quan.substring(0, quan.length-4);
+			total=total+parseInt(quan);
 	
+		}
+		
+		jQuery('#total').html(total+" Br.");
+	}
+	    jQuery('select[name="child"]').change(function(){
+          get_products();
+          get_stock();
+        });
 </script>
 </body>
 </html>

@@ -27,7 +27,7 @@ function login($user_id){
 	$_SESSION['SBuser']=$user_id;
 	global $db;
 	$date= date("Y-m-d H:i:s");
-	$db->query("UPDATE users SET last_logged='$date' WHERE id='$user_id'");
+	$db->query("UPDATE users SET last_login='$date' WHERE id='$user_id'");
 	$_SESSION['success']='You have been logged in successfully!';
 	header('Location: index.php');
 }
@@ -301,7 +301,7 @@ function average_wait_time(){
 	return floor($average_in_minutes);
 }
 /////////////////////////////////////////////////////////////////////////////
-function best_seller(){
+function best_seller($current_date){
 	global $db;
 	$menu_items_query=$db->query("SELECT * FROM menu");
 	$index=0;
@@ -313,7 +313,7 @@ function best_seller(){
 	}
 	$menu_arr_len=sizeof($menu_array);
 
-	$orders_query=$db->query("SELECT * FROM orders WHERE order_status=2");
+	$orders_query=$db->query("SELECT * FROM orders WHERE order_status=2 AND order_date LIKE '$current_date%'");
 	$index2=0;
 	$orders_array=array();
 	while($ord_result=mysqli_fetch_assoc($orders_query)){
@@ -336,13 +336,13 @@ function best_seller(){
 	$best[0]['quan']=$menu_array[0]['quan'];
 	for ($m=0; $m < $menu_arr_len; $m++) {
 
-			if ($best[0]['quan'] < $menu_array[$m]['quan']) {
-			$best['id']=$menu_array[$m]['id'];
-			$best['quan']=$menu_array[$m]['quan'];
+		if ($best[0]['quan'] < $menu_array[$m]['quan']) {
+
+			$best[0]['id']=$menu_array[$m]['id'];
+			$best[0]['quan']=$menu_array[$m]['quan'];
 		}
 	}
-
-	return $menu_array;
+	return $best;
 }
 /////////////////////////////////////////////////////////////////////////////
 function end_session($session_id_to_destroy){

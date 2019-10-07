@@ -2,9 +2,11 @@
 
 require_once "../core/init.php";
 include "includes/head.php";
-
 /////////////////////////////////////////////////////////////////////////////
-$orders_stat_query=$db->query("SELECT * FROM orders WHERE order_status=2");
+$current_date=date("Y-m-d");
+/////////////////////////////////////////////////////////////////////////////
+
+$orders_stat_query=$db->query("SELECT * FROM orders WHERE order_status=2 AND order_date LIKE '$current_date%'");
 $total_total=0;
 while ($order_stat=mysqli_fetch_assoc($orders_stat_query)) {
 	$items=json_decode($order_stat['items'],true);
@@ -13,7 +15,7 @@ while ($order_stat=mysqli_fetch_assoc($orders_stat_query)) {
 	$total_total+=$tot_total;
 }
 /////////////////////////////////////////////////////////////////
-$eatin_query=$db->query("SELECT * FROM orders WHERE order_type=1 AND order_status!=2");
+$eatin_query=$db->query("SELECT * FROM orders WHERE order_type=1 AND (order_status=1 OR order_status=0) AND order_date LIKE '$current_date%'");
 
 $total_eatin=0;
 while ($eatin_stat=mysqli_fetch_assoc($eatin_query)) {
@@ -21,7 +23,7 @@ while ($eatin_stat=mysqli_fetch_assoc($eatin_query)) {
 	$total_eatin+=orders_quantity_parser($items);
 }
 /////////////////////////////////////////////////////////////////////////////
-$takeout_query=$db->query("SELECT * FROM orders WHERE order_type=2 AND order_status!=2");
+$takeout_query=$db->query("SELECT * FROM orders WHERE order_type=2 AND (order_status=1 OR order_status=0) AND order_date LIKE '$current_date%'");
 
 $total_takeout=0;
 while ($takeout_stat=mysqli_fetch_assoc($takeout_query)) {
@@ -29,7 +31,7 @@ while ($takeout_stat=mysqli_fetch_assoc($takeout_query)) {
 	$total_takeout+=orders_quantity_parser($items);
 }
 ////////////////////////////////////////////////////////////////////////////
-$total_orders_query=$db->query("SELECT * FROM orders");
+$total_orders_query=$db->query("SELECT * FROM orders WHERE order_date LIKE '$current_date%'");
 $total=0;
 while ($total_orders=mysqli_fetch_assoc($total_orders_query)) {
 	$items=json_decode($total_orders['items'],true);
@@ -210,7 +212,7 @@ $total_menu_item=mysqli_num_rows($total_menu_query);
                 </div>
             </div>	   
              <div class="col-lg-3 col-md-6 col-sm-12">
-	    	<?php $best_seller=best_seller();
+	    	<?php $best_seller=best_seller($current_date);
 	    		$best_id=$best_seller[0]['id'];
 	    		$best_quantity=$best_seller[0]['quan'];
 	    		$best_query=$db->query("SELECT * FROM menu WHERE id='$best_id'");
