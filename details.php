@@ -2,6 +2,9 @@
 require_once "core/init.php";
 include "includes/head.php";
 
+
+
+
 if (isset($_GET['item'])&&!empty($_GET['item'])) {
 	$item_id=sanitize($_GET['item']);
 
@@ -30,20 +33,51 @@ if (isset($_POST['submit'])) {
 	$orders_array[0]['quantity']=sanitize($_POST['quantity']);
 	$orders_array[0]['custom_id']=(isset($_GET['custom']))? $custom_id : 'none';
 	$session_id=session_id();
-	$order_json=json_encode($orders_array,true);
+	$orders_json=json_encode($orders_array,true);
 	$order_type=$_SESSION['type'];
+	////////////////////////////////////////check to see if the customer is looking to add another order
 	if (isset($_SESSION['order'])) {
 
 		$order_id=sanitize($_SESSION['order']);
 		$o_query=$db->query("SELECT * FROM orders WHERE id='$order_id'");
 		$orders_list=mysqli_fetch_assoc($o_query);
-		$orders_session=json_decode($orders_list['items'],true);
-		$orders_json=json_encode(array_merge($orders_session,$orders_array));
+		$orders_eatin_session=json_decode($orders_list['items'],true);
+		$orders_takeout_session=json_decode($orders_list['takeout_items'],true);
+		//$orders_json=json_encode(array_merge($orders_session,$orders_array));
 
-		$previouse_type=$orders_list['order_type'];
-		if($previouse_type!=$order_type){
+	
 
-			$db->query("INSERT INTO orders (items,order_type,session_id) VALUES ('$order_json','$order_type','$session_id')");
+		if ($order_type==1) {
+			/////////////////////////////////update the eatin items
+			if ($orders_eatin_session!='') {
+				$orders_json=json_encode(array_merge($orders_eatin_session,$orders_array));
+			}
+			$db->query("UPDATE orders SET items='$orders_json' WHERE id='$order_id' AND (order_status=0 OR order_status=3)");
+			/////////////////////////////////update the custom id
+			if (isset($_GET['custom'])&&!empty($_GET['custom'])) {
+				$db->query("UPDATE customize SET order_id='$order_id' WHERE id='$custom_id'");
+			}
+
+			header('Location: success');	
+		}
+		elseif($order_type==2){
+			///////////////////////////////update the takeout items
+			if ($orders_takeout_session!=0) {
+				$orders_json=json_encode(array_merge($orders_takeout_session,$orders_array));
+			}
+			$db->query("UPDATE orders SET takeout_items='$orders_json' WHERE id='$order_id' AND (order_status=0 OR order_status=3)");
+			
+			if (isset($_GET['custom'])&&!empty($_GET['custom'])) {
+				$db->query("UPDATE customize SET order_id='$order_id' WHERE id='$custom_id'");
+			}
+
+			header('Location: success');	
+		}
+	
+	}
+	else{
+		if ($order_type=1) {
+			$db->query("INSERT INTO orders (items,session_id) VALUES ('$orders_json','$session_id')");
 			$order_id=$db->insert_id;
 			if (isset($_GET['custom'])&&!empty($_GET['custom'])) {
 				$db->query("UPDATE customize SET order_id='$order_id' WHERE id='$custom_id'");
@@ -51,24 +85,16 @@ if (isset($_POST['submit'])) {
 			$_SESSION['order']=$order_id;
 			header('Location: success');
 		}
-		else{
-			
-		$db->query("UPDATE orders SET items='$orders_json' WHERE id='$order_id' AND (order_status=0 OR order_status=3)");
-		
-		if (isset($_GET['custom'])&&!empty($_GET['custom'])) {
+		elseif ($order_type=2) {
+			$db->query("INSERT INTO orders (takeout_items,session_id) VALUES ('$orders_json','$session_id')");
+			$order_id=$db->insert_id;
+			if (isset($_GET['custom'])&&!empty($_GET['custom'])) {
 				$db->query("UPDATE customize SET order_id='$order_id' WHERE id='$custom_id'");
 			}
+			$_SESSION['order']=$order_id;
+			header('Location: success');
 		}
-		header('Location: success');
-	}
-	else{
-		$db->query("INSERT INTO orders (items,order_type,session_id) VALUES ('$order_json','$order_type','$session_id')");
-		$order_id=$db->insert_id;
-		if (isset($_GET['custom'])&&!empty($_GET['custom'])) {
-			$db->query("UPDATE customize SET order_id='$order_id' WHERE id='$custom_id'");
-		}
-		$_SESSION['order']=$order_id;
-		header('Location: success');
+
 	}
 
 }

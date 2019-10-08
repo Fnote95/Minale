@@ -6,37 +6,77 @@ include "includes/head.php";
 $current_date=date("Y-m-d");
 /////////////////////////////////////////////////////////////////////////////
 
-$orders_stat_query=$db->query("SELECT * FROM orders WHERE order_status=2 AND order_date LIKE '$current_date%'");
+$orders_stat_query=$db->query("SELECT * FROM orders WHERE (order_status=2 OR takeout_status=2) AND order_date LIKE '$current_date%'");
 $total_total=0;
 while ($order_stat=mysqli_fetch_assoc($orders_stat_query)) {
 	$items=json_decode($order_stat['items'],true);
-	$sub_total_array=orders_price_parser($items);
-	$tot_total=$sub_total_array['total'];
+	$takeout_items=json_decode($order_stat['takeout_items'],true);
+	if ($items=="") {
+		$sub_total_array=0;
+	}
+	else{
+		$sub_total_array=orders_price_parser($items);
+	}
+	if ($takeout_items==""){
+		$sub_takeout_array=0;
+	}
+	else{
+		$sub_takeout_array=orders_price_parser($takeout_items);
+	}
+	
+	
+	$tot_total=$sub_total_array['total']+$sub_takeout_array['total'];
 	$total_total+=$tot_total;
 }
 /////////////////////////////////////////////////////////////////
-$eatin_query=$db->query("SELECT * FROM orders WHERE order_type=1 AND (order_status=1 OR order_status=0) AND order_date LIKE '$current_date%'");
+$eatin_query=$db->query("SELECT * FROM orders WHERE (order_status=1 OR order_status=0) AND order_date LIKE '$current_date%'");
 
 $total_eatin=0;
 while ($eatin_stat=mysqli_fetch_assoc($eatin_query)) {
 	$items=json_decode($eatin_stat['items'],true);
-	$total_eatin+=orders_quantity_parser($items);
+	if ($items=="") {
+		$total_eatin+=0;
+	}
+	else{
+		$total_eatin+=orders_quantity_parser($items);
+	}
+	
 }
 /////////////////////////////////////////////////////////////////////////////
-$takeout_query=$db->query("SELECT * FROM orders WHERE order_type=2 AND (order_status=1 OR order_status=0) AND order_date LIKE '$current_date%'");
-
+$takeout_query=$db->query("SELECT * FROM orders WHERE (takeout_status=1 OR takeout_status=3) AND order_date LIKE '$current_date%'");
 $total_takeout=0;
 while ($takeout_stat=mysqli_fetch_assoc($takeout_query)) {
-	$items=json_decode($takeout_stat['items'],true);
-	$total_takeout+=orders_quantity_parser($items);
+	$items=json_decode($takeout_stat['takeout_items'],true);
+	if ($items=="") {
+		$total_takeout+=0;
+	}
+	else{
+		$total_takeout+=orders_quantity_parser($items);
+	}
+	
 }
 ////////////////////////////////////////////////////////////////////////////
 $total_orders_query=$db->query("SELECT * FROM orders WHERE order_date LIKE '$current_date%'");
 $total=0;
 while ($total_orders=mysqli_fetch_assoc($total_orders_query)) {
 	$items=json_decode($total_orders['items'],true);
-	$total+=orders_quantity_parser($items);
+	$takeouts=json_decode($total_orders['takeout_items'],true);
+	if ($items=="") {
+		$total+=0+orders_quantity_parser($takeouts);
+	}
+	elseif($takeouts==""){
+		$total+=orders_quantity_parser($items)+0;
+	}
+	elseif($takeouts==""&&$items==""){
+		$total+=0;
+	}
+	else{
+		$total+=orders_quantity_parser($items)+orders_quantity_parser($takeouts);
+	}
+	
 }
+
+
 /////////////////////////////////////////////////////////////////////////////
 $total_menu_query=$db->query("SELECT * FROM menu");
 $total_menu_item=mysqli_num_rows($total_menu_query);

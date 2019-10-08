@@ -9,12 +9,12 @@ if ((isset($_GET['done'])&&!empty($_GET['done']))) {
 	$end_result=mysqli_fetch_assoc($end_query);
 	$sess_id=$end_result['session_id'];
 
-	$db->query("UPDATE orders SET order_status=2, wait_time='$wait_time' WHERE id='$done_id'");
+	$db->query("UPDATE orders SET takeout_status=2, wait_time='$wait_time' WHERE id='$done_id'");
 	end_session($sess_id);
 	header('Location: takeout.php');
 }
 
-$order_queued_query=$db->query("SELECT * FROM orders WHERE order_status=0 AND order_type=2");
+$order_queued_query=$db->query("SELECT * FROM orders WHERE takeout_status=0 OR takeout_status=3");
 
 $process_js_index=8;
 ?>
@@ -22,8 +22,11 @@ $process_js_index=8;
 <div class="row" style="padding-top: 75px; padding-bottom: 50px;">
 	<div class="col-md-8">
 		<h2 class="text-center"><b>Take Out Orders</b></h2>
-		<?php while($order_queued=mysqli_fetch_assoc($order_queued_query)): 
-			$cust_array=json_decode($order_queued['items'],true);
+		<?php while($order_queued=mysqli_fetch_assoc($order_queued_query)):
+			$cust_array=json_decode($order_queued['takeout_items'],true);
+			if ($cust_array=="") {
+				continue;
+			}
 			$cust_check=0;
 			foreach ($cust_array as $cust) {
 				if ($cust['custom_id']!='none') {
@@ -61,7 +64,7 @@ $process_js_index=8;
 				<div class="col-md-12" style="padding: 5px">
 		
 	    			<?php
-	    				$items_array=json_decode($order_queued['items'],true);
+	    				$items_array=json_decode($order_queued['takeout_items'],true);
 	    				$num=1;
 	    				foreach($items_array as $items):
 	    					

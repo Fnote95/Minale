@@ -21,7 +21,7 @@ $order_processed_num=mysqli_num_rows($order_processed_num_query);
 if ($order_processed_num<5) {
 	$limit=5-$order_processed_num;
 	
-	$limit_select_query=$db->query("SELECT * FROM orders WHERE order_status=0 AND order_type=1 LIMIT ".$limit);
+	$limit_select_query=$db->query("SELECT * FROM orders WHERE order_status=0 LIMIT ".$limit);
 	//echo mysqli_num_rows($limit_select_query);
 	while($orders_processed_result=mysqli_fetch_assoc($limit_select_query)):
 		$sess_id=$orders_processed_result['session_id'];
@@ -33,8 +33,8 @@ if ($order_processed_num<5) {
 /////////////////////////////////////////////////////////////////////////////////////
 
 /////////////////queries to display orders on the queued and processed sections////////
-$order_queued_query=$db->query("SELECT * FROM orders WHERE order_status=0 AND order_type=1");
-$order_processed_query=$db->query("SELECT * FROM orders WHERE order_status=1 AND order_type=1");
+$order_queued_query=$db->query("SELECT * FROM orders WHERE order_status=0");
+$order_processed_query=$db->query("SELECT * FROM orders WHERE order_status=1");
 //$queued_js_index=8;
 $process_js_index=8;
 

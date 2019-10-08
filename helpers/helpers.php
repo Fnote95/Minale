@@ -336,12 +336,13 @@ function best_seller($current_date){
 	$best[0]['quan']=$menu_array[0]['quan'];
 	for ($m=0; $m < $menu_arr_len; $m++) {
 
-		if ($best[0]['quan'] < $menu_array[$m]['quan']) {
+		if ($best[0]['quan'] <= $menu_array[$m]['quan']) {
 
 			$best[0]['id']=$menu_array[$m]['id'];
 			$best[0]['quan']=$menu_array[$m]['quan'];
 		}
 	}
+	//var_dump($best);
 	return $best;
 }
 /////////////////////////////////////////////////////////////////////////////

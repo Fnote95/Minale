@@ -31,7 +31,7 @@ $menu_query=$db->query("SELECT * FROM menu WHERE cat_id='$sub_id'");
 		<div class="col-md-12 col-sm-12 col-xs-12 scrolling_wrapper" style="padding-top: 15px;padding-bottom: 15px; height: 500px">
 			<?php while($menu_item=mysqli_fetch_assoc($menu_query)): ?>
 			<a href="details?item=<?=$menu_item['id'];?>">
-				<div class="col-md-12 col-sm-12 col-xs-12" style="margin-top:10px;background-size: auto 350px;background-image: url('<?=$menu_item['item_pic'];?>'); border: 1px solid #f0f0f0;box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.14);height: 200px;overflow: hidden;">
+				<div class="col-md-12 col-sm-12 col-xs-12" style="margin-top:10px;background-size: auto 350px;background-image: url('<?=$menu_item['item_pic'];?>');box-shadow:0 4px 10px 0 rgba(0, 0, 0, 0.30), 0 2px 10px 0 rgba(0, 0, 0, 0.30); border-radius: 10px;height: 200px;overflow: hidden;">
 					<!--<div style="width:75px; height:auto ; margin: 0% auto; border-radius: 50%; margin-top: 5px;border: 2px solid #f0f0f0;box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.14);overflow: hidden;">
 						<img src="<?=$menu_item['item_pic'];?>" alt="" style="width:75px; height:auto; ">
 					</div>-->

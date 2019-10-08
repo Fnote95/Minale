@@ -1,6 +1,6 @@
 <?php
 require_once "../../core/init.php";
-$order_queued_query=$db->query("SELECT * FROM orders WHERE order_status=0 AND order_type=1");
+$order_queued_query=$db->query("SELECT * FROM orders WHERE order_status=0");
 
 ob_start();?>
 
