@@ -82,7 +82,7 @@ $process_js_index=8;
 								<img src="<?='../'.$menu_item['item_pic'];?>" class="image" style="width:80px; height:80px;padding-top: 5px">
 							</div>
 							<div style="padding-top: 5px">
-							<h5><b><?=$menu_item['item_name'];?> <span style="color: red">X <?=$items['quantity'];?></b></span></h5>
+							<h5><b><?=$menu_item['item_name'];?></b> <span style="color: red"><b>X <?=$items['quantity'];?></b></span></h5>
 								<p style="color: green"><b><?=($items['custom_id']=='none')?'Regular':'Customized';?></b></p>
 								<?php 
 		        				if ($items['custom_id']=='none') {

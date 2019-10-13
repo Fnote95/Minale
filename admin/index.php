@@ -1,6 +1,9 @@
 <?php
-
 require_once "../core/init.php";
+
+if(!is_logged_in()){
+header('Location: login.php');
+}
 include "includes/head.php";
 /////////////////////////////////////////////////////////////////////////////
 $current_date=date("Y-m-d");
@@ -58,21 +61,28 @@ while ($takeout_stat=mysqli_fetch_assoc($takeout_query)) {
 ////////////////////////////////////////////////////////////////////////////
 $total_orders_query=$db->query("SELECT * FROM orders WHERE order_date LIKE '$current_date%'");
 $total=0;
+$eatin_parsed=0;
+$takeout_parsed=0;
+
 while ($total_orders=mysqli_fetch_assoc($total_orders_query)) {
 	$items=json_decode($total_orders['items'],true);
 	$takeouts=json_decode($total_orders['takeout_items'],true);
 	if ($items=="") {
-		$total+=0+orders_quantity_parser($takeouts);
+		$eatin_parsed=0;
 	}
 	elseif($takeouts==""){
-		$total+=orders_quantity_parser($items)+0;
+		$takeout_parsed=0;
 	}
 	elseif($takeouts==""&&$items==""){
-		$total+=0;
+		$takeout_parsed=0;
+		$eatin_parsed=0;
 	}
 	else{
-		$total+=orders_quantity_parser($items)+orders_quantity_parser($takeouts);
+		$eatin_parsed=orders_quantity_parser($items);
+		$takeout_parsed=orders_quantity_parser($takeouts);
 	}
+	
+	$total+=($eatin_parsed+$takeout_parsed);
 	
 }
 

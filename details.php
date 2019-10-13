@@ -3,8 +3,6 @@ require_once "core/init.php";
 include "includes/head.php";
 
 
-
-
 if (isset($_GET['item'])&&!empty($_GET['item'])) {
 	$item_id=sanitize($_GET['item']);
 
@@ -76,7 +74,7 @@ if (isset($_POST['submit'])) {
 	
 	}
 	else{
-		if ($order_type=1) {
+		if ($order_type==1) {
 			$db->query("INSERT INTO orders (items,session_id) VALUES ('$orders_json','$session_id')");
 			$order_id=$db->insert_id;
 			if (isset($_GET['custom'])&&!empty($_GET['custom'])) {
@@ -85,7 +83,7 @@ if (isset($_POST['submit'])) {
 			$_SESSION['order']=$order_id;
 			header('Location: success');
 		}
-		elseif ($order_type=2) {
+		elseif ($order_type==2) {
 			$db->query("INSERT INTO orders (takeout_items,session_id) VALUES ('$orders_json','$session_id')");
 			$order_id=$db->insert_id;
 			if (isset($_GET['custom'])&&!empty($_GET['custom'])) {

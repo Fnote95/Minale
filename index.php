@@ -2,7 +2,7 @@
 ?>
 <div class="container-fluid">
 	<div class="row text-center" style="padding-top:30px">
-		<img src="images.jpg" alt="Logo" style="width: 200; height: 200px">
+		<img src="logo.png" class="image-thumb img-responsive" style="width:250px; height:auto ; margin: 0% auto;">
 	</div>
 	<div class="row" style="padding-top: 30px">
 		<div class="col-md-6 col-sm-12 col-xs-12 text-center" style="padding: 15px">

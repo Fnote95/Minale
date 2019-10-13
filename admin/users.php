@@ -88,6 +88,10 @@ if(empty($_POST['full_name'])||empty($_POST['email'])||empty($_POST['password'])
 			
 			 		//insert the user into the database
 			 	$db->query("INSERT INTO `users` (`full_name`, `email`, `password`, `permission`, `img`) VALUES ('$full_name','$email','$hashed','$permission','$dbpath')");
+			 		$insert_id=$db->insert_id;
+			 		if ($permission=="Waiter") {
+			 			$db->query("INSERT INTO waiters (user_id) VALUES ('$insert_id')");
+			 		}
 			 		$_SESSION['success']='User added successfully';
 			 		header('Location: users.php');
 
@@ -129,10 +133,10 @@ if(empty($_POST['full_name'])||empty($_POST['email'])||empty($_POST['password'])
 									<label for="permission">permission*</label>
 									<select class="form-control" id="permission" name="permission">
 										<option value=""<?=(($permission=='')? 'selected':'');?>></option>
-										<option value="editor"<?=(($permission=='editor')? 'selected':'');?>>Admin</option>
-										<option value="admin,editor"<?=(($permission=='Cashier')? 'selected':'');?>>Cashier</option>
-										<option value="admin,editor"<?=(($permission=='Admin, Cashier')? 'selected':'');?>>Admin,Cashier</option>
-										<option value="admin,editor"<?=(($permission=='Waiter')? 'selected':'');?>>Waiter</option>
+										<option value="Admin"<?=(($permission=='editor')? 'selected':'');?>>Admin</option>
+										<option value="Cashier"<?=(($permission=='Cashier')? 'selected':'');?>>Cashier</option>
+										<option value="Admin,Cashier"<?=(($permission=='Admin, Cashier')? 'selected':'');?>>Admin,Cashier</option>
+										<option value="Waiter"<?=(($permission=='Waiter')? 'selected':'');?>>Waiter</option>
 									</select>
 								</div>
 								<div class="form-group col-md-6">
@@ -192,14 +196,14 @@ else{
 							<tr>
 								<td>
 									<?php if($users['id']!=$user_data['id']):?>
-									<a href="users.php?delete=<?=$users['id'];?>" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-remove-sign"></span></a>
+									<a href="users.php?delete=<?=$users['id'];?>" onClick="return confirm('Are you sure you are done?')" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-remove-sign"></span></a>
 									<?php endif;?>		
 								</td>
 								<td><?=$users['full_name'];?></td>
 								<td><?=$users['email'];?></td>
 								<td><?=$users['permission'];?></td>
 								<td><?=pretty_date($users['joined_date']);?></td>
-								<td><?=(($users['last_login']=='0001-01-01 00:00:00')?'Never':pretty_date($users['last_logged']));?></td>
+								<td><?=(($users['last_login']=='0001-01-01 00:00:00')?'Never':pretty_date($users['last_login']));?></td>
 							</tr>
 						    <?php endwhile;?>
 						</tbody>

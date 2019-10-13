@@ -9,8 +9,8 @@ if (isset($_SESSION['order'])&&!empty($_SESSION['order'])) {
 	$check=mysqli_num_rows($check_query);
 	$check2=mysqli_fetch_assoc($check_query);
 }
-if (isset($_GET['delete'])) {
-	$delete_id=sanitize($_GET['delete']);
+if (isset($_GET['del_eatin'])) {
+	$delete_id=sanitize($_GET['del_eatin']);
 
 	$order_query_delete=$db->query("SELECT * FROM orders WHERE id='$or_id'");
 	$order_delete=mysqli_fetch_assoc($order_query_delete);
@@ -18,6 +18,9 @@ if (isset($_GET['delete'])) {
 	array_splice($order_json_delete, $delete_id,1);
 
 	$order_json_delete=json_encode($order_json_delete);
+	if ($order_json_delete=="[]") {
+		$order_json_delete='""';
+	}
 
 	$db->query("UPDATE orders SET items='$order_json_delete' WHERE id='$or_id' AND (order_status=3 OR order_status=0)");
 	header('Location: review');
@@ -43,7 +46,6 @@ if (isset($_POST['submit'])) {
 	foreach ($_POST as $po) {
 		$post_array[]=$po;
 	}
-
 	$array_size=sizeof($post_array)-2;
 	if ($array_size==0) {
 		$errors[]='You must add orders first! There are no orders yet!';
@@ -58,24 +60,63 @@ if (isset($_POST['submit'])) {
 	$order_query=$db->query("SELECT * FROM orders WHERE id='$order_id' AND (order_status=3 OR order_status=0)");
 	$order=mysqli_fetch_assoc($order_query);
 
-	$items=json_decode($order['items'],true);
+	$items=json_decode($order['items'],true);	
+	$takeout_items=json_decode($order['takeout_items'],true);
+	if ($items!="") {
+		$items_size=sizeof($items);
+	}
+	else{
+		$items_size=0;
+	}
+	if ($takeout_items!="") {
+		$takeout_size=sizeof($takeout_items);
+	}
+	else{
+		$takeout_size=0;
+	}
+
 
 	$index=0;
+	$take_index=0;
 	$new_items=array();
-	foreach($items as $item){
-		$new_items[$index]['item_id']=$item['item_id'];
-		$new_items[$index]['quantity']=$new_quantity[$index];
-		$new_items[$index]['custom_id']=$item['custom_id'];
-		$index++;
+	$new_takeouts=array();
+	if ($items=="") {
+		$new_items="";
 	}
+	else{
+		foreach($items as $item){
+			$new_items[$index]['item_id']=$item['item_id'];
+			$new_items[$index]['quantity']=$new_quantity[$index];
+			$new_items[$index]['custom_id']=$item['custom_id'];
+			$index++;
+		}
+	}
+	if ($takeout_items=="") {
+		$new_takeouts="";
+	}
+	else{
+		
+		foreach($takeout_items as $tk){
+			$new_takeouts[$take_index]['item_id']=$tk['item_id'];
+			$new_takeouts[$take_index]['quantity']=$new_quantity[$index];
+			$new_takeouts[$take_index]['custom_id']=$tk['custom_id'];
+			$index++;
+			$take_index++;
+		}
+				
+	}
+
+
 	if (!empty($errors)) {
 		 echo display_errors($errors);
 	}
 	else
 	{
+	$new_takeouts=json_encode($new_takeouts);
 	$new_items=json_encode($new_items);
-	$db->query("UPDATE orders SET items='$new_items', order_status=0, table_no='$table_no' WHERE id='$order_id' AND (order_status=3 OR order_status=0)");
-	header('Location: review');
+
+		$db->query("UPDATE orders SET items='$new_items', takeout_items='$new_takeouts', order_status=0, table_no='$table_no' WHERE id='$order_id' AND (order_status=3 OR order_status=0)");
+		header('Location: review');
 	}
 }
 }
@@ -135,7 +176,7 @@ function display_regular(){
 	global $db;
 ?>
 	<form action="review<?=isset($_GET['edit'])?'?edit=1':'';?>" method="post" enctype="multipart/form-data">
-	<div class="row text-center" style="padding-top: 10px">
+	<div class="row text-center" style="box-shadow:0 4px 10px 0 rgba(0, 0, 0, 0.30), 0 2px 10px 0 rgba(0, 0, 0, 0.30)">
 		<?php
 		if (isset($_SESSION['order'])&&($check>0)) {
 			$order_id=sanitize($_SESSION['order']);
@@ -143,21 +184,53 @@ function display_regular(){
 			$order_query=$db->query("SELECT * FROM orders WHERE id='$order_id' AND (order_status=0 OR order_status=3)");
 			
 			$orders=mysqli_fetch_assoc($order_query);
-		
-			$order_array=json_decode($orders['items'],true);
+
+			$order_items=json_decode($orders['items'],true);
+			$takeout_items=json_decode($orders['takeout_items'],true);
+			$take_index=0;
+			$eatin_index=0;
+			$takeout_array=array();
+			$order_array=array();
+			if ($order_items=="") {
+				# code...
+			}else{
+				foreach ($order_items as $ot) {
+				$order_array[$eatin_index]['item_id']=$ot['item_id'];
+				$order_array[$eatin_index]['quantity']=$ot['quantity'];
+				$order_array[$eatin_index]['custom_id']=$ot['custom_id'];
+				$order_array[$eatin_index]['takeout']="false";
+				$eatin_index++;
+			
+				}
+			}
+			if ($takeout_items=="") {
+				
+			}
+			else{
+				foreach ($takeout_items as $tk) {
+					$takeout_array[$take_index]['item_id']=$tk['item_id'];
+					$takeout_array[$take_index]['quantity']=$tk['quantity'];
+					$takeout_array[$take_index]['custom_id']=$tk['custom_id'];
+					$takeout_array[$take_index]['takeout']="true";
+					$take_index++;
+				}
+			}
+
+			$order_array=array_merge($order_array,$takeout_array);
+			//var_dump($order_array);
 			$num_rows=sizeof($order_array);
 			$index=1;
 			$delenex=0;
 			$total=0;
 			foreach($order_array as $order): 
-			$item_id=$order['item_id'];
-			$quantity=$order['quantity'];
-			$custom_id=$order['custom_id'];
-			$item_query=$db->query("SELECT * FROM menu WHERE id='$item_id'");
-			$item=mysqli_fetch_assoc($item_query);
-			$real_price=$item['price'];
-			$price=(int)$item['price']*(int)$quantity;
-			$total=$total+$price;
+				$item_id=$order['item_id'];
+				$quantity=$order['quantity'];
+				$custom_id=$order['custom_id'];
+				$item_query=$db->query("SELECT * FROM menu WHERE id='$item_id'");
+				$item=mysqli_fetch_assoc($item_query);
+				$real_price=$item['price'];
+				$price=(int)$item['price']*(int)$quantity;
+				$total=$total+$price;
 
 		?>
 		<div class="col-md-12 review">
@@ -175,8 +248,9 @@ function display_regular(){
 						<span class="input-group-btn" onclick="decrement(<?=$index;?>);update_price(<?=$real_price;?>,<?=$index;?>);update_total(<?=$num_rows;?>);">
 							<button class="btn btn-white bootstrap-touchspin-down" type="button" style="color:red;"><b>-</b></button>
 						</span>
+
 						<span class="input-group-addon bootstrap-touchspin-prefix" style="display: none;"></span>
-						<input class="touchspin1 form-control text-center" id="quan<?=$index;?>" type="text" value="<?=$quantity;?>" name="demo<?=$index;?>" style="color: black;">
+						<input class="touchspin1 form-control text-center" id="quan<?=$index;?>" type="text" value="<?=$quantity;?>" name="<?=($order['takeout']=="true")? "takeout":"eatin";?><?=$index;?>" style="color: black;">
 						<span class="input-group-addon bootstrap-touchspin-postfix" style="display: none;"></span>
 						<span class="input-group-btn" onclick="increment(<?=$index;?>);update_price(<?=$real_price;?>,<?=$index;?>);update_total(<?=$num_rows;?>);">
 							<button class="btn btn-white bootstrap-touchspin-up" type="button" style="color:red;">
@@ -188,7 +262,7 @@ function display_regular(){
 				</div>
 				<div class="col-md-3 col-sm-3 col-xs-3">
 					<div class="text-right">
-						<a href="review?delete=<?=$delenex;?>" onClick="return confirm('Are you sure you want to remove this item from you orders?')" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-remove" style="color: red"></span></a>
+						<a href="review?del_<?=($order['takeout']=="true")? "takeout":"eatin";?>=<?=$delenex;?>" onClick="return confirm('Are you sure you want to remove this item from you orders?')" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-remove" style="color: red"></span></a>
 						<h5 id="price<?=$index;?>" style="padding-top: 50%"><?=cash($price);?></h5>
 					</div>
 				</div>
