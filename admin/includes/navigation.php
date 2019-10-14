@@ -27,7 +27,7 @@
                             
                              <li><a href="users.php">Users</a></li>
                              <li><a href="manage_waiters.php">Manage Waiters</a></li>
-                             <li><a href="manage_waiters.php">Settings</a></li>
+                             <li><a href="settings.php">Settings</a></li>
                              <!-- <?php if(has_permission('admin')):?>-->
                             <!-- <?php endif;?>-->
                              <li class="dropdown pull-right">

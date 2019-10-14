@@ -148,7 +148,9 @@ if(empty($_POST['full_name'])||empty($_POST['email'])||empty($_POST['password'])
 									<input type="submit" value="Add user" class="btn btn-success">
 								</div>
 							</div>
-						</div>
+							<div class="col-md-6 col-sm-6 col-xs-6 text-center">
+								<img src="../logo.png" style="width: 400px;height: auto">
+							</div>
 						</form>
 		            </div>
 		        </div>
