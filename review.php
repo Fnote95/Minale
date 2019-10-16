@@ -1,6 +1,10 @@
 <?php
 require_once "core/init.php";
 include "includes/head.php";
+if (!isset($_SESSION['type'])) {
+	header('Location: index.php');
+}
+
 
 if (isset($_SESSION['order'])&&!empty($_SESSION['order'])) {
 	$or_id=sanitize($_SESSION['order']);
@@ -152,11 +156,11 @@ if (isset($_POST['submit'])) {
 		?>
 		<div class="row" style="padding: 10px; background-color: #fff;margin-top: 2px">
 			<div class="col-md-12 col-sm-12 col-xs-12 text-center">
-				<img src="min.png" style="width: 120px">
+				<img src="images/graphics/Order in Kitchen-03.png" style="width: auto; height: 200px">
 			</div>
 
 			<div class="col-md-12 col-sm-12 col-xs-12" style="color: red; padding-top: 10px">
-				<h4 style="font-size: 15px"><b><i class="glyphicon glyphicon-time"></i>  Your order is in the waiting area</b></h4>
+				<h4 style="font-size: 15px"><b><i class="glyphicon glyphicon-time"></i>  Your order is added to the kitchen</b></h4>
 				<h4 style="font-size: 15px"><b><i class="fa fa-users"></i>  There are -<?=$orders_before;?>- orders before you</b></h4>	
 			</div>
 			<div class="col-md-12 col-sm-12 col-xs-12" style="padding-top: 15px">
@@ -298,6 +302,9 @@ function display_regular(){
 
 <?php
  }else{?>
+ 	<div class="row">
+ 		<img src="images/graphics/No Order yet-03.png" style="width: 150px; height: auto">
+ 	</div>
  	<div class="row" style="padding-top: 10px;color: red;">
 		<h3 class="text-center"><b>No Orders Yet</b></h3>
 	</div>

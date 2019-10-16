@@ -1,4 +1,5 @@
 <?php include "includes/head.php";
+
 ?>
 <div class="container-fluid">
 	<div class="row text-center" style="padding-top:30px">

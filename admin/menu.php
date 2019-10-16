@@ -39,25 +39,33 @@ if (isset($_GET['cat'])&&!empty($_GET['cat'])) {
 			header('Location: menu?cat='.$cat_id);
 		}
 
-//////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
 					if (isset($_GET['edit'])) {
 						$edit_id=sanitize($_GET['edit']);
 						$edit_query=$db->query("SELECT * FROM menu WHERE id='$edit_id'");
 						$edit_result=mysqli_fetch_assoc($edit_query);
-						$edit_comp=json_decode($edit_result['composition'],true);
-						$edit_comp_string='';
-						foreach ($edit_comp as $ec) {
-							$edit_comp_string=$edit_comp_string.$ec['comp'].':'.$ec['quantity'].',';
+						$edit_ing_type=$edit_result['ing_type'];
+						if ($edit_ing_type==3) {
+							$edit_comp_string="None";
 						}
+						else{
+							$edit_comp=json_decode($edit_result['composition'],true);
+							$edit_comp_string='';
+							foreach ($edit_comp as $ec) {
+								$edit_comp_string=$edit_comp_string.$ec['comp'].':'.$ec['quantity'].',';
+							}
+						}
+						
 					
 					}
 		
 				
 			if (isset($_POST['add-sub'])) {
-
+				
 					
 				$comps=sanitize($_POST['comps']);
 				$comps=rtrim($comps,',');
+				$ing_type=sanitize($_POST['ing_type']);
 				$comps=explode(',', $comps);
 				$comps_array=array();
 				$i=0;
@@ -69,7 +77,7 @@ if (isset($_GET['cat'])&&!empty($_GET['cat'])) {
 	
 				///////////////////////////////////////////
 				$errors=array();
-				$required=array('sub','comps','price');
+				$required=array('sub','comps','price','ing_type');
 				foreach($required as $field){
 					if($_POST[$field]==''){
 						$errors[]='All feilds with astriks must not be empty!';
@@ -77,6 +85,7 @@ if (isset($_GET['cat'])&&!empty($_GET['cat'])) {
 					}
 				}
 				if(!empty($_FILES)){
+				
 					if ($_FILES['photo']['error']==0) {
 						$photo=$_FILES['photo'];
 						$name=$photo['name'];
@@ -123,21 +132,27 @@ if (isset($_GET['cat'])&&!empty($_GET['cat'])) {
 					if (!empty($_FILES)) {
 						move_uploaded_file($temploc, $uploadloc);	
 					}
-					foreach ($comps as $com) {
-					$temp=explode(':', $com);
-					$comps_array[$i]['comp']=$temp[0];
-					$comps_array[$i]['quantity']=$temp[1];
-					$i++;					
+					if ($ing_type==3) {
+						$comps_json="None";
 					}
-					$comps_json=json_encode($comps_array);
+					else{
+						foreach ($comps as $com) {
+						$temp=explode(':', $com);
+						$comps_array[$i]['comp']=$temp[0];
+						$comps_array[$i]['quantity']=$temp[1];
+						$i++;					
+						}
+						$comps_json=json_encode($comps_array);
+					}
+					
 					
 	
 
-					$insertsql="INSERT INTO menu (item_name,item_pic,cat_id,composition,price) VALUES ('$pname','$dbpath','$cat_id','$comps_json','$price')";
+					$insertsql="INSERT INTO menu (item_name,item_pic,cat_id,ing_type,composition,price) VALUES ('$pname','$dbpath','$cat_id','$ing_type','$comps_json','$price')";
 					if (isset($_GET['edit'])) {
-						$insertsql="UPDATE menu set item_name='$pname', item_pic='$dbpath', cat_id='$cat_id', composition='$comps_json',price='$price' WHERE id='$edit_id'";
+					$insertsql="UPDATE menu set item_name='$pname', item_pic='$dbpath', cat_id='$cat_id', ing_type='$ing_type',composition='$comps_json',price='$price' WHERE id='$edit_id'";
 					}
-					
+
 					$db->query($insertsql);
 					header('Location: menu.php?cat='.$cat_id);
 
@@ -161,14 +176,23 @@ if (isset($_GET['cat'])&&!empty($_GET['cat'])) {
 				<div class="col-md-2"><label for="name">Name*</label><input type="text" name="sub" class="form form-control" value="<?=isset($_GET['edit'])? $edit_result['item_name']:'';?>" style="color: black"></div>
 
 				<div class="col-md-2"><label for="photo"><?=(isset($_GET['edit']))?'Add new ':'';?>Image*</label><input type="file" class="form-control"  accept="image/*" capture="camera" name="photo" style="color: black"></div>
+				<div class="col-md-2"><label for="ing_type"><?=(isset($_GET['edit']))?'Add new ':'';?>Ingredient Type</label>
+					<select class="form-control" id="ing_type" name="ing_type" style="color:black">
+						<option value=""></option>
+						<option value="1">Quantitative</option>
+						<option value="2">Not quantitative</option>
+						<option value="3">No Ingredient</option>
+					</select>
 
-				<div class="col-md-2"><label for="name">Ingredients*</label><button name="comp" class="btn btn-primary form-control"  onclick="jQuery('#compModal').modal('toggle'); return false;" style="background-color: #5cb85c;border-color:#4cae4c; color: white;">Composition</button></div>
+				</div>
+
+				<div class="col-md-2"><label for="name">Ingredients*</label><button name="comp" id="comp" class="btn btn-primary form-control"  onclick="jQuery('#compModal').modal('toggle'); return false;" style="background-color: #5cb85c;border-color:#4cae4c; color: white;" disabled="ture">Composition</button></div>
 
 				<div class="col-md-2"><label for="name">Ingredients Preview</label><input type="text" value="<?=(isset($_GET['edit'])? $edit_comp_string : '');?>" id="comps" name="comps" class="form form-control" style="color: black"  readonly></div>
 
-				<div class="col-md-2"><label for="name">Price*</label><input type="number" name="price" value="<?=(isset($_GET['edit'])? $edit_result['price'] : '');?>" class="form-control" style="color: black"></div>
+				<div class="col-md-1"><label for="name">Price*</label><input type="number" name="price" value="<?=(isset($_GET['edit'])? $edit_result['price'] : '');?>" class="form-control" style="color: black"></div>
 
-				<div class="col-md-2"><label for="name"><?=(isset($_GET['edit']))?'Edit':'Add to sub-menu';?></label><button name="add-sub" class="btn btn-primary form-control" style="background-color: #5cb85c;border-color:#4cae4c; color: white;" ><?=(isset($_GET['edit']))?'Edit':'Add';?></button></div>
+				<div class="col-md-1"><button name="add-sub" class="btn btn-primary form-control" style="background-color: #5cb85c;border-color:#4cae4c; color: white;margin-top: 25px" ><?=(isset($_GET['edit']))?'Edit':'Add';?></button></div>
 
 			</form>
 
@@ -213,11 +237,11 @@ if (isset($_GET['cat'])&&!empty($_GET['cat'])) {
                 <div class="container-fluid">
                     <?php for($i=1;$i<11;$i++):;?>
                     <div class="form-group col-md-4">
-                        <label for="comp">Ingredient</label>
+                        <label for="comp">Ingredient <?=$i;?></label>
                         <input type="text" class="form-control" id="comp<?=$i;?>" name="comp<?=$i;?>">
                     </div>
                     <div class="form-group col-md-2">
-                        <label for="size">Quantity</label>
+                        <label for="size" id="label<?=$i;?>">Quantity <?=$i;?></label>
                         <input type="number" class="form-control" id="quantity<?=$i;?>" name="quanitty<?=$i;?>">
                     </div>
                     <?php endfor;?>

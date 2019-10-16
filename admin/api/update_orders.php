@@ -7,6 +7,9 @@ ob_start();?>
 		<h2 class="text-center"><b>Queued Orders</b></h2>
 		<?php while($order_queued=mysqli_fetch_assoc($order_queued_query)): 
 			$cust_array=json_decode($order_queued['items'],true);
+			if ($cust_array=="") {
+				continue;
+			}
 			$cust_check=0;
 			foreach ($cust_array as $cust) {
 				if ($cust['custom_id']!='none') {

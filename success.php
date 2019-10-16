@@ -1,3 +1,4 @@
+
 <style type="text/css">
 	#body{
 		background-color: white;
@@ -10,7 +11,7 @@ include "includes/head.php";
 <div class="container-fluid" style="background-color: white">
 	<div class="row text-center">
 		<div style="padding-top: 30px">
-			<img src="min.png" style="width: 150px; height: auto">
+			<img src="images/graphics/Order Taken-03.png" style="width: 150px; height: auto">
 		</div>
 		<div style="padding-top:10%; padding-left: 10px;padding-right: 10px">
 			<h3 style="color: red;"><b>Your order has been added to</b></h3>

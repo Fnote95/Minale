@@ -2,7 +2,9 @@
 require_once "core/init.php";
 
 include "includes/head.php";
-
+if (!isset($_SESSION['type'])) {
+	header('Location: index.php');
+}
 
 if (isset($_GET['type'])&&!empty($_GET['type'])) {
 	$type=sanitize($_GET['type']);

@@ -107,6 +107,55 @@
     <script src="js/data-table/colResizable-1.5.source.js"></script>
     <script src="js/data-table/bootstrap-table-export.js"></script>
 <script>
+
+
+function update_btn_status(){
+
+  var ing_type=jQuery('#ing_type').val();
+  
+  if(ing_type==1||ing_type==2){
+    jQuery('#comp').attr("disabled", false);
+  }
+  else{
+    jQuery('#comp').attr("disabled", true);
+  }
+}
+function update_review_status(){
+  var ing_type=jQuery('#ing_type').val();
+  if(ing_type==3){
+    jQuery('#comps').val("None");
+  }
+  else{
+    jQuery('#comps').val("");
+  }
+}
+function update_modal(){
+  var ing_type=jQuery('#ing_type').val();
+  if(ing_type==2){
+    for (var i = 1; i <11; i++) {
+      jQuery('#quantity'+i).attr("disabled", true);
+      jQuery('#label'+i).html("");
+    }
+  }
+    else{
+    for (var i = 1; i <11; i++) {
+      jQuery('#quantity'+i).attr("disabled", false);
+    }
+  }
+  
+}
+jQuery('select[name="ing_type"]').change(function(){
+  update_btn_status();
+  update_review_status();
+  update_modal();
+});
+
+
+
+
+
+
+
     ///////////////////////////////////////////////////////////////////////////////
    
     function msToTime(duration) {
@@ -130,11 +179,20 @@
 		jQuery('#dis').html(" ");
 	}
      function updateComp(){
+            var ing_type=jQuery('#ing_type').val();
             var compString='';
             for (var i = 1; i <11; i++) {
-                if(jQuery('#comp'+i).val()!=''){
-                    compString+=''+jQuery('#comp'+i).val()+':'+jQuery('#quantity'+i).val()+',';
+                if (ing_type == 1) {
+                  if(jQuery('#comp'+i).val()!=''){
+                      compString+=''+jQuery('#comp'+i).val()+':'+jQuery('#quantity'+i).val()+',';
+                  }
+                              
                 }
+                else{
+                    if(jQuery('#comp'+i).val()!=''){
+                      compString+=''+jQuery('#comp'+i).val()+':'+'NA'+',';
+                    }
+                  }      
                 }
                 jQuery('#comps').val(compString);
             }
@@ -236,7 +294,6 @@ function drawHand(ctx, pos, length, width) {
     ctx.stroke();
     ctx.rotate(-pos);
 }
-
 
 
 

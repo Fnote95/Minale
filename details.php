@@ -1,7 +1,9 @@
 <?php
 require_once "core/init.php";
 include "includes/head.php";
-
+if (!isset($_SESSION['type'])) {
+	header('Location: index.php');
+}
 
 if (isset($_GET['item'])&&!empty($_GET['item'])) {
 	$item_id=sanitize($_GET['item']);
@@ -12,8 +14,15 @@ if (isset($_GET['item'])&&!empty($_GET['item'])) {
 	$item_name=$item['item_name'];
 	$item_pic=$item['item_pic'];
 	$item_price=$item['price'];
-	$item_composition=json_decode($item['composition'],true);
-	$orders_array=array();
+	$ing_type=$item['ing_type'];
+	if ($ing_type==3) {
+		$item_composition=$item['composition'];
+	}
+	else{
+		$item_composition=json_decode($item['composition'],true);
+		$orders_array=array();
+	}
+
 	//var_dump($item_composition);
 	////////////////check to see if the user already customized
 	if (isset($_GET['custom'])&&!empty($_GET['custom'])) {
@@ -135,9 +144,13 @@ if (isset($_POST['submit'])) {
 				<div class="col-md-12 col-sm-12 col-xs-12" >
 					<h4 class="text-center"><b>Ingredients</b></h4>
 					<p class="text-center">
-						<?php foreach ($item_composition as $comp): ?>
-							<i><?=$comp['quantity'].'-'.$comp['comp'].',';?></i>
-						<?php endforeach;?>
+						<?php if ($ing_type==3) {?>
+							<i><?=$item_composition;?></i>
+						<?php }elseif($ing_type==2&&isset($_GET['custom'])){ foreach ($item_composition as $comp): ?>
+							<i><?=$comp['comp'].(($comp['needed']=='false')?'-removed':'').',';?></i>
+						<?php endforeach; }else{ foreach ($item_composition as $comp): ?>
+							<i><?=$comp['comp'].(($comp['quantity']=='NA')?'':'-'.$comp["quantity"]).',';?></i>
+						<?php endforeach; }?>
 					</p>
 				</div>
 				<div class="col-md-3 col-sm-3 col-xs-3"></div>		

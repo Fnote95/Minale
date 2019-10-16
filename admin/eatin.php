@@ -13,7 +13,8 @@ if ((isset($_GET['done'])&&!empty($_GET['done']))) {
 //////////////////////////////////////////////////////////////
 
 ////////////check to see how many orders are being processed//////////////////////
-$order_processed_num_query=$db->query("SELECT * FROM orders WHERE order_status=1");
+$empty="";
+$order_processed_num_query=$db->query("SELECT * FROM orders WHERE order_status=1 AND items!='$empty'");
 $order_processed_num=mysqli_num_rows($order_processed_num_query);
 //////////////////////////////////////////////////////////////////////////////////
 
@@ -52,6 +53,9 @@ $process_js_index=8;
 		<h2 class="text-center"><b>Orders Being Processed</b></h2>
 		<?php while($order_processed=mysqli_fetch_assoc($order_processed_query)): 
 			$cust_array=json_decode($order_processed['items'],true);
+			if ($cust_array=="") {
+				continue;
+			}
 			$cust_check=0;
 			foreach ($cust_array as $cust) {
 				if ($cust['custom_id']!='none') {
@@ -89,10 +93,12 @@ $process_js_index=8;
     					$items_id=$items['item_id'];
     					$items_query=$db->query("SELECT * FROM menu WHERE id='$items_id'");
     					$menu_item=mysqli_fetch_assoc($items_query);
+    					$ing_type=$menu_item['ing_type'];
     					$custom_id=$items['custom_id'];
     					$custom_query=$db->query("SELECT * FROM customize WHERE id='$custom_id'");
     					$custom=mysqli_fetch_assoc($custom_query);
     					$custom_items=json_decode($custom['composition'],true);
+    					
     			?>	
 					<div class="col-md-4 col-sm-4 text-center">
 						<div style="border: 3px solid red;width:86px; height:auto ; margin: 0% auto; border-radius: 50%; overflow: hidden; background-color: white; box-shadow:0 4px 10px 0 rgba(0, 0, 0, 0.30), 0 2px 10px 0 rgba(0, 0, 0, 0.30);">
@@ -106,6 +112,10 @@ $process_js_index=8;
 		        				if ($items['custom_id']=='none') {
 		        				}
 		        				else{
+		        					if ($custom_items==null) {?>
+		        					<h5 style="color:green;"><?=$custom['composition'];?></h5>
+		        				<?php }
+		        				else{
 		        				?>
 		        				<table class="table table-striped">
 		        					<thead>
@@ -116,13 +126,13 @@ $process_js_index=8;
 		        						<tr>
 		        							
 		        								<td><?=$cus_items['comp'];?></td>
-		        								<td><?=$cus_items['quantity'];?></td>
+		        								<td><?=($ing_type==1)?$cus_items['quantity']:(($cus_items['needed']=="true")?"<span class='glyphicon glyphicon-ok'></span>":"<span class='glyphicon glyphicon-remove'></span>");?></td>
 		        							
 		        						</tr>
 		        						<?php endforeach; ?>
 		        					</tbody>
 		        				</table>
-	        				<?php }?>
+	        				<?php }}?>
 						</div>
 						
 					</div>

@@ -71,10 +71,11 @@ $process_js_index=8;
 	    					$items_id=$items['item_id'];
 	    					$items_query=$db->query("SELECT * FROM menu WHERE id='$items_id'");
 	    					$menu_item=mysqli_fetch_assoc($items_query);
-	    					/*$custom_id=$items['custom_id'];
+	    					$custom_id=$items['custom_id'];
+	    					$ing_type=$menu_item['ing_type'];
 	    					$custom_query=$db->query("SELECT * FROM customize WHERE id='$custom_id'");
 	    					$custom=mysqli_fetch_assoc($custom_query);
-	    					$custom_items=json_decode($custom['composition'],true);*/
+	    					$custom_items=json_decode($custom['composition'],true);
 
 		    			?>
 						<div class="col-md-4 col-sm-4 text-center">
@@ -88,6 +89,10 @@ $process_js_index=8;
 		        				if ($items['custom_id']=='none') {
 		        				}
 		        				else{
+		        					if ($custom_items==null) {?>
+		        					<h5 style="color:green;"><?=$custom['composition'];?></h5>
+		        				<?php }
+		        				else{
 		        				?>
 		        				<table class="table table-striped">
 		        					<thead>
@@ -98,13 +103,13 @@ $process_js_index=8;
 		        						<tr>
 		        							
 		        								<td><?=$cus_items['comp'];?></td>
-		        								<td><?=$cus_items['quantity'];?></td>
+		        								<td><?=($ing_type==1)?$cus_items['quantity']:(($cus_items['needed']=="true")?"<span class='glyphicon glyphicon-ok'></span>":"<span class='glyphicon glyphicon-remove'></span>");?></td>
 		        							
 		        						</tr>
 		        						<?php endforeach; ?>
 		        					</tbody>
 		        				</table>
-	        				<?php }?>
+	        				<?php }}?>
 							</div>
 						</div>
 					<?php endforeach;?>
