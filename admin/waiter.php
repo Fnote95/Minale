@@ -3,15 +3,20 @@
 require_once "../core/init.php";
 include "includes/head.php";
 ///////////////////////////////////////////////////////////////////////////////////
+if(!is_logged_in()){
+header('Location: login.php');
+}
+///////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
 if(isset($_SESSION['SBuser'])){
 	$user_id=$_SESSION['SBuser'];
 }
-$user_id=3;
+
 $resp_query=$db->query("SELECT * FROM waiters WHERE user_id='$user_id'");
 $resp=mysqli_fetch_assoc($resp_query);
 $tables=explode('-', $resp['resp_table']);
 
-$orders_query=$db->query("SELECT * FROM orders WHERE (table_no BETWEEN '$tables[0]' AND '$tables[1]') AND order_status=2");
+$orders_query=$db->query("SELECT * FROM orders WHERE (table_no BETWEEN '$tables[0]' AND '$tables[1]') AND (order_status=2 || takeout_status=2)");
 ?>
 <div class="container-fluid">
 	<div class="row" style="padding-top: 75px;padding-left:10px;padding-right:10px;">

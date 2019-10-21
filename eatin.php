@@ -13,7 +13,7 @@ $cat=mysqli_fetch_assoc($cat_query);
 $menu_query=$db->query("SELECT * FROM menu WHERE cat_id='$sub_id'");
 ?>
 <div class="container-fluid">
-	<div class="row" style="padding: 10px; background-color: #fff">
+	<div class="row front_nav">
 		<div class="col-md-1 col-sm-1 col-xs-1 pull-left" style="padding: 5px">
 				<a id="back"><i class="fa fa-arrow-left" style="font-size: 25px; color: red;"></i></a>
 		</div>
@@ -30,7 +30,7 @@ $menu_query=$db->query("SELECT * FROM menu WHERE cat_id='$sub_id'");
 
 
 	<div class="row text-center">
-		<div class="col-md-12 col-sm-12 col-xs-12 scrolling_wrapper" style="padding-top: 15px;padding-bottom: 15px; height: 500px">
+		<div class="col-md-12 col-sm-12 col-xs-12 scrolling_wrapper" style="padding-top: 15px;padding-bottom: 15px; height: 100vh">
 			<?php while($menu_item=mysqli_fetch_assoc($menu_query)): ?>
 			<a href="details?item=<?=$menu_item['id'];?>">
 				<div class="col-md-12 col-sm-12 col-xs-12" style="margin-top:10px;background-size: auto 350px;background-image: url('<?=$menu_item['item_pic'];?>');box-shadow:0 4px 10px 0 rgba(0, 0, 0, 0.30), 0 2px 10px 0 rgba(0, 0, 0, 0.30); border-radius: 10px;height: 200px;overflow: hidden;">

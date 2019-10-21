@@ -13,7 +13,7 @@ if (isset($_POST['add'])&&!empty($_POST)) {
 	$sub_menu=sanitize($_POST['sub']);
 	$errors=array();
 
-	if ($_POST['add']=" ") {
+	if ($_POST['sub']=="") {
 		$errors[]="You must add a sub menu first!";
 	}
 	if (!empty($errors)) {
@@ -203,7 +203,7 @@ if (isset($_GET['cat'])&&!empty($_GET['cat'])) {
 		<div class="col-md-12 col-sm-12 col-xs-12" style="padding-top: 15px;">
 			<?php while($menu_item=mysqli_fetch_assoc($menu_query)): ?>
 			
-				<div class="col-md-2 col-sm-2 col-xs-2">
+				<div class="col-md-2 col-sm-12 col-xs-12" style="padding-top: 20px">
 				
 					<div class="review2" style=" border-radius: 10px;box-shadow:0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12); padding-top: 15px;padding-bottom: 15px; ">
 						<div style="padding-bottom: 5px;padding-right: 10px;margin-top: -5px" class="text-right">

@@ -2,9 +2,10 @@
 require_once "core/init.php";
 
 include "includes/head.php";
-if (!isset($_SESSION['type'])) {
+
+/*if (!isset($_SESSION['type'])) {
 	header('Location: index.php');
-}
+}*/
 
 if (isset($_GET['type'])&&!empty($_GET['type'])) {
 	$type=sanitize($_GET['type']);
@@ -19,7 +20,7 @@ if(!isset($_SESSION['type'])){
 $sub_menu_query=$db->query("SELECT * FROM category");
 ?>
 <div class="container-fluid">
-	<div class="row" style="padding: 10px; background-color: #fff">
+	<div class="row front_nav">
 		<div class="col-md-1 col-sm-1 col-xs-1 pull-left" style="padding: 5px">
 				<a id="back"><i class="fa fa-arrow-left" style="font-size: 25px; color: red;"></i></a>
 		</div>

@@ -24,7 +24,7 @@
 /*----------------------------------------*/
 /*  1.  Theme default CSS
 /*----------------------------------------*/
-html, body {font-family: 'Rockwell', sans-serif;font-weight:400;}
+html, body {font-family: 'Roboto', sans-serif;font-weight:400;}
 html, body.materialdesign {background: #fff}
 .floatleft {float:left}
 .floatright {float:right}
@@ -2762,11 +2762,11 @@ ul.profile-contact-menu {
 .btn-group-xs>.btn:focus, .btn-xs:focus{
 	outline:none;
 }
-.btn.focus, .btn:focus, .btn:hover, .btn:active{
+/*.btn.focus, .btn:focus, .btn:hover, .btn:active{
 	color:#fff;
 	background:linear-gradient(to bottom, #1702d0  0%, #3fc1b5 100%);
 	outline:none;
-}
+}**/
 .project-list-ad-bl .btn:focus{
 	outline:none;
 }
@@ -4307,6 +4307,60 @@ input[type="file"] {
 	height: 50px;
 
 }
-.container-fluid{
+/*.container-fluid{
 	background-color: #f9f9f9;
+}
+*/
+.shadow{
+	box-shadow:0 4px 10px 0 rgba(0, 0, 0, 0.15), 0 2px 10px 0 rgba(0, 0, 0, 0.15);
+}
+.bradius{
+	border-radius: 10px;
+}
+.front_nav{
+	padding: 10px; 
+	background-color: #fff;
+	box-shadow:0 4px 10px 0 rgba(0, 0, 0, 0.1), 0 2px 10px 0 rgba(0, 0, 0, 0.1);
+}
+.btn_orange{
+	background-color: rgba(252,84,4,1);color:white; border-radius: 3px;
+}
+.btn_orange:hover{
+	background-color: red;
+}
+.btn_orange:active{
+	background-color: red;
+}
+.front:active{
+	background-color:white;
+}
+#loading {
+		-webkit-animation: rotation 20s infinite linear;
+		-moz-animation: rotation 20s infinite linear;
+		animation: rotation 20s infinite linear;
+}
+
+@-webkit-keyframes rotation {
+		from {
+				-webkit-transform: rotate(0deg);
+		}
+		to {
+				-webkit-transform: rotate(359deg);
+		}
+}
+@-moz-keyframes rotation {
+		from {
+				-moz-transform: rotate(0deg);
+		}
+		to {
+				-moz-transform: rotate(359deg);
+		}
+}
+@keyframes rotation {
+		from {
+				-webkit-transform: rotate(0deg);
+		}
+		to {
+				-webkit-transform: rotate(359deg);
+		}
 }

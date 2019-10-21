@@ -7,10 +7,11 @@ $current_date=date("Y-m-d h:i:s");
 $orders_query=$db->query("SELECT * FROM orders WHERE order_status=2");
 
 ?>
+
+<div class="container-fluid">
 	<div class="row" style="padding-top: 75px; padding-bottom: 30px;">
 		<h1 class="text-center" style="font-family: 'Rockwell'; font-size: 3em"><b>Orders Report</b></h1>
 	</div>
-<div class="container-fluid">
 	<div class="row" style="padding: 20px">
 		<table class="table table-striped">
 			<thead>
@@ -41,20 +42,20 @@ $orders_query=$db->query("SELECT * FROM orders WHERE order_status=2");
 						<td><?=orders_quantity_parser($items);?></td>
 						<td><?php $sub_total_array=orders_price_parser($items);
 								  $sub_total=$sub_total_array['sub_total'];
-								  echo cash(round($sub_total));	 
+								  echo cash(round($sub_total,2));	 
 						?></td>
 						<td><?php $sub_total_array=orders_price_parser($items);
 								  $vat_total=$sub_total_array['vat'];
-								  echo cash(round($vat_total));	 
+								  echo cash(round($vat_total,2));	 
 						?></td>
 						<td><?php $sub_total_array=orders_price_parser($items);
 								  $ser_total=$sub_total_array['service'];
-								  echo cash(round($ser_total));	 
+								  echo cash(round($ser_total,2));	 
 
 						?></td>
 						<td><?php $sub_total_array=orders_price_parser($items);
 								  $tot_total=$sub_total_array['total'];
-								  echo cash(round($tot_total));	 
+								  echo cash(round($tot_total,2));	 
 						?></td>
 						<td><?=pretty_date($orders['order_date']);?></td>
 					</tr>

@@ -75,16 +75,16 @@ $process_js_index=8;
 		        ;}, 1);
 			
 			</script>
-			<div class="col-md-12 " style="padding:10px; margin: 15px; background-color: #fff; border: 1px solid #f0f0f0;box-shadow:0 4px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 10px 0 rgba(0, 0, 0, 0.12); border-radius: 10px;">
-				<div class="col-md-12" style="border-bottom: 1px solid #d8d8d8">
-					 <div class="col-md-2"><h4 style="color: red"><b>#<?=$order_processed['id'];?></b></h4></div>
-						<div class="col-md-3"><h5><b>Table No. <?=$order_processed['table_no'];?></b></h5></div>
-					<div class="col-md-4"><h5 style="color: green"><b><?=($cust_check>0)? $cust_check.' Customized orders':'All Regular';?></b></h5></div>
-					<div class="col-md-3">
+			<div class="col-md-12 col-sm-12 col-xs-12" style="padding:15px; margin-top: 15px; background-color: #fff; border: 1px solid #f0f0f0;box-shadow:0 4px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 10px 0 rgba(0, 0, 0, 0.12); border-radius: 10px;">
+				<div class="row" style="border-bottom: 1px solid #d8d8d8">
+					<div class="col-md-2 col-sm-2"><h4 style="color: red"><b>#<?=$order_processed['id'];?></b></h4></div>
+						<div class="col-md-3 col-sm-3"><h5><b>Table No. <?=$order_processed['table_no'];?></b></h5></div>
+					<div class="col-md-4 col-sm-4"><h5 style="color: green"><b><?=($cust_check>0)? $cust_check.' Customized orders':'All Regular';?></b></h5></div>
+					<div class="col-md-3 col-sm-4">
 						<h4 style="color: red" id="<?=$order_processed['id'];?>"><b></b></h4>
 					</div>
 				</div>
-			<div class="col-md-12" style="padding: 5px">
+			<div class="row" style="padding: 5px">
 				<?php
     				$items_array=json_decode($order_processed['items'],true);
     				$num=1;
@@ -106,7 +106,7 @@ $process_js_index=8;
 						</div>
 
 						<div style="padding-top: 5px">
-							<h5><b><?=$menu_item['item_name'];?> <span style="color: red">X <?=$items['quantity'];?></b></span></h5>
+							<h5><b><?=$menu_item['item_name'];?></b> <span style="color: red"><b>X <?=$items['quantity'];?></b></span></h5>
 							<p style="color: green"><b><?=($items['custom_id']=='none')?'Regular':'Customized';?></b></p>
 							<?php 
 		        				if ($items['custom_id']=='none') {

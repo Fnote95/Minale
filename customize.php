@@ -70,7 +70,7 @@ if (isset($_GET['customize'])&&!empty($_GET['customize'])) {
 
 ?>
 <div class="container-fluid">
-	<div class="row" style="padding: 10px; background-color: #fff">
+	<div class="row front_nav">
 		<div class="col-md-1 col-sm-1 col-xs-1 pull-left" style="padding: 5px">
 				<a id="back"><i class="fa fa-arrow-left" style="font-size: 25px; color: red;"></i></a>
 		</div>
@@ -107,7 +107,7 @@ if (isset($_GET['customize'])&&!empty($_GET['customize'])) {
 		if($ing_type!=3){
 		$index=1;
 		foreach($item_composition as $comp): ?>
-			<div class="col-md-12 review" style="padding-top: 5px; padding-bottom: 5px">
+			<div class="col-md-12 review shadow" style="padding-top: 5px; padding-bottom: 5px">
 				<div class="row" style="padding-top: 5px;padding-bottom: 5px;">
 					<div class="col-md-4 col-sm-4 col-xs-4">
 						<h4><b><?=$comp['comp'];?></b></h4>
@@ -143,7 +143,7 @@ if (isset($_GET['customize'])&&!empty($_GET['customize'])) {
 		endforeach; 
 		}else{
 		?>
-			<div class="col-md-12 review" style="padding: 5px">
+			<div class="col-md-12 review btn_orange shadow" style="padding: 5px">
 				<div class="row" style="padding: 5px">
 					<div class="col-md-12 col-sm-12 col-xs">
 						<h5 class="text-center"><b>Describe how you want your <?=$item2['item_name'];?> In the text area below</b></h5>
@@ -161,10 +161,10 @@ if (isset($_GET['customize'])&&!empty($_GET['customize'])) {
 		</div>
 	<div class="row" style="padding: 5px;padding-top: 10px">
 		<div class="col-md-6 col-sm-6 col-xs-6">
-			<a href="details?item=<?=$item_id;?>" class="btn btn-danger form-control" style="background-color: rgba(252,0,4,1);color:white; border-radius: 3px;">Cancel</a>
+			<a href="details?item=<?=$item_id;?>" class="btn btn-danger form-control btn_orange shadow">Cancel</a>
 		</div>
 		<div class="col-md-6 col-sm-6 col-xs-6">
-			<input type="submit" name="customize" value="Finish Customizing" class="btn btn-danger form-control" style="background-color: rgba(252,84,4,1);color:white; border-radius: 3px;">
+			<input type="submit" name="customize" value="Finish Customizing" class="btn btn-danger form-control btn_orange shadow">
 		</div>
 	</div>
 	</form>

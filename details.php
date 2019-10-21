@@ -108,7 +108,7 @@ if (isset($_POST['submit'])) {
 ?>
 
 <div class="container-fluid">
-	<div class="row" style="padding: 10px;">
+	<div class="row front_nav">
 		<div class="col-md-10 col-sm-10 col-xs-10 pull-left">
 			
 				<a id="back"><i class="fa fa-arrow-left" style="font-size: 25px; color: red;"></i></a>
@@ -121,7 +121,7 @@ if (isset($_POST['submit'])) {
 		</div>
 	</div>
 	<form action="details?item=<?=(isset($_GET['custom']))?$item_id.'&custom='.$custom_id : $item_id;?>" method="post" enctype="multipart/form-data">
-		<div class="row">
+		<div class="row shadow">
 			<div class="col-md-12 col-sm-12 col-xs-12" style="background-size: auto 300px;background-image: url('<?=$item_pic;?>');  height: 300px;overflow: hidden;">
 				
 		
@@ -156,7 +156,7 @@ if (isset($_POST['submit'])) {
 				<div class="col-md-3 col-sm-3 col-xs-3"></div>		
 				<div class="col-md-6 col-sm-6 col-xs-6">
 					<h4 class="text-center"><b>Quantity</b></h4>
-					<div class="input-group bootstrap-touchspin">
+					<div class="input-group bootstrap-touchspin shadow">
 						<span class="input-group-btn" onclick="decrement(1);update_price(<?=$item_price;?>,1);">
 							<button class="btn btn-white bootstrap-touchspin-down" type="button" style="color:red;"><b>-</b></button>
 						</span>
@@ -176,10 +176,10 @@ if (isset($_POST['submit'])) {
 		</div>
 		<div class="row" style="padding-top: 15px;padding-bottom: 15px">
 			<div class="col-md-6 col-sm-6 col-xs-6">
-				<a href="customize?customize=<?=(isset($_GET['custom']))?$item_id.'&custom='.$custom_id : $item_id;?>" class="btn btn-success form-control" style="background-color: rgba(252,84,4,1);color:white; border-radius: 3px;">CUSTOMIZE</a>
+				<a href="customize?customize=<?=(isset($_GET['custom']))?$item_id.'&custom='.$custom_id : $item_id;?>" class="btn btn-success form-control btn_orange shadow">CUSTOMIZE</a>
 			</div>
 			<div class="col-md-6 col-sm-6 col-xs-6">
-				<button type="submit" name="submit" class="btn btn-danger form-control" style="background-color: rgba(252,84,4,1);color:white;border-radius: 3px;">ADD TO ORDER</button>
+				<button type="submit" name="submit" class="btn btn-danger form-control btn_orange shadow">ADD TO ORDER</button>
 			</div>
 		</div>
 

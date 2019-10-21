@@ -127,7 +127,7 @@ if (isset($_POST['submit'])) {
 
 ?>
 <div class="container-fluid">
-	<div class="row" style="padding: 10px; background-color: #fff">
+	<div class="row front_nav">
 		<div class="col-md-1 col-sm-1 col-xs-1 pull-left" style="padding: 5px">
 				<a id="back"><i class="fa fa-arrow-left" style="font-size: 25px; color: red;"></i></a>
 		</div>

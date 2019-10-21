@@ -2,7 +2,9 @@
 
 require_once "../core/init.php";
 include "includes/head.php";
-
+if (!has_permission('Admin')) {
+	header('Location: index');
+}
 $dbpath='';	
 $temploc='';
 $uploadloc='';

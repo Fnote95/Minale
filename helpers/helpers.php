@@ -28,8 +28,16 @@ function login($user_id){
 	global $db;
 	$date= date("Y-m-d H:i:s");
 	$db->query("UPDATE users SET last_login='$date' WHERE id='$user_id'");
-	$_SESSION['success']='You have been logged in successfully!';
-	header('Location: index.php');
+	$users_query=$db->query("SELECT * FROM users WHERE id='$user_id'");
+	$user=mysqli_fetch_assoc($users_query);
+	if ($user['permission']=='Waiter') {
+		header('Location: waiter');
+	}
+	else{
+		$_SESSION['success']='You have been logged in successfully!';
+		header('Location: index.php');
+	}
+
 }
 function is_logged_in(){
 	if(isset($_SESSION['SBuser'])&& $_SESSION['SBuser']>0){
@@ -56,7 +64,7 @@ function login_error_redirect($url='login.php'){
 
 }
 function permission_error_redirect($url='login.php'){
-	echo 'no way bro';
+	
 	$_SESSION['error']='you dont have permission to access that page';
 	header('Location:'.$url);
 }
@@ -406,16 +414,21 @@ function orders_price_parser($orders_array){
 	$vat=0;
 	$actual_base_price=0;
 	$ser_charge=0;
+	//var_dump($orders_array);
 	foreach($orders_array as $orders){
 		$item_id=$orders['item_id'];
+	//	var_dump($item_id);
 		$menu_item=mysqli_fetch_assoc($db->query("SELECT * FROM menu WHERE id='$item_id'"));
 		$price=$menu_item['price'];
+	//	var_dump($price);
 		$quantity=$orders['quantity'];
-		$base_price=(int)($price/1.15)*$quantity;
+		$base_price=(float)($price/1.17)*$quantity;
+		//var_dump($base_price);
 		$vat=$vat+(0.15*$base_price);
-		$pre_actual_base=($base_price/1.02);
-		$actual_base_price=$actual_base_price+$pre_actual_base;
-		$ser_charge=$ser_charge+($base_price-$pre_actual_base);
+		//$pre_actual_base=($base_price/1.02);
+		$actual_base_price=$actual_base_price+$base_price;
+		//var_dump($actual_base_price);
+		$ser_charge=$ser_charge+(0.02*$base_price);
 
 	
 	}

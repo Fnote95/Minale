@@ -15,7 +15,7 @@ if (isset($_POST['submit'])) {
 ?>
 
 <div class="container-fluid">
-	<div class="row" style="margin-top: 100px"></div>
+	<div class="row" style="margin-top: 50px"></div>
 	<div class="row">
 		<div class="col-md-4"></div>
 		<div class="charts-single-pro shadow-reset col-md-4 col-xs-12">

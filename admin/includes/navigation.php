@@ -19,17 +19,18 @@
 
                     <div class="collapse navbar-collapse" id="navbarCollapse">
                         <ul class="nav navbar-nav">
+                             <?php if(has_permission('Admin')||has_permission('Cashier')):?>
                              <li><a href="eatin">Eat in orders</a></li>
                             <li><a href="takeout">Take out orders</a></li>
-                            <li><a href="orders_report.php">Orders</a></li>
+                            <li><a href="orders_report.php">Orders report</a></li>
                              <li><a href="menu">Edit Menu</a></li>
-
-                            
+                             <?php endif;?>
+                            <?php if(has_permission('Admin')):?>
                              <li><a href="users.php">Users</a></li>
                              <li><a href="manage_waiters.php">Manage Waiters</a></li>
                              <li><a href="settings.php">Settings</a></li>
-                             <!-- <?php if(has_permission('admin')):?>-->
-                            <!-- <?php endif;?>-->
+                                <?php endif;?>
+                           
                              <li class="dropdown pull-right">
                                  <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Signed in as <?=$user_data['first'];?>
                                      <span class="caret"></span>
