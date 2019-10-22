@@ -293,6 +293,10 @@ function validate_image(){
 function validate_video(){
 
 }////////////////////////////////////////////////////////////////////////////
+function getter($val){
+	return $val;
+}
+////////////////////////////////////////////////////////////////////////////
 function average_wait_time(){
 	global $db;
 	$wait_query=$db->query("SELECT * FROM orders WHERE order_status=2");

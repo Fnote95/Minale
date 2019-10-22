@@ -5,6 +5,8 @@ $dbpath='';
 $temploc='';
 $uploadloc='';
 
+$check_kitchen_query=$db->query("SELECT * FROM kitchens");
+$check_kitchen=mysqli_fetch_assoc($check_kitchen_query);
 $check_query=$db->query("SELECT * FROM settings");
 $check_num=mysqli_num_rows($check_query);
 if ($check_num>0) {
@@ -22,8 +24,13 @@ if ($check_num>0) {
 }
 
 if (isset($_POST['submit'])) {
+	//var_dump($_POST);
 	$comp_name=sanitize($_POST['comp_name']);
 	$comp_tables=sanitize($_POST['comp_tables']);
+	$comp_kitchens=(int)sanitize($_POST['comp_kitchens']);
+
+
+
 	if (isset($_POST['switch'])) {
 		$custom=1;
 	}
@@ -31,7 +38,27 @@ if (isset($_POST['submit'])) {
 		$custom=0;
 	}
 ///////////////////form_validation//////////////////////
+
+	if ($check_kitchen>0) {
+		$db->query("DELETE FROM kitchens");
+		$db->query("ALTER TABLE kitchens AUTO_INCREMENT = 0");
+	}
 	$errors=array();
+	for ($i=1; $i <=$comp_kitchens ; $i++) { 
+		if (($_POST['Kitchen'.$i]=="")||($_POST['admin'.$i]=="")) {
+			$errors[]="You must enter kitchen names and their adminstrators";
+		}
+
+		if (!empty($errors)) {
+				
+		}
+		else{
+			$kitchens=sanitize($_POST['Kitchen'.$i]);
+			$admin=sanitize($_POST['admin'.$i]);
+			$db->query("INSERT INTO kitchens (kit_name, admin) VALUES('$kitchens', '$admin')");	
+		}
+		
+	}
 	if($comp_name==""||$comp_tables==""){
 		$errors[]="None of the fields can be empty";
 	}
@@ -81,6 +108,8 @@ if (isset($_POST['submit'])) {
 				}
 				else{
 
+
+
 					if (!empty($_FILES)) {
 						move_uploaded_file($temploc, $uploadloc);	
 					}
@@ -107,7 +136,7 @@ if (isset($_POST['submit'])) {
 				<div class="col-md-4 text-center">
 						<div style="padding:50px">
 					<?php if ($check_num>0) {?>
-						<img src="<?='../'.$logo;?>" style="width: auto;height: 220px">
+						<img class="shadow bradius" src="<?='../'.$logo;?>" style="width: auto;height: 220px">
 					<?php } ;?>
 						</div>
 				</div>
@@ -127,6 +156,13 @@ if (isset($_POST['submit'])) {
 						<label for="photo">Company logo</label>
 						<input type="file" id="photo" name="photo" class="form-control">
 					</div>
+					<div class="col-md-6" style="padding: 10px">
+						<label for="comp_kitchens">Number of kitchens</label>
+						<input type="number" name="comp_kitchens" id="comp_kitchens" class="form-control" min="1">
+					</div>
+					<div class="col-md-12 col-sm-12" id="kit_form">
+						
+					</div>
 					<div class="col-md-6 text-center" style="padding: 10px">
 						<!-- Rounded switch -->
 						<label>Customization</label>
@@ -137,11 +173,14 @@ if (isset($_POST['submit'])) {
 							</label>
 						</div>
 					</div>
-					<div class="col-md-4"></div>
-					<div class="col-md-4" style="padding: 10px">
-						<input type="submit" name="submit" value="Submit" class="form-control btn btn-primary" style="box-shadow:0 4px 10px 0 rgba(0, 0, 0, 0.30), 0 2px 10px 0 rgba(0, 0, 0, 0.30); background-color: ">
+					<div class="col-md-12 col-sm-12">
+						<div class="col-md-4"></div>
+						<div class="col-md-4" style="padding: 10px">
+							<input type="submit" name="submit" value="Submit" class="form-control btn btn-primary" style="box-shadow:0 4px 10px 0 rgba(0, 0, 0, 0.30), 0 2px 10px 0 rgba(0, 0, 0, 0.30); background-color: ">
+						</div>
+						<div class="col-md-4"></div>
+
 					</div>
-					<div class="col-md-4"></div>
 					
 				</div>
 				<div class="col-md-4 text-center">

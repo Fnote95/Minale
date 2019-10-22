@@ -135,10 +135,11 @@ if(empty($_POST['full_name'])||empty($_POST['email'])||empty($_POST['password'])
 									<label for="permission">permission*</label>
 									<select class="form-control" id="permission" name="permission">
 										<option value=""<?=(($permission=='')? 'selected':'');?>></option>
-										<option value="Admin"<?=(($permission=='editor')? 'selected':'');?>>Admin</option>
+										<option value="Admin"<?=(($permission=='Admin')? 'selected':'');?>>Admin</option>
 										<option value="Cashier"<?=(($permission=='Cashier')? 'selected':'');?>>Cashier</option>
 										<option value="Admin,Cashier"<?=(($permission=='Admin, Cashier')? 'selected':'');?>>Admin,Cashier</option>
 										<option value="Waiter"<?=(($permission=='Waiter')? 'selected':'');?>>Waiter</option>
+										<option value="Chef"<?=(($permission=='Waiter')? 'selected':'');?>>Chef</option>
 									</select>
 								</div>
 								<div class="form-group col-md-6">

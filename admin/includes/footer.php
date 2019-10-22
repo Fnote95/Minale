@@ -151,6 +151,20 @@ jQuery('select[name="ing_type"]').change(function(){
 });
 
 
+jQuery('input[name="comp_kitchens"]').change(function(){
+  var num_kitchens=jQuery('#comp_kitchens').val();
+             jQuery.ajax({
+                url: '../api/update_kitchens.php',
+                type: 'POST',
+                data: {num_kitchens : num_kitchens},
+                success: function(data){
+                    jQuery('#kit_form').html(data);
+                },
+                error: function(){alert("something went wrong!")},
+            });
+});
+
+
 
 
 
