@@ -2,10 +2,10 @@
 require_once "../core/init.php";
 
 $num_kitchens=(int)$_POST['num_kitchens'];
-$admin_query=$db->query("SELECT * FROM users WHERE permission='Admin'");
+$admin_query=$db->query("SELECT * FROM users WHERE permission='Chef,Admin' OR permission='Chef' OR permission='Owner,Admin'");
 ob_start();?>
 <?php for($i=1; $i<=$num_kitchens;$i++):
-	$admin_query=$db->query("SELECT * FROM users WHERE permission='Admin'");
+	$admin_query=$db->query("SELECT * FROM users WHERE permission='Chef,Admin' OR permission='Chef' OR permission='Owner,Admin'");
 	?>
 <div class="col-md-6 col-sm-6">
 	<label for="k_name<?=$i;?>">Kitchen <?=$i;?> name</label>

@@ -2,6 +2,7 @@
 require_once "../../core/init.php";
 $order_queued_query=$db->query("SELECT * FROM orders WHERE order_status=0");
 
+
 ob_start();?>
 
 		<h2 class="text-center"><b>Queued Orders</b></h2>
@@ -65,11 +66,19 @@ ob_start();?>
 							<div style="border: 3px solid red;width:86px; height:auto ; margin: 0% auto; border-radius: 50%; overflow: hidden; background-color: white;box-shadow:0 4px 10px 0 rgba(0, 0, 0, 0.30), 0 2px 10px 0 rgba(0, 0, 0, 0.30);">
 								<img src="<?='../'.$menu_item['item_pic'];?>" class="image" style="width:80px; height:80px">
 							</div>
-							<h5><b><?=$menu_item['item_name'];?> <span style="color: red">X <?=$items['quantity'];?></b></span></h5>
-							<p style="color: green"><b><?=($items['custom_id']=='none')?'Regular':'Customized';?></b></p>
+							<div style="padding-top: 5px">
+								<h5><b><?=$menu_item['item_name'];?></b> <span style="color: red"><b>X <?=$items['quantity'];?></b></span></h5>
+								<p style="color: green"><b><?=($items['custom_id']=='none')?'Regular':'Customized';?></b></p>
+							</div>
+							
 						</div>
 					<?php endforeach;?>
 					<div class="col-md-12 text-right"><h5 id="<?=$order_queued['id'];?>"></h5></div>
+					<div class="col-md-12 col-sm-12 text-center">
+						<?php if(has_permission('Admin')):?>
+							<a href="eatin?add=<?=$order_queued['id'];?>" class="btn btn-success shadow">Process</a>
+						<?php endif;?>
+					</div>
 				</div>
 		</div>
 		<?php 

@@ -293,8 +293,8 @@ function validate_image(){
 function validate_video(){
 
 }////////////////////////////////////////////////////////////////////////////
-function getter($val){
-	return $val;
+function check_admin($json_string){
+	
 }
 ////////////////////////////////////////////////////////////////////////////
 function average_wait_time(){
@@ -329,12 +329,16 @@ function best_seller($current_date){
 	$index2=0;
 	$orders_array=array();
 	while($ord_result=mysqli_fetch_assoc($orders_query)){
+		if ($ord_result['items']=='""') {
+			continue;
+		}
 		$orders_array[$index2]=$ord_result['items'];
+
 		$index2++;
 	}
 	$orders_len=sizeof($orders_array);
-
-	for ($i=0; $i < $menu_arr_len ; $i++) { 
+	if (!empty($orders_array)) {
+			for ($i=0; $i < $menu_arr_len ; $i++) { 
 		for ($x=0; $x < $orders_len ; $x++) { 
 			$orders_json=json_decode($orders_array[$x], true);
 			foreach($orders_json as $ord){
@@ -346,6 +350,7 @@ function best_seller($current_date){
 	}
 	$best[0]['id']="";
 	$best[0]['quan']=$menu_array[0]['quan'];
+
 	for ($m=0; $m < $menu_arr_len; $m++) {
 
 		if ($best[0]['quan'] <= $menu_array[$m]['quan']) {
@@ -354,8 +359,13 @@ function best_seller($current_date){
 			$best[0]['quan']=$menu_array[$m]['quan'];
 		}
 	}
-	//var_dump($best);
+	
 	return $best;
+	}
+	else{
+		return null;
+	}
+
 }
 /////////////////////////////////////////////////////////////////////////////
 function end_session($session_id_to_destroy){
@@ -387,6 +397,10 @@ function orders_parser($orders_array){
 	
 	$items_array=array();
 	$index=0;
+	
+	if ($orders_array=='') {
+		# code...
+	}else{
 	foreach($orders_array as $orders){
 		$item_id=$orders['item_id'];
 		$menu_item=mysqli_fetch_assoc($db->query("SELECT * FROM menu WHERE id='$item_id'"));
@@ -402,15 +416,18 @@ function orders_parser($orders_array){
 		<?php endforeach;?>
 	</ul>
 <?php
-}
+}}
 function orders_quantity_parser($orders_array){
 	$total_quantity=0;
+	if ($orders_array=='') {
+		# code...
+	}else{
 	foreach($orders_array as $orders){
 		$item_quantity=$orders['quantity'];
 		$total_quantity+=$item_quantity;
 	}
 	return $total_quantity;
-}
+}}
 function orders_price_parser($orders_array){
 	global $db;
 	$price_array=array();
@@ -418,6 +435,9 @@ function orders_price_parser($orders_array){
 	$vat=0;
 	$actual_base_price=0;
 	$ser_charge=0;
+	if ($orders_array=='') {
+		# code...
+	}else{
 	//var_dump($orders_array);
 	foreach($orders_array as $orders){
 		$item_id=$orders['item_id'];
@@ -443,5 +463,5 @@ function orders_price_parser($orders_array){
 
 	return $price_array;
 
-}
+}}
 ?>

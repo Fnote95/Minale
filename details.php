@@ -1,6 +1,12 @@
 <?php
 require_once "core/init.php";
 include "includes/head.php";
+
+$cust_check_query=$db->query("SELECT * FROM settings");
+$cust_check_result=mysqli_fetch_assoc($cust_check_query);
+$cust_status=$cust_check_result['customize'];
+
+
 if (!isset($_SESSION['type'])) {
 	header('Location: index.php');
 }
@@ -39,6 +45,7 @@ if (isset($_POST['submit'])) {
 	$orders_array[0]['item_id']=$item_id;
 	$orders_array[0]['quantity']=sanitize($_POST['quantity']);
 	$orders_array[0]['custom_id']=(isset($_GET['custom']))? $custom_id : 'none';
+	$orders_array[0]['mini_status']=0;
 	$session_id=session_id();
 	$orders_json=json_encode($orders_array,true);
 	$order_type=$_SESSION['type'];
@@ -176,7 +183,9 @@ if (isset($_POST['submit'])) {
 		</div>
 		<div class="row" style="padding-top: 15px;padding-bottom: 15px">
 			<div class="col-md-6 col-sm-6 col-xs-6">
-				<a href="customize?customize=<?=(isset($_GET['custom']))?$item_id.'&custom='.$custom_id : $item_id;?>" class="btn btn-success form-control btn_orange shadow">CUSTOMIZE</a>
+				<?php if($cust_status==1):?>
+					<a href="customize?customize=<?=(isset($_GET['custom']))?$item_id.'&custom='.$custom_id : $item_id;?>" class="btn btn-success form-control btn_orange shadow" disabled="">CUSTOMIZE</a>
+				<?php endif;?>
 			</div>
 			<div class="col-md-6 col-sm-6 col-xs-6">
 				<button type="submit" name="submit" class="btn btn-danger form-control btn_orange shadow">ADD TO ORDER</button>

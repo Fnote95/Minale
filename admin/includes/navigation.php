@@ -4,9 +4,11 @@
                 <div class="row">
 
                     <div class="navbar-header">
+                        <?php if(has_permission('Admin')):?>
                         <div class="navbar-left">
                             <a href="index.php" class="navbar-brand"><b>Dashboard</b></a>
                         </div>
+                        <?php endif;?>
                         <button type="button" data-target="#navbarCollapse" data-toggle="collapse" class="navbar-toggle">
 				            <span class="sr-only">Toggle navigation</span>
 				            <span class="icon-bar"></span>
@@ -19,17 +21,19 @@
 
                     <div class="collapse navbar-collapse" id="navbarCollapse">
                         <ul class="nav navbar-nav">
-                             <?php if(has_permission('Admin')||has_permission('Cashier')):?>
-                             <li><a href="eatin">Eat in orders</a></li>
+                            <?php if(has_permission('Chef')||has_permission('Admin')):?>
+                            <li><a href="eatin">Eat in orders</a></li>
                             <li><a href="takeout">Take out orders</a></li>
+                            <?php endif;?>
+                             <?php if(has_permission('Admin')):?>
                             <li><a href="orders_report.php">Orders report</a></li>
                              <li><a href="menu">Edit Menu</a></li>
                              <?php endif;?>
-                            <?php if(has_permission('Admin')):?>
+                            <?php if(has_permission('Owner')):?>
                              <li><a href="users.php">Users</a></li>
                              <li><a href="manage_waiters.php">Manage Waiters</a></li>
                              <li><a href="settings.php">Settings</a></li>
-                                <?php endif;?>
+                            <?php endif;?>
                            
                              <li class="dropdown pull-right">
                                  <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Signed in as <?=$user_data['first'];?>

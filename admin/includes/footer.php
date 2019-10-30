@@ -210,7 +210,71 @@ jQuery('input[name="comp_kitchens"]').change(function(){
                 }
                 jQuery('#comps').val(compString);
             }
+/////////////////////////////////////////////////////
+        function update_takeout(){
 
+        
+        
+            jQuery.ajax({
+                url: 'api/update_takeouts.php',
+                type: 'POST',
+                data: {},
+                success: function(data){
+                    jQuery('#take_out').html(data);
+                    update_takeouts_processed();
+                },
+                error: function(){alert("something went wrong!")},
+            });
+    }
+    //////////////////////////////////////////////////////////
+    function update_queued(){
+
+        
+        
+            jQuery.ajax({
+                url: 'api/update_orders.php',
+                type: 'POST',
+                data: {},
+                success: function(data){
+                    jQuery('#ord').html(data);
+                    update_orders();
+                },
+                error: function(){alert("something went wrong!")},
+            });
+    }
+    //////////////////////////////////////////////////////////////////////////
+        function update_process(){
+
+        
+        
+            jQuery.ajax({
+                url: 'api/update_processed.php',
+                type: 'POST',
+                data: {},
+                success: function(data){
+                    jQuery('#pro').html(data);
+                    update_processed();
+                },
+                error: function(){alert("something went wrong!")},
+            });
+    }
+////////////////////////////////////////////////////////////////////////
+    function update_takeouts_processed(){
+
+        
+         setInterval(function(){
+            jQuery.ajax({
+                url: 'api/update_takeouts.php',
+                type: 'POST',
+                data: {},
+                success: function(data){
+                    jQuery('#take_out').html(data);
+                },
+                error: function(){alert("something went wrong!")},
+            });
+         }, 5000);
+    }
+    //////////////////////////////////////////////////////////////////////////////
     function update_orders(){
 
         
@@ -224,7 +288,20 @@ jQuery('input[name="comp_kitchens"]').change(function(){
                 },
                 error: function(){alert("something went wrong!")},
             });
-         }, 400);
+         }, 5000);
+    }
+    function update_processed(){
+               setInterval(function(){
+            jQuery.ajax({
+                url: 'api/update_processed.php',
+                type: 'POST',
+                data: {},
+                success: function(data){
+                    jQuery('#pro').html(data);
+                },
+                error: function(){alert("something went wrong!")},
+            });
+         }, 5000);
     }
 
 

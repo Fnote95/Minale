@@ -20,7 +20,7 @@ if (isset($_POST['add'])&&!empty($_POST)) {
 		echo display_errors_two($errors);
 	}
 	else{
-	
+
 	$db->query("INSERT INTO category (cat_name) VALUES ('$sub_menu')");
 	header('Location: menu');
 }
@@ -266,15 +266,34 @@ else{
 ?>
 <div class="container-fluid">
 	<div class="row" style="padding-top: 75px; padding-bottom: 30px;">
-		<h1 class="text-center" style="font-family: 'Rockwell'; font-size: 3em"><b>Menu</b></h1>
+		<h1 class="text-center" style="font-family: 'Rockwell'; font-size: 3em"><b>Menu Categories</b></h1>
 	</div>
-		<div class="row" style="margin: 15px">
+		<div class="row" style="margin: 10px">
+			<form class="form" action="menu.php" method="post" >
 			<div class="col-md-3"></div>
 			<div class="col-md-6 review2" style="padding-top:20px; padding-bottom: 20px; margin: 5px; border-radius: 10px;box-shadow:0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12); padding-top: 15px;padding-bottom: 15px;">
-				<div class="col-md-4"><h3><b>Add sub-menu</b></h3></div>
-				<form class="form" action="menu.php" method="post" >
-					<div class="col-md-4"><input type="text" name="sub" class="form form-control"></div>
-					<div class="col-md-4"><button name="add" class="btn btn-success form-control" style="background-color: #5cb85c;border-color:#4cae4c; color: white;">Add</button></div>
+				<div class="col-md-4">
+					<label>Catagory name:</label>
+					<input type="text" name="sub" class="form form-control" style="color: black">
+				</div>
+				
+				<div class="col-md-4">
+					<label>Kitchen it belongs to:</label>
+					<select class="form-control" name="kitchen" style="color: black;">
+						<option value=""></option>
+						<?php $kit_query=$db->query("SELECT * FROM `kitchens`");
+
+							  while($result=mysqli_fetch_assoc($kit_query)):
+
+						?>
+							<option value="<?=$result['id'];?>"><?=$result['kit_name'];?></option>
+						<?php endwhile;?>
+					</select>
+				</div>
+					<div class="col-md-4">
+						<label></label>
+						<button name="add" class="btn btn-success form-control shadow" style="background-color: #5cb85c;border-color:#4cae4c; color: white; margin-top: 5px">Add</button>
+					</div>
 				</form>
 
 			</div>
@@ -296,7 +315,11 @@ else{
 						
 								<div class="col-md-4 col-sm-4">
 									<div style="border: 3px solid rgba(252,84,4,1);width:90px; height:90px ; margin: 0% auto; border-radius: 50%; overflow: hidden; background-color: white;">
-										<img src="../images/item_image/hamburger.jpg" style="width:100px">
+										<?php 
+											$sub_img_query=$db->query("SELECT * FROM menu WHERE cat_id={$cat['id']}");
+											$sub_img=mysqli_fetch_assoc($sub_img_query);
+										?>
+										<img src="<?='../'.$sub_img['item_pic'];?>" style="width:100px" alt="<?=$cat['cat_name'];?>">
 									</div>
 								</div>
 
@@ -305,8 +328,12 @@ else{
 								</div>
 								
 							</div>
-							<div class="text-right" style="margin-right: 5px;margin-top: -15px">
-									<a href="menu?cat=<?=$cat['id'];?>" class="btn btn-default btn-xs" style="color: red"><b>Edit</b></a>
+							<div class="row" style="padding-top: 15px">
+								<div class="col-md-2 col-sm-8 col-xs-8"></div>
+								<div class="col-md-8 col-sm-8 col-xs-8">
+									<a href="menu?cat=<?=$cat['id'];?>" class="btn btn-default shadow form-control" style="color: red"><b>Add <?=$cat['cat_name'];?></b></a>
+								</div>
+								<div class="col-md-2"></div>
 									
 							</div>
 						</div>

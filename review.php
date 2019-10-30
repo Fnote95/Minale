@@ -92,6 +92,7 @@ if (isset($_POST['submit'])) {
 			$new_items[$index]['item_id']=$item['item_id'];
 			$new_items[$index]['quantity']=$new_quantity[$index];
 			$new_items[$index]['custom_id']=$item['custom_id'];
+			$new_items[$index]['mini_status']=0;
 			$index++;
 		}
 	}
@@ -104,6 +105,7 @@ if (isset($_POST['submit'])) {
 			$new_takeouts[$take_index]['item_id']=$tk['item_id'];
 			$new_takeouts[$take_index]['quantity']=$new_quantity[$index];
 			$new_takeouts[$take_index]['custom_id']=$tk['custom_id'];
+			$new_takeouts[$take_index]['mini_status']=0;
 			$index++;
 			$take_index++;
 		}
@@ -180,7 +182,7 @@ function display_regular(){
 	global $db;
 ?>
 	<form action="review<?=isset($_GET['edit'])?'?edit=1':'';?>" method="post" enctype="multipart/form-data">
-	<div class="row text-center" style="box-shadow:0 4px 10px 0 rgba(0, 0, 0, 0.30), 0 2px 10px 0 rgba(0, 0, 0, 0.30)">
+	<div class="row text-center">
 		<?php
 		if (isset($_SESSION['order'])&&($check>0)) {
 			$order_id=sanitize($_SESSION['order']);
@@ -302,7 +304,7 @@ function display_regular(){
 
 <?php
  }else{?>
- 	<div class="row">
+ 	<div class="row" style="padding-top: 20px;">
  		<img src="images/graphics/No Order yet-03.png" style="width: 150px; height: auto">
  	</div>
  	<div class="row" style="padding-top: 10px;color: red;">
@@ -311,7 +313,16 @@ function display_regular(){
 
 	<div class="row" style="padding-top: 15px;padding-bottom: 15px">
 		<div class="col-md-12 col-sm-12 col-xs-12">
-			<a href="main" class="btn btn-success form-control" style="background-color: rgba(252,84,4,1);color:white; border-radius: 3px;">BACK TO MENU</a>
+			<div class="col-md-2 col-sm-2 col-xs-2">
+				
+			</div>
+			<div class="col-md-8 col-sm-8 col-xs-8">
+				<a href="main" class="btn btn-success form-control shadow" style="background-color: rgba(252,84,4,1);color:white; border-radius: 3px;">BACK TO MENU</a>
+			</div>
+			<div class="col-md-2 col-sm-2 col-xs-2">
+				
+			</div>
+			
 		</div>
 		
 	</div>

@@ -7,7 +7,15 @@ include "includes/head.php";
 if ((isset($_GET['done'])&&!empty($_GET['done']))) {
 	$done_id=sanitize($_GET['done']);
 	$wait_time=sanitize($_GET['time']);
-	$db->query("UPDATE orders SET order_status=2, wait_time='$wait_time' WHERE id='$done_id'");
+	$end_query=$db->query("SELECT * FROM orders WHERE id='$done_id'");
+	$end_result=mysqli_fetch_assoc($end_query);
+	if ($end_result['takeout_items']=='""') {
+		$db->query("UPDATE orders SET order_status=2, takeout_status=2, wait_time='$wait_time' WHERE id='$done_id'");
+	}
+	else{
+		$db->query("UPDATE orders SET order_status=2, wait_time='$wait_time' WHERE id='$done_id'");
+	}
+	
 	header('Location: eatin.php');
 }
 //////////////////////////////////////////////////////////////
@@ -17,9 +25,42 @@ $empty="";
 $order_processed_num_query=$db->query("SELECT * FROM orders WHERE order_status=1 AND items!='$empty'");
 $order_processed_num=mysqli_num_rows($order_processed_num_query);
 //////////////////////////////////////////////////////////////////////////////////
+if (isset($_GET['add'])&&!empty($_GET['add'])) {
+	$add_id=sanitize($_GET['add']);
+	$sess_query=$db->query("SELECT * FROM orders WHERE id='$add_id'");
+	$sess=mysqli_fetch_assoc($sess_query);
+	$sess_id=$sess['session_id'];
+	$add_query=$db->query("UPDATE orders SET order_status=1 WHERE id='$add_id'");
+	end_session($sess_id);
+	header("Location: eatin");
 
+}
+////////Update the mini status when the finish button is clicked////////////////////////////////
+if(isset($_GET['finish'])&&!empty($_GET['finish'])){
+	$order_id=sanitize($_GET['finish']);
+	$processed_id=sanitize($_GET['item']);
+	$finish_order_query=$db->query("SELECT * FROM orders WHERE id='$order_id'");
+	$finish_result=mysqli_fetch_assoc($finish_order_query);
+	$finish_items=json_decode($finish_result['items'],true);
+	//var_dump($finish_items);
+	$finish_items[$processed_id]['mini_status']=1;
+	//var_dump($finish_items[$processed_id]['mini_status']);
+		/*$check=1;
+		foreach($finish_items as $fin_item){
+			if ($check==$processed_id) {
+				$finish_items[]['mini_status']=1;
+				break;
+			}
+			$check++;
+		}*/
+	$finish_items=json_encode($finish_items);
+	var_dump($finish_items);
+	$db->query("UPDATE orders SET items='$finish_items' WHERE id='$order_id'");
+	header('Location: eatin');
+}
+////////////////////////////////////////////////////////////////////////////////////
 ///////////to add orders from the queued section to the processing section//////////
-if ($order_processed_num<5) {
+/*if ($order_processed_num<5) {
 	$limit=5-$order_processed_num;
 	
 	$limit_select_query=$db->query("SELECT * FROM orders WHERE order_status=0 LIMIT ".$limit);
@@ -30,7 +71,7 @@ if ($order_processed_num<5) {
 		$db->query("UPDATE orders SET order_status=1 WHERE id='$or_id'");
 		end_session($sess_id);
 	endwhile;
-}
+}*/
 /////////////////////////////////////////////////////////////////////////////////////
 
 /////////////////queries to display orders on the queued and processed sections////////
@@ -50,101 +91,10 @@ $process_js_index=8;
 	</div>
 
 	<div class="col-md-6" id="pro">
-		<h2 class="text-center"><b>Orders Being Processed</b></h2>
-		<?php while($order_processed=mysqli_fetch_assoc($order_processed_query)): 
-			$cust_array=json_decode($order_processed['items'],true);
-			if ($cust_array=="") {
-				continue;
-			}
-			$cust_check=0;
-			foreach ($cust_array as $cust) {
-				if ($cust['custom_id']!='none') {
-					$cust_check++;
-				}
-			}?>
-			<script>
-				
-				 
-				 setInterval(function(){
-		         var v1="<?=$order_processed['order_date'];?>";
-		         var diff = Math.abs(new Date() - new Date(v1.replace(/-/g,'/')));
-		         var link="eatin?done=<?=$order_processed['id'];?>&time="+diff;
-		     	 jQuery('#done<?=$order_processed['id'];?>').attr("href", link);
-		         var result=msToTime(diff);
-		         jQuery('#<?=$order_processed['id'];?>').html('<b>'+result+'</b>');
-		        ;}, 1);
-			
-			</script>
-			<div class="col-md-12 col-sm-12 col-xs-12" style="padding:15px; margin-top: 15px; background-color: #fff; border: 1px solid #f0f0f0;box-shadow:0 4px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 10px 0 rgba(0, 0, 0, 0.12); border-radius: 10px;">
-				<div class="row" style="border-bottom: 1px solid #d8d8d8">
-					<div class="col-md-2 col-sm-2"><h4 style="color: red"><b>#<?=$order_processed['id'];?></b></h4></div>
-						<div class="col-md-3 col-sm-3"><h5><b>Table No. <?=$order_processed['table_no'];?></b></h5></div>
-					<div class="col-md-4 col-sm-4"><h5 style="color: green"><b><?=($cust_check>0)? $cust_check.' Customized orders':'All Regular';?></b></h5></div>
-					<div class="col-md-3 col-sm-4">
-						<h4 style="color: red" id="<?=$order_processed['id'];?>"><b></b></h4>
-					</div>
-				</div>
-			<div class="row" style="padding: 5px">
-				<?php
-    				$items_array=json_decode($order_processed['items'],true);
-    				$num=1;
-    				foreach($items_array as $items):
-    					
-    					$items_id=$items['item_id'];
-    					$items_query=$db->query("SELECT * FROM menu WHERE id='$items_id'");
-    					$menu_item=mysqli_fetch_assoc($items_query);
-    					$ing_type=$menu_item['ing_type'];
-    					$custom_id=$items['custom_id'];
-    					$custom_query=$db->query("SELECT * FROM customize WHERE id='$custom_id'");
-    					$custom=mysqli_fetch_assoc($custom_query);
-    					$custom_items=json_decode($custom['composition'],true);
-    					
-    			?>	
-					<div class="col-md-4 col-sm-4 text-center">
-						<div style="border: 3px solid red;width:86px; height:auto ; margin: 0% auto; border-radius: 50%; overflow: hidden; background-color: white; box-shadow:0 4px 10px 0 rgba(0, 0, 0, 0.30), 0 2px 10px 0 rgba(0, 0, 0, 0.30);">
-							<img src="<?='../'.$menu_item['item_pic'];?>" class="image" style="width:80px; height: 80px; padding-top: 5px">
-						</div>
 
-						<div style="padding-top: 5px">
-							<h5><b><?=$menu_item['item_name'];?></b> <span style="color: red"><b>X <?=$items['quantity'];?></b></span></h5>
-							<p style="color: green"><b><?=($items['custom_id']=='none')?'Regular':'Customized';?></b></p>
-							<?php 
-		        				if ($items['custom_id']=='none') {
-		        				}
-		        				else{
-		        					if ($custom_items==null) {?>
-		        					<h5 style="color:green;"><?=$custom['composition'];?></h5>
-		        				<?php }
-		        				else{
-		        				?>
-		        				<table class="table table-striped">
-		        					<thead>
-		        				
-		        					</thead>
-		        					<tbody>
-		        						<?php foreach($custom_items as $cus_items): ?>
-		        						<tr>
-		        							
-		        								<td><?=$cus_items['comp'];?></td>
-		        								<td><?=($ing_type==1)?$cus_items['quantity']:(($cus_items['needed']=="true")?"<span class='glyphicon glyphicon-ok'></span>":"<span class='glyphicon glyphicon-remove'></span>");?></td>
-		        							
-		        						</tr>
-		        						<?php endforeach; ?>
-		        					</tbody>
-		        				</table>
-	        				<?php }}?>
-						</div>
-						
-					</div>
-				<?php endforeach;?>
-				<div class="col-md-12 col-sm-12 col-xs-12 text-center">
-					<a href="" id="done<?=$order_processed['id'];?>"  onClick="return confirm('Are you sure you are done?')"  class="btn btn-primary" style="box-shadow:0 4px 10px 0 rgba(0, 0, 0, 0.30), 0 2px 10px 0 rgba(0, 0, 0, 0.30);">Done</a>
-				</div>
-			</div>
-		</div>
 
-	<?php endwhile;?>
-</div>
+		
+	</div>
 </div>
 
 <?php 
