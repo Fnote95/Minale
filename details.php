@@ -184,7 +184,7 @@ if (isset($_POST['submit'])) {
 		<div class="row" style="padding-top: 15px;padding-bottom: 15px">
 			<div class="col-md-6 col-sm-6 col-xs-6">
 				<?php if($cust_status==1):?>
-					<a href="customize?customize=<?=(isset($_GET['custom']))?$item_id.'&custom='.$custom_id : $item_id;?>" class="btn btn-success form-control btn_orange shadow" disabled="">CUSTOMIZE</a>
+					<a href="customize?customize=<?=(isset($_GET['custom']))?$item_id.'&custom='.$custom_id : $item_id;?>" class="btn btn-success form-control btn_orange shadow" >CUSTOMIZE</a>
 				<?php endif;?>
 			</div>
 			<div class="col-md-6 col-sm-6 col-xs-6">
