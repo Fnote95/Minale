@@ -170,6 +170,7 @@ jQuery('input[name="comp_kitchens"]').change(function(){
 
 
 
+
     ///////////////////////////////////////////////////////////////////////////////
    
     function msToTime(duration) {

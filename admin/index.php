@@ -189,7 +189,7 @@ $total_menu_item=mysqli_num_rows($total_menu_query);
                         <div class="main-income-head">
                             <h2>Total orders</h2>
                             <div class="main-income-phara visitor-cl">
-                                <a href="products.php"><p>View</p></a>
+                                <a href="orders_report.php"><p>View</p></a>
                             </div>
                         </div>
                     </div>
@@ -240,7 +240,7 @@ $total_menu_item=mysqli_num_rows($total_menu_query);
                         <div class="main-income-head">
                             <h2>Menu items</h2>
                             <div class="main-income-phara visitor-cl">
-                                <a href="products.php"><p>View</p></a>
+                                <a href="menu"><p>View</p></a>
                             </div>
                         </div>
                     </div>

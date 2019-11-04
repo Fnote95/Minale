@@ -7,12 +7,14 @@ $uploadloc='';
 
 $check_kitchen_query=$db->query("SELECT * FROM kitchens");
 $check_kitchen=mysqli_fetch_assoc($check_kitchen_query);
+$check_kitchen_num=mysqli_num_rows($check_kitchen_query);
 $check_query=$db->query("SELECT * FROM settings");
 $check_num=mysqli_num_rows($check_query);
 if ($check_num>0) {
 	$settings=mysqli_fetch_assoc($check_query);
 	$company_name=$settings['company_name'];
 	$num_tables=$settings['no_of_tables'];
+	$num_chicken=mysqli_num_rows($check_kitchen_query);
 	if ($settings['customize']==1) {
 		$customize="on";
 	}
@@ -24,10 +26,16 @@ if ($check_num>0) {
 }
 
 if (isset($_POST['submit'])) {
-	//var_dump($_POST);
+	
 	$comp_name=sanitize($_POST['comp_name']);
 	$comp_tables=sanitize($_POST['comp_tables']);
-	$comp_kitchens=(int)sanitize($_POST['comp_kitchens']);
+	if ($check_kitchen>0) {
+		$comp_kitchens=$check_kitchen_num;
+	}
+	else{
+		$comp_kitchens=(int)sanitize($_POST['comp_kitchens']);
+	}
+	
 
 
 
@@ -39,12 +47,12 @@ if (isset($_POST['submit'])) {
 	}
 ///////////////////form_validation//////////////////////
 
-	if ($check_kitchen>0) {
+	/*if ($check_kitchen>0) {
 		$db->query("DELETE FROM kitchens");
 		$db->query("ALTER TABLE kitchens AUTO_INCREMENT = 0");
-	}
+	}*/
 	$errors=array();
-	for ($i=1; $i <=$comp_kitchens ; $i++) { 
+	for ($i=1; $i <=$comp_kitchens; $i++) { 
 		if (($_POST['Kitchen'.$i]=="")||($_POST['admin'.$i]=="")) {
 			$errors[]="You must enter kitchen names and their adminstrators";
 		}
@@ -55,7 +63,14 @@ if (isset($_POST['submit'])) {
 		else{
 			$kitchens=sanitize($_POST['Kitchen'.$i]);
 			$admin=sanitize($_POST['admin'.$i]);
-			$db->query("INSERT INTO kitchens (kit_name, admin) VALUES('$kitchens', '$admin')");	
+			if ($check_kitchen>0) {
+
+				$db->query("UPDATE kitchens SET kit_name='$kitchens', admin='$admin' WHERE id='$i'");
+			}
+			else{
+				$db->query("INSERT INTO kitchens (kit_name, admin) VALUES('$kitchens', '$admin')");
+			}
+				
 		}
 		
 	}
@@ -63,7 +78,7 @@ if (isset($_POST['submit'])) {
 		$errors[]="None of the fields can be empty";
 	}
 	if(!empty($_FILES)){
-					
+					var_dump($_FILES);
 					if ($_FILES['photo']['error']==0) {
 						$photo=$_FILES['photo'];
 						$name=$photo['name'];
@@ -75,7 +90,7 @@ if (isset($_POST['submit'])) {
 						$mimeext=$mime[1];
 						$temploc=$photo['tmp_name'];
 						$filesize=$photo['size'];
-						$allowedtypes=array('png','jpg','jpeg','gif');
+						$allowedtypes=array('png','jpg','jpeg','gif','JPG','JPEG');
 						$uploadname=md5(microtime()).'.'.$imageExtention;
 						$uploadloc='C:\wamp64\www\res_automation\images\\'.$uploadname;
 						$dbpath='images/'.$uploadname;
@@ -86,6 +101,7 @@ if (isset($_POST['submit'])) {
 							$errors[]='The file must be an image!';
 						}
 						if(!in_array($imageExtention, $allowedtypes)){
+							var_dump($imageExtention);
 							$errors[]='The image doesnt have a supported type, the allowed image extentions are: png, jpg, jpeg and gif!';
 						}
 						if($filesize>15000000){
@@ -156,19 +172,43 @@ if (isset($_POST['submit'])) {
 						<label for="photo">Company logo</label>
 						<input type="file" id="photo" name="photo" class="form-control">
 					</div>
+					<?php if ($check_num==0) {?>
 					<div class="col-md-6" style="padding: 10px">
 						<label for="comp_kitchens">Number of kitchens</label>
 						<input type="number" name="comp_kitchens" id="comp_kitchens" class="form-control" min="1">
 					</div>
+					<?php } ;?>
+					<?php if ($check_num==0) {?>
 					<div class="col-md-12 col-sm-12" id="kit_form">
 						
 					</div>
+					<?php }else{
+						?>
+						<script>
+							function update_kitchens(num_kitchens){
+							       jQuery.ajax({
+							        url: '../api/get_kit_set.php',
+							        type: 'POST',
+							        data: {num_kitchens : num_kitchens},
+							        success: function(data){
+							            jQuery('#kit_form').html(data);
+							        },
+							        error: function(){alert("something went wrong!")},
+							    });
+							}
+							update_kitchens(<?=$check_kitchen_num;?>);
+						</script>
+						<div class="col-md-12 col-sm-12" id="kit_form">
+							
+						</div>
+						<?php
+						} ;?>
 					<div class="col-md-6 text-center" style="padding: 10px">
 						<!-- Rounded switch -->
 						<label>Customization</label>
 						<div>
 							<label class="switch">
-							  <input type="checkbox" value="<?=($check_num>0)?$customize:'';?>" name="switch">
+							  <input type="checkbox" name="switch" <?=($check_num>0&&$customize=="on")?"checked":"";?>>
 							  <span class="slider round"></span>
 							</label>
 						</div>

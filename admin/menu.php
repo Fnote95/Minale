@@ -10,18 +10,22 @@ if (isset($_GET['deletecat'])&&!empty($_GET['deletecat'])) {
 			header('Location: menu');
 }
 if (isset($_POST['add'])&&!empty($_POST)) {
+	
 	$sub_menu=sanitize($_POST['sub']);
+	$kit_id=(int)sanitize($_POST['kitchen']);
 	$errors=array();
 
 	if ($_POST['sub']=="") {
 		$errors[]="You must add a sub menu first!";
 	}
+	if ($_POST['kitchen']=="") {
+		$errors[]="You must add which kitchen the category belongs to";
+	}
 	if (!empty($errors)) {
 		echo display_errors_two($errors);
 	}
 	else{
-
-	$db->query("INSERT INTO category (cat_name) VALUES ('$sub_menu')");
+	$db->query("INSERT INTO category (cat_name,kit_id) VALUES ('$sub_menu','$kit_id')");
 	header('Location: menu');
 }
 }
@@ -190,7 +194,7 @@ if (isset($_GET['cat'])&&!empty($_GET['cat'])) {
 
 				<div class="col-md-2"><label for="name">Ingredients Preview</label><input type="text" value="<?=(isset($_GET['edit'])? $edit_comp_string : '');?>" id="comps" name="comps" class="form form-control" style="color: black"  readonly></div>
 
-				<div class="col-md-1"><label for="name">Price*</label><input type="number" name="price" value="<?=(isset($_GET['edit'])? $edit_result['price'] : '');?>" class="form-control" style="color: black"></div>
+				<div class="col-md-1"><label for="name">Price*</label><input type="number" name="price" value="<?=(isset($_GET['edit'])? $edit_result['price'] : '');?>" class="form-control" style="color: black" min="0"></div>
 
 				<div class="col-md-1"><button name="add-sub" class="btn btn-primary form-control" style="background-color: #5cb85c;border-color:#4cae4c; color: white;margin-top: 25px" ><?=(isset($_GET['edit']))?'Edit':'Add';?></button></div>
 
