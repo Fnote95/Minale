@@ -1492,7 +1492,7 @@ var Lobibox = Lobibox || {};
         //from Lobibox.notify.OPTIONS object depending of the type of the notifications or set custom string. Set this false to disable title
         size: 'normal',             // normal, mini, large
         soundPath: 'sounds/',   // The folder path where sounds are located
-        soundExt: '.ogg',           // Default extension for all sounds
+        soundExt: '.mp3',           // Default extension for all sounds
         showClass: 'fadeInDown',    // Show animation class.
         hideClass: 'zoomOut',       // Hide animation class.
         icon: true,                 // Icon of notification. Leave as is for default icon or set custom string
@@ -1553,7 +1553,7 @@ var Lobibox = Lobibox || {};
         info: {
             'class': 'lobibox-notify-info',
             'title': 'Information',
-            sound: 'sound6'
+            sound: 'sound'
         },
         icons: {
             bootstrap: {

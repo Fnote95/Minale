@@ -2,6 +2,10 @@
 <hr>
 <hr>
     <!-- Footer Start-->
+    <audio id="chatAudio">
+
+        <source src="sounds/note.mp3" type="audio/mpeg">
+    </audio>
     <div class="footer-copyright-area">
         <div class="container-fluid">
             <div class="row">
@@ -97,7 +101,8 @@
     <!-- main JS
     ============================================ -->
     <script src="js/main.js"></script>
-
+    <script src="js/Lobibox.js"></script>
+    <script type="js/notification-active.js"></script>
     <script src="js/data-table/bootstrap-table.js"></script>
     <script src="js/data-table/tableExport.js"></script>
     <script src="js/data-table/data-table-active.js"></script>
@@ -106,9 +111,42 @@
     <script src="js/data-table/bootstrap-table-resizable.js"></script>
     <script src="js/data-table/colResizable-1.5.source.js"></script>
     <script src="js/data-table/bootstrap-table-export.js"></script>
+
 <script>
 
+function notify(){
+         var check=0;
+         var num2
+         setInterval(function(){
+              jQuery.ajax({
+                url: 'api/check_orders.php',
+                type: 'POST',
+                data: {},
+                success: function(data){
+                    var check2=data[0];
+                    var check3=data[1];
+                    if (check!=check2) {
+                      var audio = new Audio('sounds/sound.mp3');
+                      audio.play();
+                      check=check2;
+                    }
+                    if (num2!=check3) {
+                      var audio = new Audio('sounds/sound.mp3');
+                      audio.play();
+                      num2=check3;
+                    }
+                    var num=data.split(",");
+                    jQuery('#ei').html(num[0]);
+                    jQuery('#to').html(num[1]);
 
+                },
+                error: function(){alert("something went wrong!")},
+            });
+         }, 100);
+}
+jQuery('#ei').change(function(){
+  jQuery('#chatAudio')[0].play();
+});
 function update_btn_status(){
 
   var ing_type=jQuery('#ing_type').val();
@@ -299,6 +337,7 @@ jQuery('input[name="comp_kitchens"]').change(function(){
                 data: {},
                 success: function(data){
                     jQuery('#pro').html(data);
+                    
                 },
                 error: function(){alert("something went wrong!")},
             });

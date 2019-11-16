@@ -60,7 +60,7 @@ if(empty($_POST['full_name'])||empty($_POST['email'])||empty($_POST['password'])
 						$filesize=$photo['size'];
 						$allowedtypes=array('png','jpg','jpeg','gif');
 						$uploadname=md5(microtime()).'.'.$imageExtention;
-						$uploadloc='C:\wamp64\www\res_automation\images\profile_pic\\'.$uploadname;
+						$uploadloc='C:\wamp64\www\menu\images\profile_pic\\'.$uploadname;
 						$dbpath='images/profile_pic/'.$uploadname;
 						if ($mimetype!='image') {
 							$errors[]='The file must be an image';

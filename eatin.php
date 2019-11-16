@@ -10,7 +10,7 @@ if (isset($_GET['sub'])&&!empty($_GET['sub'])) {
 }
 $cat_query=$db->query("SELECT * FROM category WHERE id='$sub_id'");
 $cat=mysqli_fetch_assoc($cat_query);
-$menu_query=$db->query("SELECT * FROM menu WHERE cat_id='$sub_id'");
+$menu_query=$db->query("SELECT * FROM menu WHERE cat_id='$sub_id' AND featured=1");
 ?>
 <div class="container-fluid">
 	<div class="row front_nav">

@@ -22,8 +22,8 @@
                     <div class="collapse navbar-collapse" id="navbarCollapse">
                         <ul class="nav navbar-nav">
                             <?php if(has_permission('Chef')||has_permission('Admin')):?>
-                            <li><a href="eatin">Eat in orders</a></li>
-                            <li><a href="takeout">Take out orders</a></li>
+                            <li><a href="eatin">Eat in orders <span id="ei" class="notif"></span></a></li>
+                            <li><a href="takeout">Take out orders <span id="to" class="notif"></span></a></li>
                             <?php endif;?>
                              <?php if(has_permission('Admin')):?>
                             <li><a href="orders_report.php">Orders report</a></li>

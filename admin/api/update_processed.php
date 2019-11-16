@@ -57,6 +57,9 @@ ob_start();?>
 
 					
 					$menu_item=mysqli_fetch_assoc($items_query);
+	    					$c_id=$menu_item['cat_id'];
+	    					$cat_query=$db->query("SELECT * FROM category WHERE id='$c_id'");
+	    					$cat_result=mysqli_fetch_assoc($cat_query);
 					$ing_type=$menu_item['ing_type'];
 					$custom_id=$items['custom_id'];
 					$custom_query=$db->query("SELECT * FROM customize WHERE id='$custom_id'");
@@ -72,6 +75,7 @@ ob_start();?>
 
 					<div style="padding-top: 5px">
 						<h5><b><?=$menu_item['item_name'];?></b> <span style="color: red"><b>X <?=$items['quantity'];?></b></span></h5>
+						<p style="color: purple"><b><?=$cat_result['cat_name'];?></b></p>
 						<p style="color: blue"><b><?=($items['custom_id']=='none')?'Regular':'Customized';?></b></p>
 						
 						<?php 

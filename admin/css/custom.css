@@ -104,3 +104,12 @@ margin: 15px auto;
 	color:white;
 	
 }
+.unfeature{
+	border: 0.1px solid rgba(252,84,4,1);
+	/*border-radius: 15px;*/
+
+	margin: 0px auto;
+	background-color: #cac4c4;
+	color:white;
+	
+}

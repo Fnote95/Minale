@@ -5,8 +5,8 @@ echo "There was a problem connecting to the database".mysqli_connect_error();
 die();
 }
 session_start();
-require_once $_SERVER['DOCUMENT_ROOT'].'/res_automation/config.php';
-require_once BASEURL.'\res_automation\helpers\helpers.php';
+require_once $_SERVER['DOCUMENT_ROOT'].'/menu/config.php';
+require_once BASEURL.'\menu\helpers\helpers.php';
 
 
 $cart_id='';

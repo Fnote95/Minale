@@ -9,6 +9,7 @@ if (isset($_GET['deletecat'])&&!empty($_GET['deletecat'])) {
 	$delete_query=$db->query("DELETE FROM category WHERE id='$del_id'");
 			header('Location: menu');
 }
+
 if (isset($_POST['add'])&&!empty($_POST)) {
 	
 	$sub_menu=sanitize($_POST['sub']);
@@ -33,6 +34,16 @@ $cat_query=$db->query("SELECT * FROM category");
 
 if (isset($_GET['cat'])&&!empty($_GET['cat'])) {
 	$cat_id=sanitize($_GET['cat']);
+	////////////////////////////////////////////////////////////////////////////
+	if (isset($_GET['featured'])) {
+		$feature=sanitize($_GET['featured']);
+		$f_id=sanitize($_GET['id']);
+
+		$db->query("UPDATE menu SET featured='$feature' WHERE id='$f_id'");
+	
+		header('Location: menu.php?cat='.$cat_id);
+	}
+	////////////////////////////////////////////////////////////////////////////
 	$cat_query=$db->query("SELECT * FROM category WHERE id='$cat_id'");
 	$cat_result=mysqli_fetch_assoc($cat_query);
 	$menu_query=$db->query("SELECT * FROM menu WHERE cat_id='$cat_id'");
@@ -103,7 +114,7 @@ if (isset($_GET['cat'])&&!empty($_GET['cat'])) {
 						$filesize=$photo['size'];
 						$allowedtypes=array('png','jpg','jpeg','gif');
 						$uploadname=md5(microtime()).'.'.$imageExtention;
-						$uploadloc='C:\wamp64\www\res_automation\images\item_image\\'.$uploadname;
+						$uploadloc='C:\wamp64\www\menu\images\item_image\\'.$uploadname;
 						$dbpath='images/item_image/'.$uploadname;
 						if($name==""){
 							$errors[]='You must enter an image for the item!';
@@ -209,7 +220,7 @@ if (isset($_GET['cat'])&&!empty($_GET['cat'])) {
 			
 				<div class="col-md-2 col-sm-12 col-xs-12" style="padding-top: 20px">
 				
-					<div class="review2" style=" border-radius: 10px;box-shadow:0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12); padding-top: 15px;padding-bottom: 15px; ">
+					<div class="<?=($menu_item['featured']==1)?'review2':'unfeature';?>" style=" border-radius: 10px;box-shadow:0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12); padding-top: 15px;padding-bottom: 15px; ">
 						<div style="padding-bottom: 5px;padding-right: 10px;margin-top: -5px" class="text-right">
 							<a href="menu?cat=<?=$cat_id;?>&delete=<?=$menu_item['id'];?>" onClick="return confirm('Are you sure you want to remove this item from you Burgers?')" class="btn btn-default btn-xs " ><span class="glyphicon glyphicon-remove"  style="color:red"></span></a>
 						</div>
@@ -219,8 +230,14 @@ if (isset($_GET['cat'])&&!empty($_GET['cat'])) {
 						</div>
 						<h5 class="text-center" style="color: white; padding-top:10px"><b><?=$menu_item['item_name'];?></b></h5>
 						<h4 class="text-center" style="color: white"><b><?=cash($menu_item['price']);?></b></h4>
-						<a href="menu?cat=<?=$cat_id;?>&edit=<?=$menu_item['id'];?>" class="btn btn-default" style="color:red"><b>Edit</b></a>
-						
+						<a href="menu?cat=<?=$cat_id;?>&edit=<?=$menu_item['id'];?>" class="btn btn-default" style="color:red"><b>Edit</b></a><hr>
+						<div class="text-right" style="padding-right: 10px;margin-top: -5px">
+							
+							<a href="menu?cat=<?=$cat_id;?>&featured=<?=($menu_item['featured']==0)?'1':'0';?>&id=<?=$menu_item['id'];?>" class="btn btn-xs btn-default"  style="color: red">
+								<span class="glyphicon glyphicon-<?=(($menu_item['featured']==0)? 'plus':'minus') ;?>"></span>
+							</a>
+													
+						</div>
 					</div>
 				</div>
 			

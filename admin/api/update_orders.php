@@ -19,7 +19,6 @@ ob_start();?>
 			}
 			?>
 			<script>
-
 				    function msToTime(duration) {
 				      var milliseconds = parseInt((duration % 1000) / 100),
 				        seconds = Math.floor((duration / 1000) % 60),
@@ -38,6 +37,7 @@ ob_start();?>
 		         var result=msToTime(diff);
 		         jQuery('#<?=$order_queued['id'];?>').html('<b>'+result+'</b>');
 		        ;}, 1);
+
 			</script>
 			<div class="col-md-12" style="padding:15px; margin: 15px; background-color: #fff798; border: 1px solid #f0f0f0;box-shadow:0 4px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 10px 0 rgba(0, 0, 0, 0.12); border-radius: 10px;">
 				<div class="row" style="border-bottom: 1px solid #d8d8d8">
@@ -55,7 +55,11 @@ ob_start();?>
 	    					
 	    					$items_id=$items['item_id'];
 	    					$items_query=$db->query("SELECT * FROM menu WHERE id='$items_id'");
+
 	    					$menu_item=mysqli_fetch_assoc($items_query);
+	    					$c_id=$menu_item['cat_id'];
+	    					$cat_query=$db->query("SELECT * FROM category WHERE id='$c_id'");
+	    					$cat_result=mysqli_fetch_assoc($cat_query);
 	    					/*$custom_id=$items['custom_id'];
 	    					$custom_query=$db->query("SELECT * FROM customize WHERE id='$custom_id'");
 	    					$custom=mysqli_fetch_assoc($custom_query);
@@ -68,6 +72,7 @@ ob_start();?>
 							</div>
 							<div style="padding-top: 5px">
 								<h5><b><?=$menu_item['item_name'];?></b> <span style="color: red"><b>X <?=$items['quantity'];?></b></span></h5>
+								<p style="color: purple"><b><?=$cat_result['cat_name'];?></b></p>
 								<p style="color: green"><b><?=($items['custom_id']=='none')?'Regular':'Customized';?></b></p>
 							</div>
 							
@@ -80,6 +85,10 @@ ob_start();?>
 						<?php endif;?>
 					</div>
 				</div>
+				<audio id="chatAudio">
+				    <source src="../sound/note.ogg" type="audio/ogg">
+				    <source src="../sound/note.mp3" type="audio/mpeg">
+				</audio>
 		</div>
 		<?php 
 		//$queued_js_index++;
