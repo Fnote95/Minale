@@ -165,7 +165,7 @@ if (isset($_POST['submit'])) {
 			<div class="col-md-12 col-sm-12 col-xs-12 review" style="color: red; padding-top: 10px">
 				<p style="font-size: 15px; color: white;"><b><i class="glyphicon glyphicon-ok"></i>  Your order is added to the kitchen</b></p>
 				<p style="font-size: 15px;color: white;"><b><i class="fa fa-users"></i>  There are -<?=$orders_before;?>- orders before you</b></p>
-				<p style="font-size: 15px;color: white;"><b><i class="glyphicon glyphicon-time"></i>  Your food will be here in about <?=average_wait_time();?> minutes</b></p>		
+						
 			</div>
 		</div>
 		<div class="col-md-12 col-sm-12 col-xs-12" style="padding-top: 15px;">

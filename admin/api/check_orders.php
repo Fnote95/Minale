@@ -1,7 +1,8 @@
 <?php
 require_once "../../core/init.php";
+$items='""';
 $order_queued_query=$db->query("SELECT * FROM orders WHERE order_status=0");
-$take_queued_query=$db->query("SELECT * FROM orders WHERE  takeout_status=3");
+$take_queued_query=$db->query("SELECT * FROM orders WHERE  takeout_status=3 AND takeout_items!='$items' ");
 $eatin_num=mysqli_num_rows($order_queued_query);
 $takeout_num=mysqli_num_rows($take_queued_query);
 $num_array=array();

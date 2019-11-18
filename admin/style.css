@@ -4376,7 +4376,7 @@ input:checked + .slider:before {
 	border-radius: 10px;
 }
 .notif{
-	background-color: green;
+	background-color: #080379;
 	color: white;padding-left:4px;
 	padding-right: 4px; padding-top: 1px;
 	padding-bottom: 1px; border-radius: 10px;

@@ -124,7 +124,7 @@ function check_request(){
               },
               error: function(){alert("something went wrong!")},
           });  
-         }, 100);
+         }, 500);
   
 }
 function request(){
@@ -138,7 +138,7 @@ function request(){
       },
       error: function(){alert("something went wrong!")},
   });
-  }, 100);    
+  }, 500);    
 }
 function notify(){
          var check=0;
@@ -168,11 +168,9 @@ function notify(){
                 },
                 error: function(){alert("something went wrong!")},
             });
-         }, 100);
+         }, 500);
 }
-jQuery('#ei').change(function(){
-  jQuery('#chatAudio')[0].play();
-});
+
 function update_btn_status(){
 
   var ing_type=jQuery('#ing_type').val();
