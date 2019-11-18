@@ -67,4 +67,4 @@
     <script src="js/vendor/modernizr-2.8.3.min.js"></script>
 </head>
 
-<body onload="update_queued();update_process();update_takeout();notify();">
+<body onload="update_queued();update_process();update_takeout();notify();request();check_request();">

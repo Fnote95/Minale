@@ -7,7 +7,7 @@ $settings_result=mysqli_fetch_assoc($settings_query);
 ?>
 <div style="overflow: hidden;">
 	<div style="z-index:1;position:relative;">
-		<img src="che.png" id="loading" style="width: 500px; height: auto; margin-left: -250px ;opacity: 0.8" >
+		<img src="che.png" id="loading" style="width: 500px; height: auto; margin-left: -250px ;opacity: 0.8">
 	</div>
 
 	<div style="z-index:2;position:relative;">
@@ -38,6 +38,14 @@ $settings_result=mysqli_fetch_assoc($settings_query);
 							<h3 class="text-center" style="color: white; margin-top: 5px "><b>Take Out</b></h3>
 					</button>
 				</a>
+			</div>
+			<div class="col-md-6 col-sm-12 col-xs-12 text-center" style="padding: 15px">
+				<a href="requests">
+					<button class="btn shadow" style="width: 225px; height: 75px; background-color: orange; border-radius: 45px;">
+						<h4 class="text-center" style="color: white;margin-top: 5px "><b>Request Bill/Waiter</b></h4>
+					</button>
+				</a>
+
 			</div>
 		</div>
 		<div class="row text-center" style="padding-top:10px">

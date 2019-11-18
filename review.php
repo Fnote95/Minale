@@ -290,7 +290,7 @@ function display_regular(){
 			<h4 style="color: white; margin-top: 5px"><b>Enter your table number</b></h4>
 		</div>
 		<div class="col-md-4 col-sm-4 col-xs-4" style="padding-left: 5px">
-			<input type="text" name="table_no" class="form-control text-center" value="<?=(isset($_GET['edit']))? $orders['table_no']:'';?>" style="color: #000">
+			<input type="text" name="table_no" class="form-control text-center" value="<?=(isset($_GET['edit']))? $orders['table_no']:'';?>" style="color: #000" placeholder="Table no.">
 		</div>
 	</div>
 	<div class="row" style="padding-top: 15px;padding-bottom: 15px">

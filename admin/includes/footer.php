@@ -113,7 +113,33 @@
     <script src="js/data-table/bootstrap-table-export.js"></script>
 
 <script>
-
+function check_request(){
+           setInterval(function(){
+           jQuery.ajax({
+              url: 'api/check_req_num.php',
+              type: 'POST',
+              data: {},
+              success: function(data){
+                  jQuery('#req_num').html(data);
+              },
+              error: function(){alert("something went wrong!")},
+          });  
+         }, 100);
+  
+}
+function request(){
+   setInterval(function(){
+   jQuery.ajax({
+      url: 'api/check_request.php',
+      type: 'POST',
+      data: {},
+      success: function(data){
+          jQuery('#req').html(data);
+      },
+      error: function(){alert("something went wrong!")},
+  });
+  }, 100);    
+}
 function notify(){
          var check=0;
          var num2
