@@ -28,11 +28,12 @@
                             <?php endif;?>
                              <?php if(has_permission('Admin')):?>
                             <li><a href="orders_report.php">Orders report</a></li>
-                             <li><a href="menu">Edit Menu</a></li>
+                             <li><a href="menu">Menu</a></li>
+                             <li><a href="POS.php">POS</a></li>
                              <?php endif;?>
                             <?php if(has_permission('Owner')):?>
                              <li><a href="users.php">Users</a></li>
-                             <li><a href="manage_waiters.php">Manage Waiters</a></li>
+                             <li><a href="manage_waiters.php">Waiters</a></li>
                              <li><a href="settings.php">Settings</a></li>
                             <?php endif;?>
                            

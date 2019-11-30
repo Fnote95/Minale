@@ -4381,3 +4381,6 @@ input:checked + .slider:before {
 	padding-right: 4px; padding-top: 1px;
 	padding-bottom: 1px; border-radius: 10px;
 }
+.sider-nav:hover{
+	background-color: #080379;
+}
