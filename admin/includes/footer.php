@@ -124,7 +124,7 @@ function check_request(){
               },
               error: function(){alert("something went wrong!")},
           });  
-         }, 500);
+         }, 3000);
   
 }
 function request(){
@@ -138,7 +138,7 @@ function request(){
       },
       error: function(){alert("something went wrong!")},
   });
-  }, 500);    
+  }, 3000);    
 }
 function notify(){
          var check=0;
@@ -168,7 +168,7 @@ function notify(){
                 },
                 error: function(){alert("something went wrong!")},
             });
-         }, 500);
+         }, 3000);
 }
 
 function update_btn_status(){

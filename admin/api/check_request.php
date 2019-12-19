@@ -6,7 +6,11 @@ ob_start();?>
 <?php while ($req=mysqli_fetch_assoc($req_query)):?>
 
 <div class="col-md-3 col-sm-12 col-xs-12" id="req" class="shadow">
+
 	<div class="col-md-12 col-sm-12 col-xs-12" style="margin-top:10px;background-color: #fff; border: 1px solid #f0f0f0;box-shadow:0 4px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 10px 0 rgba(0, 0, 0, 0.12); border-radius: 10px;padding: 20px">
+		<div class="col-md-12 col-sm-12 col-xs-12 text-right" style="margin-top: -10px; margin-right: -40px;">
+			<a href="request?delete=<?=$req['id'];?>" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span></a>		
+		</div>
 		<div class="col-md-12">
 			<h4>Table no. <?=$req['table_no'];?></h4>
 		</div>
