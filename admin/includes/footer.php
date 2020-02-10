@@ -113,6 +113,19 @@
     <script src="js/data-table/bootstrap-table-export.js"></script>
 
 <script>
+function process(id){
+      var id=id;
+        jQuery.ajax({
+          url: 'api/process.php',
+          type: 'POST',
+          data: {id : id},
+          success: function(data){
+              jQuery('#details').html(data);
+              update_takeouts_processed();
+          },
+          error: function(){alert("something went wrong!")},
+      });
+}
 function check_request(){
            setInterval(function(){
            jQuery.ajax({
@@ -140,7 +153,7 @@ function request(){
   });
   }, 3000);    
 }
-function notify(){
+/*function notify(){
          var check=0;
          var num2
          setInterval(function(){
@@ -170,7 +183,7 @@ function notify(){
             });
          }, 3000);
 }
-
+*/
 function update_btn_status(){
 
   var ing_type=jQuery('#ing_type').val();

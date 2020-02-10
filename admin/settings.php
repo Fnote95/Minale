@@ -92,7 +92,7 @@ if (isset($_POST['submit'])) {
 						$filesize=$photo['size'];
 						$allowedtypes=array('png','jpg','jpeg','gif','JPG','JPEG');
 						$uploadname=md5(microtime()).'.'.$imageExtention;
-						$uploadloc='C:\wamp64\www\res_automation\images\\'.$uploadname;
+						$uploadloc='C:\wamp64\www\menu\images\\'.$uploadname;
 						$dbpath='images/'.$uploadname;
 						if($name==""){
 							$errors[]='You must enter an image for the item!';

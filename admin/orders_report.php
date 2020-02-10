@@ -12,6 +12,24 @@ $orders_query=$db->query("SELECT * FROM orders WHERE (order_status=2 OR takeout_
 	<div class="row" style="padding-top: 75px; padding-bottom: 30px;">
 		<h1 class="text-center" style="font-family: 'Rockwell'; font-size: 3em"><b>Orders Report</b></h1>
 	</div>
+	<div class="row">
+		<div class="col-md-7 col-sm-7 col-xs-7">
+			
+		</div>
+		<div class="col-md-4 col-sm-4 col-xs-4" style="margin-right: -150px">
+        	<div class="form-group data-custon-pick data-custom-mg col-md-12" id="data_5">
+                <label for="datepicker"><b>Report range select</b></label>
+                <div class="input-daterange input-group col-md-8 col-sm-8" id="datepicker">
+                    <input type="text" class="form-control" name="start" id="start" value="">
+                    <span class="input-group-addon">to</span>
+                    <input type="text" class="form-control" name="end" id="end" value="">
+                </div>                       
+        	</div>
+		</div>
+		<div class="col-md-1 col-sm-1 text-left" style="margin-top: 25px">
+        	<button class="btn btn-success" onclick="drawer()">Generate</button>
+        </div>         
+	</div>
 	<div class="row" style="padding: 20px">
 		<div class="sparkline8-graph">
 		<div class="static-table-list scrolling_wrapper">
