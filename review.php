@@ -163,8 +163,7 @@ if (isset($_POST['submit'])) {
 		</div> 
 		<div class="row">
 			<div class="col-md-12 col-sm-12 col-xs-12 review" style="color: red; padding-top: 10px">
-				<p style="font-size: 15px; color: white;"><b><i class="glyphicon glyphicon-ok"></i>  Your order is added to the kitchen</b></p>
-				<p style="font-size: 15px;color: white;"><b><i class="fa fa-users"></i>  There are -<?=$orders_before;?>- orders before you</b></p>
+				<p style="font-size: 15px; color: white;"><b><i class="glyphicon glyphicon-ok"></i>  Your order is added to the kitchen. We will bring your order to your room shortly. Thank you!</b></p>
 						
 			</div>
 		</div>
@@ -287,10 +286,10 @@ function display_regular(){
 	</div>
 	<div class="row" style="padding-top: 15px;padding-bottom: 15px;background-image:linear-gradient(to top, rgba(252,84,4,1) 1%, rgba(255,0,0,1) 100%);">
 		<div class="col-md-8 col-sm-8 col-xs-8" style="padding-right: 5px">
-			<h4 style="color: white; margin-top: 5px"><b>Enter your table number</b></h4>
+			<h4 style="color: white; margin-top: 5px"><b>Enter your room number</b></h4>
 		</div>
 		<div class="col-md-4 col-sm-4 col-xs-4" style="padding-left: 5px">
-			<input type="text" name="table_no" class="form-control text-center" value="<?=(isset($_GET['edit']))? $orders['table_no']:'';?>" style="color: #000" placeholder="Table no.">
+			<input type="text" name="table_no" class="form-control text-center" value="<?=(isset($_GET['edit']))? $orders['table_no']:'';?>" style="color: #000" placeholder="Room no.">
 		</div>
 	</div>
 	<div class="row" style="padding-top: 15px;padding-bottom: 15px">

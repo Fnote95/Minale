@@ -121,7 +121,7 @@ function process(id){
           data: {id : id},
           success: function(data){
               jQuery('#details').html(data);
-              update_takeouts_processed();
+            
           },
           error: function(){alert("something went wrong!")},
       });

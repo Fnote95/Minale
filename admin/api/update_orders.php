@@ -43,7 +43,7 @@ ob_start();?>
 				<div class="row" style="border-bottom: 1px solid #d8d8d8">
 					 <div class="col-md-2 col-sm-2 col-xs-2"><h4 style="color: red"><b>#<?=$order_queued['id'];?></b></h4></div>
 						<div class="col-md-3 col-sm-3 col-xs-3"><h5><b>Multiple Orders</b></h5></div>
-						<div class="col-md-3 col-sm-3 col-xs-3"><h5><b>Table No. <?=$order_queued['table_no'];?></b></h5></div>
+						<div class="col-md-3 col-sm-3 col-xs-3"><h5><b>Room No. <?=$order_queued['table_no'];?></b></h5></div>
 					<div class="col-md-4 col-sm-4 col-xs-4"><h5 style="color: green"><b><?=($cust_check>0)? $cust_check.' Customized orders':'All Regular';?></b></h5></div>
 				</div>
 				<div class="row" style="padding: 5px">

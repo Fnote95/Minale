@@ -35,7 +35,7 @@ ob_start();?>
 		<div class="col-md-12 col-sm-12 col-xs-12" style="padding:15px; margin-top: 15px; background-color: #fff; border: 1px solid #f0f0f0;box-shadow:0 4px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 10px 0 rgba(0, 0, 0, 0.12); border-radius: 10px;">
 			<div class="row" style="border-bottom: 1px solid #d8d8d8">
 				<div class="col-md-2 col-sm-2"><h4 style="color: red"><b>#<?=$order_processed['id'];?></b></h4></div>
-					<div class="col-md-3 col-sm-3"><h5><b>Table No. <?=$order_processed['table_no'];?></b></h5></div>
+					<div class="col-md-3 col-sm-3"><h5><b>Room No. <?=$order_processed['table_no'];?></b></h5></div>
 				<div class="col-md-4 col-sm-4"><h5 style="color: green"><b><?=($cust_check>0)? $cust_check.' Customized orders':'All Regular';?></b></h5></div>
 				<div class="col-md-3 col-sm-4">
 					<h4 style="color: red" id="<?=$order_processed['id'];?>"><b></b></h4>

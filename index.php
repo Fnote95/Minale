@@ -24,25 +24,21 @@ $settings_result=mysqli_fetch_assoc($settings_query);
 
 		</div>
 		<div class="row text-center" style="padding-top: 15px">
-			<div class="col-md-6 col-sm-12 col-xs-12 text-center" style="padding: 15px">
-				<a href="main.php?type=1">
-					<button class="btn shadow" style="width: 225px; height: 75px; background-color: red; border-radius: 45px;">
-						<h3 class="text-center" style="color: white;margin-top: 5px "><b>Eat In</b></h3>
-					</button>
-				</a>
+			<div class="col-md-6 col-sm-12 col-xs-12 text-center shadow" style="margin-top: 10px;margin-bottom:10px;padding: 15px; background-color: red">
+				<h3 style="color: white"><b>Room Service</b></h3>
 
 			</div>
 			<div class="col-md-6 col-sm-12 col-xs-12 text-center" style="padding: 15px">
 				<a href="main.php?type=2">
 					<button class="btn shadow" style="width: 225px; height: 75px; background-color: red; border-radius: 45px;">
-							<h3 class="text-center" style="color: white; margin-top: 5px "><b>Take Out</b></h3>
+							<h3 class="text-center" style="color: white; margin-top: 5px "><b>Menu</b></h3>
 					</button>
 				</a>
 			</div>
 			<div class="col-md-6 col-sm-12 col-xs-12 text-center" style="padding: 15px">
 				<a href="requests">
 					<button class="btn shadow" style="width: 225px; height: 75px; background-color: orange; border-radius: 45px;">
-						<h4 class="text-center" style="color: white;margin-top: 5px "><b>Request Bill/Waiter</b></h4>
+						<h4 class="text-center" style="color: white;margin-top: 5px "><b>Request a Waiter</b></h4>
 					</button>
 				</a>
 
